@@ -1,12 +1,11 @@
-import * as sequelize from 'sequelize-typescript'
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript"
+import { Collections } from "./Collections"
 
-@sequelize.Table({
-  timestamps: false,
-  tableName: 'users',
-})
-export class Users extends sequelize.Model {
-  @sequelize.Column({
-    type: sequelize.DataType.INTEGER,
+
+@Table({ timestamps: false, tableName: 'users' })
+export class Users extends Model {
+  @Column({
+    type: DataType.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
@@ -14,25 +13,28 @@ export class Users extends sequelize.Model {
   })
   id!: number
 
-  @sequelize.Column({
-    type: sequelize.DataType.STRING,
+  @Column({
+    type: DataType.STRING,
     allowNull: false,
     unique: true
   })
   nickname!: string
 
-  @sequelize.Column({
-    type: sequelize.DataType.STRING,
+  @Column({
+    type: DataType.STRING,
     allowNull: false,
     unique: true
   })
   email!: string
 
-  @sequelize.Column({})
+  @Column({type: DataType.STRING})
   password!: string
 
-  @sequelize.Column({
-    type: sequelize.DataType.STRING,
+  @Column({
+    type: DataType.STRING,
   })
   avatarUrl!: string
+
+  @HasMany(() => Collections)
+  collections!: Collections[]
 }
