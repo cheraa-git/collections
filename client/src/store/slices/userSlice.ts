@@ -9,7 +9,7 @@ export interface UserState {
 
 const initialState: UserState = {
   currentUser: {
-    id: '',
+    id: NaN,
     nickname: '',
     email: '',
     token: '',

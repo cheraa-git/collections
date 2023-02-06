@@ -22,7 +22,7 @@ export const LoginContent: FC = () => {
   return (
     <>
       <div className="text-center mb-4">
-        <h1 className="text-3xl font-bold mb-2">Welcome!</h1>
+        <h1 className="mb-2">Welcome!</h1>
         <p className="text-gray-400">Sign in to your account</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="w-[300px]">

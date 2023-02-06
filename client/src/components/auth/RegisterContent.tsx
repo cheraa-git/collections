@@ -27,7 +27,7 @@ export const RegisterContent: FC = () => {
   return (
     <>
       <div className="text-center mb-4">
-        <h1 className="text-3xl font-bold mb-2">Create Account!</h1>
+        <h1 className="mb-2">Create Account!</h1>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="w-[300px]">
         <TextField fullWidth label="Name" {...register('nickname', { required: true })} error={!!errors.nickname}

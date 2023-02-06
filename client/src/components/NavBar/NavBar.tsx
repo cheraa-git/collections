@@ -6,14 +6,13 @@ import SearchIcon from '@mui/icons-material/Search'
 import { IconButton, InputBase } from "@mui/material"
 
 export const NavBar: FC = () => {
-
   return (
     <nav className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2">
         <div className="relative flex h-16 items-center text-white">
           <div className="block sm:flex min-w-[200px]">
             <Link to={clientRoutes.MAIN}>
-              <h1 className="text-3xl text-start">Collections</h1>
+              <h1 className="text-start">Collections</h1>
             </Link>
           </div>
           <div className="ml-auto flex">

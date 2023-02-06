@@ -1,10 +1,12 @@
 export interface User {
-  id: string
+  id: number
   nickname: string
   avatar?: string
   email: string
   token: string
 }
+
+export type ProfileUser = Omit<User, "token" | "email">
 
 export interface AuthData {
   email: string

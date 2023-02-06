@@ -1,9 +1,12 @@
 import { FC } from "react"
 
+
 export const MainPage: FC = () => {
+
   return (
     <div>
-      Main
+      Main page
+
     </div>
   )
 }

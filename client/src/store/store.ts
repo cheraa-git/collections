@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 import { UserReducer } from "./slices/userSlice"
+import { CollectionReducer } from "./slices/collectionSlice"
+import { ProfileReducer } from "./slices/profileSlice"
 
 
 export const store = configureStore({
   reducer: {
-    user: UserReducer
+    user: UserReducer,
+    collection: CollectionReducer,
+    profile: ProfileReducer
   },
 })
 

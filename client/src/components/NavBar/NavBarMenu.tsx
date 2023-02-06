@@ -35,36 +35,31 @@ export const NavBarMenu: FC = () => {
       >
         <MenuIcon color="primary"/>
       </IconButton>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <div className="border-b text-orange-500" hidden={!isAuth}>
-          <MenuItem onClick={handleClose}>
-            <Link to={routes.PROFILE} className="flex">
+
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+
+        <div hidden={!isAuth}>
+          <Link to={`/profile/${currentUser.id}`} onClick={handleClose} className="flex text-orange-500 border-b">
+            <MenuItem className="w-full">
               <AccountCircleIcon/>
               <p className="ml-3 capitalize">{currentUser.nickname}</p>
-            </Link>
-          </MenuItem>
-        </div>
-        <div hidden={!isAuth}>
-          <MenuItem onClick={handleClose}>
-            <Link to={routes.CREATE_COLLECTION} className="flex">
+            </MenuItem>
+          </Link>
+
+          <Link to={routes.CREATE_COLLECTION} onClick={handleClose} className="flex">
+            <MenuItem>
               <AddIcon/>
               <p className="ml-3">Create collection</p>
-            </Link>
-          </MenuItem>
+            </MenuItem>
+          </Link>
           <MenuItem onClick={logoutHandler}>Logout</MenuItem>
         </div>
+
         <div hidden={isAuth}>
-          <MenuItem onClick={handleClose}><Link to={routes.AUTH.LOGIN}>Login</Link></MenuItem>
-          <MenuItem onClick={handleClose}><Link to={routes.AUTH.REGISTER}>Sign up</Link></MenuItem>
+          <Link to={routes.AUTH.LOGIN}><MenuItem onClick={handleClose}>Login</MenuItem></Link>
+          <Link to={routes.AUTH.REGISTER}><MenuItem onClick={handleClose}>Sign up</MenuItem></Link>
         </div>
+
       </Menu>
     </div>
   )

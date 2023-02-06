@@ -35,9 +35,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = __importStar(require("bcrypt"));
 const jwt = __importStar(require("jsonwebtoken"));
 const Users_1 = require("../db/models/Users");
+const SECRET_KEY = process.env.TOKEN_SECTET_KEY + '';
 class AuthController {
     constructor() {
-        this.SECRET_KEY = process.env.PGPASSWORD + '';
         this.registerUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const nickname = req.body.nickname.trim().toLowerCase();
             const email = req.body.email.trim().toLowerCase();
@@ -48,8 +48,8 @@ class AuthController {
                 return res.status(500).json({ error: 'Registration data invalid' });
             }
             try {
-                const token = jwt.sign({ email, hashPassword }, this.SECRET_KEY);
                 const newUser = yield Users_1.Users.create({ nickname, email, password: hashPassword, avatarUrl });
+                const token = jwt.sign({ email, hashPassword, id: newUser.id }, SECRET_KEY);
                 res.json(Object.assign(Object.assign({}, newUser.dataValues), { password: undefined, token }));
             }
             catch (error) {
@@ -61,7 +61,7 @@ class AuthController {
             }
         });
         this.loginUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c;
+            var _a, _b, _c, _d;
             const reqEmail = (_a = req.body.email) === null || _a === void 0 ? void 0 : _a.trim().toLowerCase();
             const reqPassword = (_b = req.body.password) === null || _b === void 0 ? void 0 : _b.trim();
             if (!reqEmail || !reqPassword) {
@@ -70,12 +70,12 @@ class AuthController {
             const user = yield this.checkLoginData(reqEmail, reqPassword);
             if (user.error)
                 return res.status(500).json({ error: user.error });
-            const token = jwt.sign({ email: reqEmail, hashPassword: (_c = user.data) === null || _c === void 0 ? void 0 : _c.password }, this.SECRET_KEY);
+            const token = jwt.sign({ email: reqEmail, hashPassword: (_c = user.data) === null || _c === void 0 ? void 0 : _c.password, id: (_d = user.data) === null || _d === void 0 ? void 0 : _d.id }, SECRET_KEY);
             res.json(Object.assign(Object.assign({}, user.data), { token, password: undefined }));
         });
         this.autoLogin = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const token = req.body.token;
-            const jwtPayload = jwt.verify(token, this.SECRET_KEY);
+            const jwtPayload = jwt.verify(token, SECRET_KEY);
             const iat = jwtPayload.iat;
             const isExpired = ((iat + 3600) * 1000) < Date.now();
             const user = yield Users_1.Users.findOne({ where: { email: jwtPayload.email } });

@@ -10,11 +10,12 @@ import { clientRoutes } from './constants/routes'
 import { useAppDispatch } from "./store/store"
 import { useAuth } from "./hooks/authHook"
 import { autoLogin } from "./store/actions/userActions"
+import { CollectionPage } from "./pages/CollectionPage"
 
 function App() {
   const dispatch = useAppDispatch()
   const { isAuth } = useAuth()
-  const { MAIN, PROFILE, CREATE_COLLECTION } = clientRoutes
+  const { MAIN, CREATE_COLLECTION } = clientRoutes
 
 
   useEffect(() => {
@@ -30,7 +31,8 @@ function App() {
         <Route path={MAIN} element={<MainPage/>}/>
         <Route path="/auth/:mode" element={<AuthPage/>}/>
         <Route path={CREATE_COLLECTION} element={<CreateCollectionPage/>}/>
-        <Route path={PROFILE} element={<ProfilePage/>}/>
+        <Route path="/profile/:userId" element={<ProfilePage/>}/>
+        <Route path="/collection/:id" element={<CollectionPage/>}/>
         <Route path="*" element={<NotFoundPage/>}/>
       </Routes>
     </>

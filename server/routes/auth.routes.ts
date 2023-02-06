@@ -10,3 +10,4 @@ authRouter.post('/login', controller.loginUser)
 authRouter.post('/register', controller.registerUser)
 authRouter.post('/autologin', controller.autoLogin)
 
+

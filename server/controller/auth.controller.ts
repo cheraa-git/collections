@@ -5,8 +5,8 @@ import { Users } from "../db/models/Users"
 import { JwtPayload } from "jsonwebtoken"
 
 
+const SECRET_KEY = process.env.TOKEN_SECTET_KEY + ''
 class AuthController {
-  private SECRET_KEY = process.env.PGPASSWORD + ''
 
   private async checkLoginData(email: string, password: string) {
     const user = await Users.findOne({ where: { email } })
@@ -26,8 +26,8 @@ class AuthController {
       return res.status(500).json({ error: 'Registration data invalid' })
     }
     try {
-      const token = jwt.sign({ email, hashPassword }, this.SECRET_KEY)
       const newUser = await Users.create({ nickname, email, password: hashPassword, avatarUrl })
+      const token = jwt.sign({ email, hashPassword, id: newUser.id }, SECRET_KEY)
       res.json({ ...newUser.dataValues, password: undefined, token })
     } catch (error: any) {
       if (error.name === 'SequelizeUniqueConstraintError') {
@@ -44,13 +44,13 @@ class AuthController {
     }
     const user = await this.checkLoginData(reqEmail, reqPassword)
     if (user.error) return res.status(500).json({ error: user.error })
-    const token = jwt.sign({ email: reqEmail, hashPassword: user.data?.password }, this.SECRET_KEY)
+    const token = jwt.sign({ email: reqEmail, hashPassword: user.data?.password, id: user.data?.id }, SECRET_KEY)
     res.json({ ...user.data, token, password: undefined })
   }
 
   autoLogin = async (req: Request, res: Response) => {
     const token = req.body.token
-    const jwtPayload = jwt.verify(token, this.SECRET_KEY) as JwtPayload
+    const jwtPayload = jwt.verify(token, SECRET_KEY) as JwtPayload
     const iat = jwtPayload.iat as number
     const isExpired = ((iat + 3600) * 1000) < Date.now()
     const user = await Users.findOne({ where: { email: jwtPayload.email } })
