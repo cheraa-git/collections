@@ -9,6 +9,7 @@ import { deleteCollection, getCollection } from "../store/actions/collectionActi
 import { EditItemDialog } from "../components/item/EditItemDialog"
 import { ItemCard } from "../components/item/ItemCard"
 import { clearCollectionData } from "../store/slices/collectionSlice"
+import { useConfirm } from "../hooks/confirmHook"
 
 export const CollectionPage: FC = () => {
   const dispatch = useAppDispatch()
@@ -16,7 +17,7 @@ export const CollectionPage: FC = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
-
+  const { showConfirm } = useConfirm()
 
   useEffect(() => {
     if (collection && collection.id !== Number(id)) {
@@ -27,8 +28,12 @@ export const CollectionPage: FC = () => {
     }
   }, [dispatch, id])
 
+
   const deleteHandler = () => {
-    dispatch(deleteCollection(collection, navigate))
+    showConfirm('It will be impossible to restore the collection.', () => {
+      dispatch(deleteCollection(collection, navigate))
+    })
+
   }
 
   if (!collection.id) return <></>
