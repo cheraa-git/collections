@@ -6,6 +6,7 @@ import { JwtPayload } from "jsonwebtoken"
 
 
 const SECRET_KEY = process.env.TOKEN_SECTET_KEY + ''
+
 class AuthController {
 
   private async checkLoginData(email: string, password: string) {
@@ -52,7 +53,7 @@ class AuthController {
     const token = req.body.token
     const jwtPayload = jwt.verify(token, SECRET_KEY) as JwtPayload
     const iat = jwtPayload.iat as number
-    const isExpired = ((iat + 3600) * 1000) < Date.now()
+    const isExpired = (((iat + 3600) * 24) * 1000) < Date.now() // TODO: убрать 24 (чтобы срок действия токена был 1 час
     const user = await Users.findOne({ where: { email: jwtPayload.email } })
     if (!user || user.password !== jwtPayload.hashPassword || isExpired) {
       return res.status(500).json({ error: 'Autologin canceled' })

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { RootState, useAppDispatch, useAppSelector } from "../store/store"
-import { Loader } from "../components/UI/Loader/Loader"
+import { Spinner } from "../components/UI/Loader/Spinner"
 import { setErrorMessage } from "../store/slices/userSlice"
 import { RegisterContent } from "../components/auth/RegisterContent"
 import { LoginContent } from "../components/auth/LoginContent"
@@ -25,9 +25,10 @@ export function AuthPage() {
   }, [isAuth, navigate])
 
 
-  if (loading) return <div className="text-center my-[40vh]"><Loader/></div>
+  if (loading) return <div className="text-center my-[40vh]"><Spinner/></div>
   return (
     <div className="bg-white w-min p-7 mx-auto mt-16 rounded">
+
       <p className="w-full bg-red-100 rounded text-center">{errorMessage}</p>
       <div className="text-center h-[28px] text-orange-400 mb-4">
         {mode === 'signup' ? <PersonAddIcon fontSize="large"/> : <LoginIcon fontSize="large"/>}

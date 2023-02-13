@@ -13,7 +13,7 @@ export const authUser = (type: 'login' | 'create', data: AuthData) => async (dis
     const user = (await axios.post<User>(url, data)).data
     localStorage.setItem('token', user.token)
     dispatch(setUser(user))
-    console.log(user)
+    console.log('AUTH', user)
   } catch (error) {
     if (error instanceof AxiosError) {
       dispatch(setErrorMessage(error.response?.data.error))
@@ -28,7 +28,8 @@ export const autoLogin = () => async (dispatch: AppDispatch) => {
   const token = localStorage.getItem('token')
   if (!token) return
   try {
-    const user = (await axios.post<User>(apiRoutes.AUTH.AUTOLOGIN, {token})).data
+    const user = (await axios.post<User>(apiRoutes.AUTH.AUTOLOGIN, { token })).data
+    console.log('AUTOLOGIN')
     dispatch(setUser(user))
   } catch (error) {
     dispatch(logoutUser())

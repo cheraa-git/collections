@@ -1,7 +1,7 @@
 'use strict'
 
 import { Router } from "express"
-import { ProfileController } from "../controller/profile.contrloller"
+import { ProfileController } from "../controller/profile.controller"
 
 const controller = new ProfileController()
 export const profileRouter = Router()

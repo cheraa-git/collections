@@ -22,6 +22,9 @@ export class Items extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   name!: string
 
+  @Column({ type: DataType.STRING, allowNull: false })
+  timestamp!: string
+
   @Column({ type: DataType.STRING })
   str1!: string
 

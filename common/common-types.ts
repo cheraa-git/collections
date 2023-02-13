@@ -13,27 +13,22 @@ export interface Collection {
   title: string
   description: string
   theme: string
+  timestamp: string
   imageUrl?: string
 }
 
-export interface ItemType {
+export interface Item {
   id: number
   collectionId: number
-  str1?: string
-  str2?: string
-  str3?: string
-  txt1?: string
-  txt2?: string
-  txt3?: string
-  numb1?: number
-  numb2?: number
-  numb3?: number
-  date1?: string
-  date2?: string
-  date3?: string
-  bool1?: boolean
-  bool2?: boolean
-  bool3?: boolean
+  name: string
+  timestamp: string
+  [type: string]: string | number | boolean
+}
+
+export interface Fields {
+  name: string
+
+  [type: string]: string | number | boolean
 }
 
 export interface ItemConfigType {

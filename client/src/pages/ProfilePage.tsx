@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react"
 import { Grid } from "@mui/material"
-import { CollectionCard } from "../components/CollectionCard"
+import { CollectionCard } from "../components/collection/CollectionCard"
 import { RootState, useAppDispatch, useAppSelector } from "../store/store"
 import { useParams } from "react-router-dom"
 import { getProfile } from "../store/actions/profileActions"

@@ -35,12 +35,15 @@ export class Collections extends Model {
   @Column({ type: DataType.STRING })
   imageUrl!: string
 
+  @Column({ type: DataType.STRING, allowNull: false })
+  timestamp!: string
+
   @BelongsTo(() => Users)
   users!: Users
 
   @HasMany(() => Items)
   items!: Items[]
 
-  @HasMany(() => ItemConfigs)
+  @HasMany(() => ItemConfigs, { onDelete: 'cascade' })
   itemConfigs!: ItemConfigs[]
 }

@@ -36,6 +36,10 @@ __decorate([
     __metadata("design:type", String)
 ], Items.prototype, "name", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
+    __metadata("design:type", String)
+], Items.prototype, "timestamp", void 0);
+__decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING }),
     __metadata("design:type", String)
 ], Items.prototype, "str1", void 0);

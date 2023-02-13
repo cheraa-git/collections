@@ -51,6 +51,10 @@ __decorate([
     __metadata("design:type", String)
 ], Collections.prototype, "imageUrl", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
+    __metadata("design:type", String)
+], Collections.prototype, "timestamp", void 0);
+__decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => Users_1.Users),
     __metadata("design:type", Users_1.Users)
 ], Collections.prototype, "users", void 0);
@@ -59,7 +63,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Collections.prototype, "items", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => ItemConfigs_1.ItemConfigs),
+    (0, sequelize_typescript_1.HasMany)(() => ItemConfigs_1.ItemConfigs, { onDelete: 'cascade' }),
     __metadata("design:type", Array)
 ], Collections.prototype, "itemConfigs", void 0);
 Collections = __decorate([
