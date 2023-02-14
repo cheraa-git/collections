@@ -31,10 +31,9 @@ export interface Fields {
   [type: string]: string | number | boolean
 }
 
-export interface ItemConfigType {
+export type ItemConfigType = {
   id?: number
   collectionId?: number
-  // type: 'str1' | 'str2' | 'str3' | 'txt1' | 'txt2' | 'txt3' | 'numb1' | 'numb2' | 'numb3' | 'bool1' | 'bool2' | 'bool3' | 'date1' | 'date2' | 'date3'
   type: string
   label: string
 }

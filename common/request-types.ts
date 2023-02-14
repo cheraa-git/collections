@@ -33,3 +33,9 @@ export interface DeleteCollectionBody {
   token: string
 }
 
+export interface EditCollectionBody {
+  itemConfigs: ItemConfigType[]
+  collection: Collection
+  token: string
+}
+

@@ -16,7 +16,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 export const CollectionPage: FC = () => {
   const dispatch = useAppDispatch()
-  const { collection, items } = useAppSelector((state: RootState) => state.collection)
+  const { collection, items, itemConfigs } = useAppSelector((state: RootState) => state.collection)
   const { id } = useParams()
   const navigate = useNavigate()
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
@@ -39,7 +39,10 @@ export const CollectionPage: FC = () => {
     showConfirm('It will be impossible to restore the collection.', () => {
       dispatch(deleteCollection(collection, navigate))
     })
-
+  }
+  const editHandler = () => {
+    setMenuAnchorEl(null)
+    navigate('/create_collection', { state: { editable: { collection, itemConfigs } } })
   }
 
   if (!collection.id) return <></>
@@ -79,7 +82,7 @@ export const CollectionPage: FC = () => {
                   horizontal: 'right',
                 }}
           >
-            <MenuItem ><EditIcon className="text-gray-500 mr-3"/>Edit collection</MenuItem>
+            <MenuItem onClick={editHandler}><EditIcon className="text-gray-500 mr-3"/>Edit collection</MenuItem>
             <MenuItem onClick={deleteHandler}><DeleteIcon className="text-red-400 mr-3"/>Delete collection</MenuItem>
           </Menu>
         </div>

@@ -1,17 +1,18 @@
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Button, IconButton, MenuItem, TextField } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useAppDispatch } from "../store/store"
-import { createCollection } from "../store/actions/collectionActions"
+import { createCollection, editCollection } from "../store/actions/collectionActions"
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useSnackbar } from "notistack"
 import { MarkdownFormControl } from "../components/UI/Markdown/MarkdownFormControl"
 import { ImageDrop } from "../components/UI/ImageDrop"
 import { MAX_IMAGE_SIZE } from "../constants/_other"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useApp } from "../hooks/appStateHook"
 import { Spinner } from "../components/UI/Loader/Spinner"
+import { Collection, ItemConfigType } from "../../../common/common-types"
 
 
 interface Inputs {
@@ -19,26 +20,45 @@ interface Inputs {
   description: string
   theme: string
   image: FileList
+  existingImage?: string
 }
+
 
 export const CreateCollectionPage: FC = () => {
   const dispatch = useAppDispatch()
   const { loading } = useApp()
   const { enqueueSnackbar: snackbar } = useSnackbar()
   const navigate = useNavigate()
-  const { register, handleSubmit, formState: { errors }, watch, setValue, control } = useForm<Inputs>()
-  const [configInputs, setConfigInputs] = useState<{ type: string, label: string }[]>([{ type: '', label: '' }])
+  const location = useLocation()
+  const { register, handleSubmit, formState: { errors }, watch, setValue, getValues, control } = useForm<Inputs>()
+  const [configInputs, setConfigInputs] = useState<ItemConfigType[]>([{ type: '', label: '' }])
   const imageFile = watch('image') && watch('image').length > 0 ? watch('image')[0] : undefined
-
   const fixedConfigInputs = [['string', 'name'], ['#tags', 'tags']]
   const themes = ["Books", "Films", "Travels", "Programming", "TV"]
+  const editable: { collection: Collection, itemConfigs: ItemConfigType[] } | undefined = location.state?.editable
+
+  useEffect(() => {
+    if (editable) {
+      setValue('title', editable.collection.title)
+      setValue('description', editable.collection.description)
+      setValue('theme', editable.collection.theme)
+      setValue('existingImage', editable.collection.imageUrl)
+      setConfigInputs(editable.itemConfigs)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (imageFile) setValue('existingImage', '')
+  }, [watch('image')])
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const itemConfigs = configInputs.filter(config => config.type && config.label)
-    if (data.image[0]?.size > MAX_IMAGE_SIZE) {
-      return snackbar('The maximum photo size is 10MB')
+    if (data.image[0]?.size > MAX_IMAGE_SIZE) return snackbar('The maximum photo size is 10MB')
+    if (editable) {
+      dispatch(editCollection({ ...editable.collection, ...data, image: data.image[0], itemConfigs, }, navigate))
+    } else {
+      dispatch(createCollection({ ...data, image: data.image[0], itemConfigs }, navigate))
     }
-    dispatch(createCollection({ ...data, image: data.image[0], itemConfigs }, navigate))
   }
 
   const configTypeHandler = (index: number, type: string) => {
@@ -65,6 +85,11 @@ export const CreateCollectionPage: FC = () => {
     setConfigInputs(prev => prev.filter((_, i) => i !== index))
   }
 
+  const clearImage = () => {
+    setValue('image', new DataTransfer().files)
+    setValue('existingImage', '')
+  }
+
 
   return (
     <div className="bg-white max-w-3xl mx-auto px-4 my-5 p-5">
@@ -73,7 +98,7 @@ export const CreateCollectionPage: FC = () => {
 
         <TextField label="Title" margin="normal" {...register('title', { required: true })} error={!!errors.title}/>
 
-        <TextField select label="Theme" defaultValue="" margin="normal"
+        <TextField select label="Theme" defaultValue={editable?.collection.theme || ''} margin="normal"
                    {...register('theme', { required: true, })} error={!!errors.theme}>
           {themes.map((theme, i) => <MenuItem key={i} value={theme}>{theme}</MenuItem>)}
         </TextField>
@@ -82,7 +107,8 @@ export const CreateCollectionPage: FC = () => {
         <ImageDrop className="mx-auto mb-3 mt-1"
                    imageFile={imageFile}
                    inputProps={{ ...register('image') }}
-                   clearFile={() => setValue('image', new DataTransfer().files)}
+                   clearFile={clearImage}
+                   existingImageUrl={getValues().existingImage}
         />
 
         <MarkdownFormControl control={control} className="mb-4" controlName="description" label="Enter a description"/>

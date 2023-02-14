@@ -13,6 +13,7 @@ collectionRouter.get('/:id', controller.getCollection)
 collectionRouter.get('/:collectionId/:id', controller.getItem)
 collectionRouter.delete('/delete_item', controller.deleteItem)
 collectionRouter.delete('/delete_collection', controller.deleteCollection)
+collectionRouter.post('/edit_collection', controller.editCollection)
 
 
 

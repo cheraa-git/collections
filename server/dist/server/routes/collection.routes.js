@@ -12,3 +12,4 @@ exports.collectionRouter.get('/:id', controller.getCollection);
 exports.collectionRouter.get('/:collectionId/:id', controller.getItem);
 exports.collectionRouter.delete('/delete_item', controller.deleteItem);
 exports.collectionRouter.delete('/delete_collection', controller.deleteCollection);
+exports.collectionRouter.post('/edit_collection', controller.editCollection);

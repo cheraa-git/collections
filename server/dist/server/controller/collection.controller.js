@@ -122,6 +122,18 @@ class CollectionController {
             const countDeletedCollections = yield Collections_1.Collections.destroy({ where: { id: collection.id }, force: true });
             res.json(countDeletedCollections);
         });
+        this.editCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { collection, token, itemConfigs } = req.body;
+            if (!this.checkToken(token, collection.userId)) {
+                return res.status(500).json({ error: 'TokenError' });
+            }
+            const editedCollection = yield Collections_1.Collections.update(collection, { where: { id: collection.id }, returning: ['*'] });
+            const editedConfigs = yield ItemConfigs_1.ItemConfigs.bulkCreate(itemConfigs, {
+                updateOnDuplicate: ['type', 'label'],
+                returning: ['*']
+            });
+            res.json({ collection: editedCollection[1][0], itemConfigs: editedConfigs });
+        });
     }
     checkToken(token, userId) {
         if (!token || !userId)

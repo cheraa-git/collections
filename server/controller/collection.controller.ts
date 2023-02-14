@@ -8,7 +8,7 @@ import {
   CreateCollectionBody,
   CreateItemBody,
   DeleteCollectionBody,
-  DeleteItemBody,
+  DeleteItemBody, EditCollectionBody,
   EditItemBody
 } from "../../common/request-types"
 import { Users } from "../db/models/Users"
@@ -111,9 +111,20 @@ export class CollectionController {
     if (!this.checkToken(token, collection.userId)) {
       return res.status(500).json({ error: 'TokenError' })
     }
-
     const countDeletedCollections = await Collections.destroy({ where: { id: collection.id }, force: true })
     res.json(countDeletedCollections)
+  }
+  editCollection = async (req: Request<any, any, EditCollectionBody>, res: Response) => {
+    const { collection, token, itemConfigs } = req.body
+    if (!this.checkToken(token, collection.userId)) {
+      return res.status(500).json({ error: 'TokenError' })
+    }
+    const editedCollection = await Collections.update(collection, { where: { id: collection.id }, returning: ['*'] })
+    const editedConfigs = await ItemConfigs.bulkCreate(itemConfigs, {
+      updateOnDuplicate: ['type', 'label'],
+      returning: ['*']
+    })
 
+    res.json({ collection: editedCollection[1][0], itemConfigs: editedConfigs })
   }
 }

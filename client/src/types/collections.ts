@@ -8,6 +8,17 @@ export interface CreateCollectionPayload {
   itemConfigs?: ItemConfigType[]
 }
 
+export interface EditCollectionPayload {
+  description: string
+  existingImage?: string
+  id: number
+  image?: File
+  itemConfigs?: ItemConfigType[]
+  theme: string
+  title: string
+  userId: number
+}
+
 export interface CreateItemPayload {
   collectionId: number
   fields: Fields

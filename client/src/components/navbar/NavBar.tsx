@@ -11,7 +11,7 @@ export const NavBar: FC = () => {
   const { loading } = useApp()
 
   return (
-    <div className="sticky top-0 z-10">
+    <div className="sticky top-0 z-20">
       <nav className="bg-gray-800 w-full ">
         <div className="mx-auto max-w-7xl px-2">
           <div className="relative flex h-16 items-center text-white">
