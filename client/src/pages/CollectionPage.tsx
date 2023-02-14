@@ -3,13 +3,16 @@ import { RootState, useAppDispatch, useAppSelector } from "../store/store"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { formatDate } from "../utils"
 import MDEditor from "@uiw/react-md-editor"
-import { Button, Grid } from "@mui/material"
+import { Button, Grid, IconButton, Menu, MenuItem } from "@mui/material"
 import AddIcon from '@mui/icons-material/Add'
 import { deleteCollection, getCollection } from "../store/actions/collectionActions"
 import { EditItemDialog } from "../components/item/EditItemDialog"
 import { ItemCard } from "../components/item/ItemCard"
 import { clearCollectionData } from "../store/slices/collectionSlice"
 import { useConfirm } from "../hooks/confirmHook"
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 export const CollectionPage: FC = () => {
   const dispatch = useAppDispatch()
@@ -17,7 +20,9 @@ export const CollectionPage: FC = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const { showConfirm } = useConfirm()
+
 
   useEffect(() => {
     if (collection && collection.id !== Number(id)) {
@@ -30,6 +35,7 @@ export const CollectionPage: FC = () => {
 
 
   const deleteHandler = () => {
+    setMenuAnchorEl(null)
     showConfirm('It will be impossible to restore the collection.', () => {
       dispatch(deleteCollection(collection, navigate))
     })
@@ -39,7 +45,6 @@ export const CollectionPage: FC = () => {
   if (!collection.id) return <></>
   return (
     <div className="bg-white max-w-5xl mx-auto my-5 rounded p-5">
-      <Button onClick={deleteHandler}>delete</Button>
       <Grid container spacing={5}>
         <Grid item md={4} xs={12} hidden={!collection.imageUrl}>
           <img className="max-h-[50vh] max-w-[300px]" src={collection.imageUrl} alt="collection"/>
@@ -61,15 +66,30 @@ export const CollectionPage: FC = () => {
             in {formatDate(collection.timestamp)}
           </p>
         </div>
-        <Button onClick={() => setEditItemDialogOpen(true)} hidden={!collection}>
-          <AddIcon/>
-          add item
-        </Button>
+        <div className="h-min my-auto text-blue-500">
+          <Button onClick={() => setEditItemDialogOpen(true)} hidden={!collection}>
+            <AddIcon/>
+            add item
+          </Button>
+
+          <IconButton onClick={(e) => setMenuAnchorEl(e.currentTarget)}><MoreVertIcon/></IconButton>
+          <Menu open={Boolean(menuAnchorEl)} onClose={() => setMenuAnchorEl(null)} anchorEl={menuAnchorEl}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+          >
+            <MenuItem ><EditIcon className="text-gray-500 mr-3"/>Edit collection</MenuItem>
+            <MenuItem onClick={deleteHandler}><DeleteIcon className="text-red-400 mr-3"/>Delete collection</MenuItem>
+          </Menu>
+        </div>
         <EditItemDialog open={editItemDialogOpen} onClose={() => setEditItemDialogOpen(false)}
                         collectionId={collection.id}/>
       </div>
 
-      {items.map(item => <ItemCard item={item} key={item.id}/>)}
+      {
+        items.map(item => <ItemCard item={item} key={item.id}/>)
+      }
 
     </div>
   )

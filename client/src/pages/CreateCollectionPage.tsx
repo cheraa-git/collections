@@ -19,7 +19,6 @@ interface Inputs {
   description: string
   theme: string
   image: FileList
-  test: string
 }
 
 export const CreateCollectionPage: FC = () => {
