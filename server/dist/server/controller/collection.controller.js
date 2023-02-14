@@ -43,6 +43,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const Users_1 = require("../db/models/Users");
 const Items_1 = require("../db/models/Items");
 const utils_1 = require("../utils");
+const Themes_1 = require("../db/models/Themes");
 class CollectionController {
     constructor() {
         this.createCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -133,6 +134,10 @@ class CollectionController {
                 returning: ['*']
             });
             res.json({ collection: editedCollection[1][0], itemConfigs: editedConfigs });
+        });
+        this.getThemes = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const themes = yield Themes_1.Themes.findAll();
+            res.json(themes);
         });
     }
     checkToken(token, userId) {

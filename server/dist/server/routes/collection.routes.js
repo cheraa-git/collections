@@ -8,6 +8,7 @@ exports.collectionRouter = (0, express_1.Router)();
 exports.collectionRouter.post('/create_collection', controller.createCollection);
 exports.collectionRouter.post('/create_item', controller.createItem);
 exports.collectionRouter.post('/edit_item', controller.editItem);
+exports.collectionRouter.get('/theme', controller.getThemes);
 exports.collectionRouter.get('/:id', controller.getCollection);
 exports.collectionRouter.get('/:collectionId/:id', controller.getItem);
 exports.collectionRouter.delete('/delete_item', controller.deleteItem);

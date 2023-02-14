@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Collection, Item, ItemConfigType } from "../../../../common/common-types"
+import { Collection, Item, ItemConfigType, Theme } from "../../../../common/common-types"
 
 export interface CollectionState {
   collection: Collection
   itemConfigs: ItemConfigType[]
   items: Item[]
+  themes: Theme[]
 }
 
 const initialState: CollectionState = {
@@ -15,10 +16,11 @@ const initialState: CollectionState = {
     description: '',
     theme: '',
     imageUrl: '',
-    timestamp: ''
+    timestamp: '',
   },
   itemConfigs: [],
-  items: []
+  items: [],
+  themes: []
 }
 
 export const userSlice = createSlice({
@@ -45,9 +47,12 @@ export const userSlice = createSlice({
     setItem: (state, { payload }: PayloadAction<Item>) => {
       state.items = state.items.map(item => item.id === payload.id ? payload : item)
     },
+    setThemes: (state, { payload }: PayloadAction<Theme[]>) => {
+      state.themes = payload
+    },
   }
 })
 
-export const { setCollectionData, addItem, setItemConfigs, clearCollectionData, setItem } = userSlice.actions
+export const { setCollectionData, addItem, setItemConfigs, clearCollectionData, setItem, setThemes } = userSlice.actions
 
 export const CollectionReducer = userSlice.reducer

@@ -11,6 +11,7 @@ const Items_1 = require("./models/Items");
 const ItemConfigs_1 = require("./models/ItemConfigs");
 const Tags_1 = require("./models/Tags");
 const ItemsTags_1 = require("./models/ItemsTags");
+const Themes_1 = require("./models/Themes");
 dotenv_1.default.config();
 const connection = new sequelize_typescript_1.Sequelize({
     dialect: 'postgres',
@@ -19,7 +20,7 @@ const connection = new sequelize_typescript_1.Sequelize({
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
     logging: false,
-    models: [Users_1.Users, Collections_1.Collections, Items_1.Items, ItemConfigs_1.ItemConfigs, Tags_1.Tags, ItemsTags_1.ItemsTags],
+    models: [Users_1.Users, Collections_1.Collections, Items_1.Items, ItemConfigs_1.ItemConfigs, Tags_1.Tags, ItemsTags_1.ItemsTags, Themes_1.Themes],
     dialectOptions: {
         ssl: true,
         native: true,

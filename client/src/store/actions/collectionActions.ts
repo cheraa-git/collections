@@ -3,7 +3,7 @@ import axios from "../../axios-app"
 import { CreateCollectionPayload, CreateItemPayload, EditCollectionPayload } from "../../types/collections"
 import { saveImageToCloud } from "../../apis/firebase/firebaseActions"
 import { CreateCollectionBody, CreateItemBody } from "../../../../common/request-types"
-import { addItem, setCollectionData, setItem, setItemConfigs } from "../slices/collectionSlice"
+import { addItem, setCollectionData, setItem, setItemConfigs, setThemes } from "../slices/collectionSlice"
 import { setLoading } from "../slices/appSlice"
 import { Collection, Item } from "../../../../common/common-types"
 import { NavigateFunction } from "react-router-dom"
@@ -92,5 +92,13 @@ export const deleteCollection = (collection: Collection, navigate: NavigateFunct
   const response = await axios.delete('/collection/delete_collection', { data: { collection, token } })
   console.log('DELETE', response.data)
   navigate(`/profile/${collection.userId}`)
+  dispatch(setLoading(false))
+}
+
+export const getThemes = () => async (dispatch: AppDispatch,) => {
+  dispatch(setLoading(true))
+  const response = await axios.get('/collection/theme')
+  console.log('THEMES', response.data)
+  dispatch(setThemes(response.data))
   dispatch(setLoading(false))
 }

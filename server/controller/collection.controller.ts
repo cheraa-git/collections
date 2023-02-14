@@ -14,6 +14,7 @@ import {
 import { Users } from "../db/models/Users"
 import { Items } from "../db/models/Items"
 import { filterItem } from "../utils"
+import { Themes } from "../db/models/Themes"
 
 
 export class CollectionController {
@@ -126,5 +127,10 @@ export class CollectionController {
     })
 
     res.json({ collection: editedCollection[1][0], itemConfigs: editedConfigs })
+  }
+
+  getThemes = async (req: Request, res: Response) => {
+    const themes = await Themes.findAll()
+    res.json(themes)
   }
 }

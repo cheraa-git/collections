@@ -37,3 +37,8 @@ export type ItemConfigType = {
   type: string
   label: string
 }
+
+export interface Theme {
+  id: number
+  name: string
+}
