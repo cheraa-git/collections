@@ -14,7 +14,7 @@ const initialState: CollectionState = {
     userId: NaN,
     title: '',
     description: '',
-    theme: '',
+    themeId: NaN,
     imageUrl: '',
     timestamp: '',
   },
@@ -41,8 +41,8 @@ export const userSlice = createSlice({
     setItemConfigs: (state, { payload }: PayloadAction<ItemConfigType[]>) => {
       state.itemConfigs = payload
     },
-    clearCollectionData: () => {
-      return initialState
+    clearCollectionData: (state) => {
+      return { ...initialState, themes: state.themes }
     },
     setItem: (state, { payload }: PayloadAction<Item>) => {
       state.items = state.items.map(item => item.id === payload.id ? payload : item)

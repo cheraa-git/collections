@@ -11,12 +11,12 @@ import { NavigateFunction } from "react-router-dom"
 
 export const createCollection = (data: CreateCollectionPayload, navigate: NavigateFunction) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { image, theme, title, itemConfigs, description } = data
+    const { image, themeId, title, itemConfigs, description } = data
     const { id: userId, token } = getState().user.currentUser
     let imageUrl = ''
     dispatch(setLoading(true))
     if (image) imageUrl = await saveImageToCloud(image)
-    const sendData: CreateCollectionBody = { userId, token, imageUrl, theme, title, description, itemConfigs }
+    const sendData: CreateCollectionBody = { userId, token, imageUrl, themeId, title, description, itemConfigs }
     console.log(sendData)
     const collection = (await axios.post<Collection>('collection/create_collection', sendData)).data
     navigate(`/profile/${userId}`)
@@ -27,13 +27,13 @@ export const createCollection = (data: CreateCollectionPayload, navigate: Naviga
 
 export const editCollection = (data: EditCollectionPayload, navigate: NavigateFunction) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { image, existingImage, id, title, userId, itemConfigs, theme, description } = data
+    const { image, existingImage, id, title, userId, itemConfigs, themeId, description } = data
     const token = getState().user.currentUser.token
     let imageUrl = ''
     dispatch(setLoading(true))
     if (existingImage) imageUrl = existingImage
     if (image) imageUrl = await saveImageToCloud(image)
-    const sendData = { itemConfigs, collection: { id, userId, imageUrl, title, theme, description }, token }
+    const sendData = { itemConfigs, collection: { id, userId, imageUrl, title, themeId, description }, token }
     const response = await axios.post<Collection>('collection/edit_collection', sendData)
     console.log('EDIT_COLLECTION', response.data)
     navigate(`/collection/${id}`)
@@ -98,7 +98,6 @@ export const deleteCollection = (collection: Collection, navigate: NavigateFunct
 export const getThemes = () => async (dispatch: AppDispatch,) => {
   dispatch(setLoading(true))
   const response = await axios.get('/collection/theme')
-  console.log('THEMES', response.data)
   dispatch(setThemes(response.data))
   dispatch(setLoading(false))
 }

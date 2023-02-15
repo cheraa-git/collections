@@ -27,7 +27,7 @@ export class Users extends Model {
   })
   email!: string
 
-  @Column({type: DataType.STRING})
+  @Column({ type: DataType.STRING })
   password!: string
 
   @Column({
@@ -35,6 +35,6 @@ export class Users extends Model {
   })
   avatarUrl!: string
 
-  @HasMany(() => Collections)
+  @HasMany(() => Collections, { onDelete: 'cascade' })
   collections!: Collections[]
 }

@@ -3,6 +3,7 @@ import { Table, Column, DataType, ForeignKey, BelongsTo, Model, HasMany } from "
 import { Users } from "./Users"
 import { Items } from "./Items"
 import { ItemConfigs } from "./ItemConfigs"
+import { Themes } from "./Themes"
 
 
 @Table({ timestamps: false, tableName: 'collections' })
@@ -29,8 +30,9 @@ export class Collections extends Model {
   @Column({ type: DataType.TEXT })
   description!: string
 
-  @Column({ type: DataType.STRING })
-  theme!: string
+  @ForeignKey(() => Themes)
+  @Column
+  themeId!: number
 
   @Column({ type: DataType.STRING })
   imageUrl!: string
@@ -38,10 +40,13 @@ export class Collections extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   timestamp!: string
 
+  @BelongsTo(() => Themes)
+  themes!: Themes
+
   @BelongsTo(() => Users)
   users!: Users
 
-  @HasMany(() => Items)
+  @HasMany(() => Items, { onDelete: 'cascade' })
   items!: Items[]
 
   @HasMany(() => ItemConfigs, { onDelete: 'cascade' })

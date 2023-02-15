@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react"
 import { Button, IconButton, MenuItem, TextField } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { RootState, useAppDispatch, useAppSelector } from "../store/store"
+import { useAppDispatch, } from "../store/store"
 import { createCollection, editCollection } from "../store/actions/collectionActions"
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
@@ -13,12 +13,13 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useApp } from "../hooks/appStateHook"
 import { Spinner } from "../components/UI/Loader/Spinner"
 import { Collection, ItemConfigType } from "../../../common/common-types"
+import { useCollection } from "../hooks/collectionStateHook"
 
 
 interface Inputs {
   title: string
   description: string
-  theme: string
+  themeId: number
   image: FileList
   existingImage?: string
 }
@@ -35,13 +36,13 @@ export const CreateCollectionPage: FC = () => {
   const imageFile = watch('image') && watch('image').length > 0 ? watch('image')[0] : undefined
   const fixedConfigInputs = [['string', 'name'], ['#tags', 'tags']]
   const editable: { collection: Collection, itemConfigs: ItemConfigType[] } | undefined = location.state?.editable
-  const themes = useAppSelector((state: RootState) => state.collection.themes)
+  const themes = useCollection().themes
 
   useEffect(() => {
     if (editable) {
       setValue('title', editable.collection.title)
       setValue('description', editable.collection.description)
-      setValue('theme', editable.collection.theme)
+      setValue('themeId', editable.collection.themeId)
       setValue('existingImage', editable.collection.imageUrl)
       setConfigInputs(editable.itemConfigs)
     }
@@ -98,9 +99,9 @@ export const CreateCollectionPage: FC = () => {
 
         <TextField label="Title" margin="normal" {...register('title', { required: true })} error={!!errors.title}/>
 
-        <TextField select label="Theme" defaultValue={editable?.collection.theme || ''} margin="normal"
-                   {...register('theme', { required: true, })} error={!!errors.theme}>
-          {themes.map((theme) => <MenuItem key={theme.id} value={theme.name}>{theme.name}</MenuItem>)}
+        <TextField select label="Theme" defaultValue={editable?.collection.themeId || ''} margin="normal"
+                   {...register('themeId', { required: true, })} error={!!errors.themeId}>
+          {themes.map((theme) => <MenuItem key={theme.id} value={theme.id}>{theme.name}</MenuItem>)}
         </TextField>
 
         <h3>If you want, add a picture of the collection</h3>

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { RootState, useAppDispatch, useAppSelector } from "../store/store"
+import { useAppDispatch } from "../store/store"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { formatDate } from "../utils"
 import MDEditor from "@uiw/react-md-editor"
@@ -13,10 +13,11 @@ import { useConfirm } from "../hooks/confirmHook"
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { useCollection } from "../hooks/collectionStateHook"
 
 export const CollectionPage: FC = () => {
   const dispatch = useAppDispatch()
-  const { collection, items, itemConfigs } = useAppSelector((state: RootState) => state.collection)
+  const { collection, items, itemConfigs, getThemeName } = useCollection()
   const { id } = useParams()
   const navigate = useNavigate()
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
@@ -45,6 +46,7 @@ export const CollectionPage: FC = () => {
     navigate('/create_collection', { state: { editable: { collection, itemConfigs } } })
   }
 
+
   if (!collection.id) return <></>
   return (
     <div className="bg-white max-w-5xl mx-auto my-5 rounded p-5">
@@ -62,7 +64,7 @@ export const CollectionPage: FC = () => {
 
       <div className="border-y py-2 my-2 flex justify-between">
         <div>
-          <h3>Theme: {collection.theme}</h3>
+          <h3>Theme: {getThemeName()}</h3>
           <p className="italic">
             Created by
             <Link to={`/profile/${collection.userId}`} className="text-orange-400 mx-1">@{collection.userName}</Link>

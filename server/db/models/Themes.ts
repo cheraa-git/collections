@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript"
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript"
+import { Collections } from "./Collections"
 
 @Table({ timestamps: false, tableName: 'themes' })
 export class Themes extends Model {
@@ -13,4 +14,7 @@ export class Themes extends Model {
 
   @Column({ type: DataType.STRING, allowNull: false })
   name!: string
+
+  @HasMany(() => Collections)
+  collections!: Collections[]
 }

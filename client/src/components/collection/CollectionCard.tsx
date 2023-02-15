@@ -5,6 +5,7 @@ import { formatDate } from "../../utils"
 import MDEditor from "@uiw/react-md-editor"
 import { Button } from "@mui/material"
 import { Link } from "react-router-dom"
+import { useCollection } from "../../hooks/collectionStateHook"
 
 interface CollectionCardProps {
   collection: Collection
@@ -12,7 +13,7 @@ interface CollectionCardProps {
 }
 
 export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) => {
-
+  const { getThemeName } = useCollection()
 
   return (
     <div className="bg-white max-w-[900px] w-[100%] rounded p-4">
@@ -23,7 +24,7 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
         </div>
         <div className="flex justify-between">
           <p className="text-orange-400 cursor-pointer capitalize">@{user.nickname}</p>
-          <p className="text-blue-500 underline cursor-pointer text">{collection.theme}</p>
+          <p className="text-blue-500 underline cursor-pointer text">{getThemeName(collection.themeId)}</p>
         </div>
       </div>
       <img src={collection.imageUrl} alt="collection" hidden={!collection.imageUrl}/>

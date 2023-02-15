@@ -2,10 +2,11 @@ import { FC, useEffect } from "react"
 import { ItemField } from "./ItemField"
 import { Button, Dialog, TextField } from "@mui/material"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
-import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
+import { useAppDispatch } from "../../store/store"
 import { createItem, editItem } from "../../store/actions/collectionActions"
 import { Fields } from "../../../../common/common-types"
 import { Item } from "../../../../common/common-types"
+import { useCollection } from "../../hooks/collectionStateHook"
 
 
 interface EditItemDialogProps {
@@ -18,7 +19,7 @@ interface EditItemDialogProps {
 export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collectionId, item }) => {
   const dispatch = useAppDispatch()
   const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<FieldValues>()
-  const itemConfigs = useAppSelector((state: RootState) => state.collection.itemConfigs)
+  const itemConfigs = useCollection().itemConfigs
   // const _itemConfigs = [
   //   { id: 1, type: 'date1', label: 'date' },
   //   { id: 2, type: 'str1', label: 'title' },

@@ -3,7 +3,7 @@ import { Fields } from "../../../common/common-types"
 export interface CreateCollectionPayload {
   title: string
   description: string,
-  theme: string
+  themeId: number
   image?: File
   itemConfigs?: ItemConfigType[]
 }
@@ -14,7 +14,7 @@ export interface EditCollectionPayload {
   id: number
   image?: File
   itemConfigs?: ItemConfigType[]
-  theme: string
+  themeId: number
   title: string
   userId: number
 }

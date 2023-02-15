@@ -12,7 +12,7 @@ export interface Collection {
   userName?: string
   title: string
   description: string
-  theme: string
+  themeId: number
   timestamp: string
   imageUrl?: string
 }

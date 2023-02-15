@@ -14,6 +14,7 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const Users_1 = require("./Users");
 const Items_1 = require("./Items");
 const ItemConfigs_1 = require("./ItemConfigs");
+const Themes_1 = require("./Themes");
 let Collections = class Collections extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -43,9 +44,10 @@ __decorate([
     __metadata("design:type", String)
 ], Collections.prototype, "description", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING }),
-    __metadata("design:type", String)
-], Collections.prototype, "theme", void 0);
+    (0, sequelize_typescript_1.ForeignKey)(() => Themes_1.Themes),
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Number)
+], Collections.prototype, "themeId", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING }),
     __metadata("design:type", String)
@@ -55,11 +57,15 @@ __decorate([
     __metadata("design:type", String)
 ], Collections.prototype, "timestamp", void 0);
 __decorate([
+    (0, sequelize_typescript_1.BelongsTo)(() => Themes_1.Themes),
+    __metadata("design:type", Themes_1.Themes)
+], Collections.prototype, "themes", void 0);
+__decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => Users_1.Users),
     __metadata("design:type", Users_1.Users)
 ], Collections.prototype, "users", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => Items_1.Items),
+    (0, sequelize_typescript_1.HasMany)(() => Items_1.Items, { onDelete: 'cascade' }),
     __metadata("design:type", Array)
 ], Collections.prototype, "items", void 0);
 __decorate([

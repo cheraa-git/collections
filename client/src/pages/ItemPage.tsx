@@ -1,16 +1,17 @@
 import { FC, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { RootState, useAppDispatch, useAppSelector } from "../store/store"
+import { useAppDispatch } from "../store/store"
 import { deleteItem, getItem } from "../store/actions/collectionActions"
 import { ItemFieldView } from "../components/item/ItemFieldView"
 import { Button } from "@mui/material"
 import { EditItemDialog } from "../components/item/EditItemDialog"
+import { useCollection } from "../hooks/collectionStateHook"
 
 export const ItemPage: FC = () => {
   const dispatch = useAppDispatch()
   const { id, collectionId } = useParams()
   const navigate = useNavigate()
-  const { items, itemConfigs } = useAppSelector((state: RootState) => state.collection)
+  const { items, itemConfigs } = useCollection()
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const item = items.find(item => item.id === Number(id))
   // const _item = {

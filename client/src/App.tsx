@@ -7,17 +7,18 @@ import { NotFoundPage } from "./pages/NotFoundPage"
 import { NavBar } from "./components/navbar/NavBar"
 import { CreateCollectionPage } from "./pages/CreateCollectionPage"
 import { clientRoutes } from './constants/routes'
-import { RootState, useAppDispatch, useAppSelector } from "./store/store"
+import { useAppDispatch } from "./store/store"
 import { useAuth } from "./hooks/authHook"
 import { autoLogin } from "./store/actions/userActions"
 import { CollectionPage } from "./pages/CollectionPage"
 import { ItemPage } from "./pages/ItemPage"
 import { getThemes } from "./store/actions/collectionActions"
+import { useCollection } from "./hooks/collectionStateHook"
 
 function App() {
   const dispatch = useAppDispatch()
   const { isAuth } = useAuth()
-  const themes = useAppSelector((state: RootState) => state.collection.themes)
+  const themes = useCollection().themes
   const { MAIN, CREATE_COLLECTION } = clientRoutes
 
 
@@ -25,7 +26,7 @@ function App() {
     if (!isAuth) {
       dispatch(autoLogin())
     }
-    if (isAuth && themes.length === 0) {
+    if (themes.length === 0) {
       dispatch(getThemes())
     }
   }, [isAuth, dispatch])

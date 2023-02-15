@@ -51,7 +51,7 @@ __decorate([
     __metadata("design:type", String)
 ], Users.prototype, "avatarUrl", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => Collections_1.Collections),
+    (0, sequelize_typescript_1.HasMany)(() => Collections_1.Collections, { onDelete: 'cascade' }),
     __metadata("design:type", Array)
 ], Users.prototype, "collections", void 0);
 Users = __decorate([

@@ -27,15 +27,15 @@ export class CollectionController {
   }
 
   createCollection = async (req: Request<any, any, CreateCollectionBody>, res: Response) => {
-    const { userId, token, title, description, theme, imageUrl, itemConfigs } = req.body
+    const { userId, token, title, description, themeId, imageUrl, itemConfigs } = req.body
     const timestamp = `${Date.now()}`
     if (!this.checkToken(token, userId)) {
       return res.status(500).json({ error: 'TokenError' })
     }
-    if (!title || !description || !theme) {
+    if (!title || !description || !themeId) {
       return res.status(500).json({ error: 'Collection data is invalid' })
     }
-    const newCollection = await Collections.create({ title, description, theme, userId, imageUrl, timestamp })
+    const newCollection = await Collections.create({ title, description, themeId, userId, imageUrl, timestamp })
     if (itemConfigs && itemConfigs.length > 0) {
       const configs = itemConfigs.map(config => ({ ...config, collectionId: newCollection.id }))
       await ItemConfigs.bulkCreate(configs)
@@ -115,6 +115,7 @@ export class CollectionController {
     const countDeletedCollections = await Collections.destroy({ where: { id: collection.id }, force: true })
     res.json(countDeletedCollections)
   }
+
   editCollection = async (req: Request<any, any, EditCollectionBody>, res: Response) => {
     const { collection, token, itemConfigs } = req.body
     if (!this.checkToken(token, collection.userId)) {

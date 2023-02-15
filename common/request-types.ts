@@ -5,7 +5,7 @@ export interface CreateCollectionBody {
   token: string
   title: string
   description: string
-  theme: string
+  themeId: number
   imageUrl?: string
   itemConfigs?: ItemConfigType[]
 }

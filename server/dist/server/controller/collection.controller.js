@@ -47,15 +47,15 @@ const Themes_1 = require("../db/models/Themes");
 class CollectionController {
     constructor() {
         this.createCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { userId, token, title, description, theme, imageUrl, itemConfigs } = req.body;
+            const { userId, token, title, description, themeId, imageUrl, itemConfigs } = req.body;
             const timestamp = `${Date.now()}`;
             if (!this.checkToken(token, userId)) {
                 return res.status(500).json({ error: 'TokenError' });
             }
-            if (!title || !description || !theme) {
+            if (!title || !description || !themeId) {
                 return res.status(500).json({ error: 'Collection data is invalid' });
             }
-            const newCollection = yield Collections_1.Collections.create({ title, description, theme, userId, imageUrl, timestamp });
+            const newCollection = yield Collections_1.Collections.create({ title, description, themeId, userId, imageUrl, timestamp });
             if (itemConfigs && itemConfigs.length > 0) {
                 const configs = itemConfigs.map(config => (Object.assign(Object.assign({}, config), { collectionId: newCollection.id })));
                 yield ItemConfigs_1.ItemConfigs.bulkCreate(configs);

@@ -11,6 +11,10 @@ export const ProfilePage: FC = () => {
   const { collections, profileUser } = useAppSelector((state: RootState) => state.profile)
   const { userId } = useParams()
 
+  const sortCollections = () => {
+    return [...collections].sort((a, b) => +a.timestamp - +b.timestamp)
+  }
+
   useEffect(() => {
     if (userId) {
       dispatch(getProfile(userId))
@@ -20,7 +24,7 @@ export const ProfilePage: FC = () => {
     <div className="m-6">
       <ProfileUserInfo/>
       <Grid container spacing={2}>
-        {collections.map(collection => (
+        {sortCollections().map(collection => (
           <Grid item xs={6} key={collection.id}>
             <CollectionCard collection={collection} user={profileUser}/>
           </Grid>
