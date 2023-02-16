@@ -32,7 +32,7 @@ class CollectionController {
                 const configs = itemConfigs.map(config => (Object.assign(Object.assign({}, config), { collectionId: newCollection.id })));
                 yield ItemConfigs_1.ItemConfigs.bulkCreate(configs);
             }
-            // TODO: отработать исключения при создании
+            //TODO: отработать исключения при создании
             res.json(Object.assign({}, newCollection.dataValues));
         });
         this.getCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {

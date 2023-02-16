@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { useAppDispatch } from "../store/store"
+import { RootState, useAppDispatch, useAppSelector } from "../store/store"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { formatDate } from "../utils"
 import MDEditor from "@uiw/react-md-editor"
@@ -17,13 +17,13 @@ import { useCollection } from "../hooks/collectionStateHook"
 
 export const CollectionPage: FC = () => {
   const dispatch = useAppDispatch()
-  const { collection, items, itemConfigs, getThemeName } = useCollection()
-  const { id } = useParams()
   const navigate = useNavigate()
+  const { id } = useParams()
+  const { showConfirm } = useConfirm()
+  const { collection, itemConfigs, getThemeName } = useCollection()
+  const items = useAppSelector((state: RootState) => state.item.items)
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
-  const { showConfirm } = useConfirm()
-
 
   useEffect(() => {
     if (collection && collection.id !== Number(id)) {
@@ -34,18 +34,17 @@ export const CollectionPage: FC = () => {
     }
   }, [dispatch, id])
 
-
   const deleteHandler = () => {
     setMenuAnchorEl(null)
     showConfirm('It will be impossible to restore the collection.', () => {
       dispatch(deleteCollection(collection, navigate))
     })
   }
+
   const editHandler = () => {
     setMenuAnchorEl(null)
     navigate('/create_collection', { state: { editable: { collection, itemConfigs } } })
   }
-
 
   if (!collection.id) return <></>
   return (

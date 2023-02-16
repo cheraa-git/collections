@@ -14,6 +14,7 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const Collections_1 = require("./Collections");
 const Tags_1 = require("./Tags");
 const ItemsTags_1 = require("./ItemsTags");
+const Comments_1 = require("./Comments");
 let Items = class Items extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -107,6 +108,10 @@ __decorate([
     (0, sequelize_typescript_1.BelongsToMany)(() => Tags_1.Tags, () => ItemsTags_1.ItemsTags),
     __metadata("design:type", Array)
 ], Items.prototype, "tags", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => Comments_1.Comments, { onDelete: 'cascade' }),
+    __metadata("design:type", Array)
+], Items.prototype, "comments", void 0);
 Items = __decorate([
     (0, sequelize_typescript_1.Table)({ timestamps: false, tableName: 'items' })
 ], Items);

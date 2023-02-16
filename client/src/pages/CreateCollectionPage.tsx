@@ -24,7 +24,6 @@ interface Inputs {
   existingImage?: string
 }
 
-
 export const CreateCollectionPage: FC = () => {
   const dispatch = useAppDispatch()
   const { loading } = useApp()
@@ -69,6 +68,7 @@ export const CreateCollectionPage: FC = () => {
       return snackbar('You have reached the maximum number of fields with this type')
     }
     newConfig[index].type = type + count
+    if (editable) newConfig[index].collectionId = editable.collection.id
     setConfigInputs(newConfig)
   }
 
@@ -90,7 +90,6 @@ export const CreateCollectionPage: FC = () => {
     setValue('image', new DataTransfer().files)
     setValue('existingImage', '')
   }
-
 
   return (
     <div className="bg-white max-w-3xl mx-auto px-4 my-5 p-5">

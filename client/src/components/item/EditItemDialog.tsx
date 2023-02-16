@@ -3,9 +3,8 @@ import { ItemField } from "./ItemField"
 import { Button, Dialog, TextField } from "@mui/material"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { useAppDispatch } from "../../store/store"
-import { createItem, editItem } from "../../store/actions/collectionActions"
-import { Fields } from "../../../../common/common-types"
-import { Item } from "../../../../common/common-types"
+import { createItem, editItem } from "../../store/actions/itemActions"
+import { Fields, Item } from "../../../../common/common-types"
 import { useCollection } from "../../hooks/collectionStateHook"
 
 
@@ -20,18 +19,13 @@ export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collect
   const dispatch = useAppDispatch()
   const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<FieldValues>()
   const itemConfigs = useCollection().itemConfigs
-  // const _itemConfigs = [
-  //   { id: 1, type: 'date1', label: 'date' },
-  //   { id: 2, type: 'str1', label: 'title' },
-  //   { id: 3, type: 'txt1', label: 'description' },
-  //   { id: 4, type: 'numb1', label: 'number' },
-  //   { id: 5, type: 'bool1', label: 'isNice' }]
 
   useEffect(() => {
     if (item) {
       Object.entries(item).forEach(([key, value]) => setValue(key, value))
     }
-  }, [])
+  }, [item])
+
   const submitHandler: SubmitHandler<FieldValues> = (data) => {
     if (item) {
       console.log("EDIT", data)

@@ -39,3 +39,10 @@ export interface EditCollectionBody {
   token: string
 }
 
+export interface AddCommentBody {
+  token: string
+  userId: number
+  itemId: number
+  text: string
+}
+

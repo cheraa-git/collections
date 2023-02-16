@@ -1,29 +1,22 @@
 import { FC, useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { useAppDispatch } from "../store/store"
-import { deleteItem, getItem } from "../store/actions/collectionActions"
+import {  useNavigate, useParams } from "react-router-dom"
+import { RootState, useAppDispatch, useAppSelector } from "../store/store"
+import { deleteItem, getItem } from "../store/actions/itemActions"
 import { ItemFieldView } from "../components/item/ItemFieldView"
 import { Button } from "@mui/material"
 import { EditItemDialog } from "../components/item/EditItemDialog"
 import { useCollection } from "../hooks/collectionStateHook"
+import { Comments } from "../components/item/Comments"
 
 export const ItemPage: FC = () => {
   const dispatch = useAppDispatch()
   const { id, collectionId } = useParams()
   const navigate = useNavigate()
-  const { items, itemConfigs } = useCollection()
+  const { itemConfigs } = useCollection()
+  const items = useAppSelector((state: RootState) => state.item.items)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const item = items.find(item => item.id === Number(id))
-  // const _item = {
-  //   id: 1,
-  //   collectionId: 1,
-  //   name: 'string',
-  //   timestamp: '1264639492',
-  //   str1: "string number 1",
-  //   txt1: "Markdown text",
-  //   bool1: false,
-  //   date1: '2023-01-01'
-  // }
+
   useEffect(() => {
     if (!item && id && collectionId) {
       dispatch(getItem(+collectionId, +id))
@@ -50,6 +43,7 @@ export const ItemPage: FC = () => {
           <ItemFieldView item={item} config={config}/>
         </div>
       ))}
+      <Comments itemId={Number(id)}/>
     </div>
   )
 }

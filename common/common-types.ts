@@ -17,12 +17,21 @@ export interface Collection {
   imageUrl?: string
 }
 
-export interface Item {
+export type Item = {
   id: number
   collectionId: number
   name: string
   timestamp: string
-  [type: string]: string | number | boolean
+  [type: string]: any
+}
+
+export interface Comment {
+  id: number
+  userId: number
+  itemId: number
+  text: string
+  nickname: string
+  timestamp: string
 }
 
 export interface Fields {
@@ -41,4 +50,19 @@ export type ItemConfigType = {
 export interface Theme {
   id: number
   name: string
+}
+
+export interface ClientToServerEvents {
+  get_comments: (itemId: number) => void
+  add_comment: (token: string, userId: number, itemId: number, text: string, nickname: string) => void
+}
+
+export interface ServerToClientEvents {
+  comments: (comments: Comment[]) => void
+  new_comment: (comment: Comment) => void
+  token_error: () => void
+}
+
+
+export interface SocketData {
 }

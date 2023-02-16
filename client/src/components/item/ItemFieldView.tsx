@@ -16,7 +16,7 @@ export const ItemFieldView: FC<ItemFieldViewProps> = ({ config, item }) => {
       const value = item[config.type]
       switch (sliceType) {
         case 'date':
-          return <p>{dayjs(value as string).format('MM-DD-YYYY')}</p>
+          return <p>{value ? dayjs(value as string).format('MM-DD-YYYY') : "-"}</p>
         case 'str':
           return <p>{value}</p>
         case 'txt':

@@ -1,7 +1,8 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript"
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript"
 import { Collections } from "./Collections"
 import { Tags } from "./Tags"
 import { ItemsTags } from "./ItemsTags"
+import { Comments } from "./Comments"
 
 
 @Table({ timestamps: false, tableName: 'items' })
@@ -75,4 +76,7 @@ export class Items extends Model {
 
   @BelongsToMany(() => Tags, () => ItemsTags)
   tags!: Tags[]
+
+  @HasMany(() => Comments, {onDelete: 'cascade'})
+  comments!: Comments[]
 }

@@ -4,6 +4,7 @@ import { UserReducer } from "./slices/userSlice"
 import { CollectionReducer } from "./slices/collectionSlice"
 import { ProfileReducer } from "./slices/profileSlice"
 import { AppReducer } from "./slices/appSlice"
+import { ItemReducer } from "./slices/itemSlice"
 
 
 export const store = configureStore({
@@ -11,8 +12,15 @@ export const store = configureStore({
     app: AppReducer,
     user: UserReducer,
     collection: CollectionReducer,
-    profile: ProfileReducer
+    item: ItemReducer,
+    profile: ProfileReducer,
   },
+  middleware: getDefaultMiddleware => getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: ['item/setSocket'],
+      ignoredPaths: ['item.socket']
+    },
+  })
 })
 
 export type RootState = ReturnType<typeof store.getState>

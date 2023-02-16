@@ -26,35 +26,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.flatJoinedModel = exports.checkToken = exports.filterItem = void 0;
+exports.Controller = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const jwt = __importStar(require("jsonwebtoken"));
-const filterItem = (item) => {
-    const filterItem = {};
-    Object.entries(item === null || item === void 0 ? void 0 : item.dataValues).forEach(([key, value]) => {
-        if (value) {
-            filterItem[key] = value;
-        }
-    });
-    return filterItem;
-};
-exports.filterItem = filterItem;
-const checkToken = (token, userId) => {
-    if (!token || !userId)
-        return false;
-    dotenv_1.default.config();
-    const jwtPayload = jwt.verify(token, String(process.env.TOKEN_SECTET_KEY));
-    return jwtPayload.id === userId;
-};
-exports.checkToken = checkToken;
-const flatJoinedModel = (obj, from) => {
-    let flatObj = {};
-    Object.entries(obj === null || obj === void 0 ? void 0 : obj.dataValues).forEach(([key, value]) => {
-        if (typeof value !== "object") {
-            flatObj[key] = value;
-        }
-    });
-    const joinedValues = from.reduce((acc, model) => (Object.assign(Object.assign({}, acc), model === null || model === void 0 ? void 0 : model.dataValues)), {});
-    return Object.assign(Object.assign({}, flatObj), joinedValues);
-};
-exports.flatJoinedModel = flatJoinedModel;
+class Controller {
+    checkToken(token, userId) {
+        if (!token || !userId)
+            return false;
+        dotenv_1.default.config();
+        const jwtPayload = jwt.verify(token, String(process.env.TOKEN_SECTET_KEY));
+        return jwtPayload.id === userId;
+    }
+}
+exports.Controller = Controller;
