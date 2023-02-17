@@ -1,8 +1,8 @@
 import { Express } from "express"
-import { authRouter } from "./routes/auth.routes"
-import { collectionRouter } from "./routes/collection.routes"
-import { itemRouter } from "./routes/item.router"
-import { profileRouter } from "./routes/profile.routes"
+import { authRouter } from "./routes/authRoutes"
+import { collectionRouter } from "./routes/collectionRoutes"
+import { itemRouter } from "./routes/itemRouter"
+import { profileRouter } from "./routes/profileRoutes"
 
 export class MainRouter {
   constructor(private app: Express) {

@@ -10,18 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ItemController = void 0;
-const Items_1 = require("../db/models/Items");
-const utils_1 = require("../utils");
-const ItemConfigs_1 = require("../db/models/ItemConfigs");
-const Collections_1 = require("../db/models/Collections");
-const Comments_1 = require("../db/models/Comments");
+const Items_1 = require("../../db/models/Items");
+const utils_1 = require("../../utils");
+const ItemConfigs_1 = require("../../db/models/ItemConfigs");
+const Collections_1 = require("../../db/models/Collections");
 class ItemController {
     constructor() {
         this.createItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { collectionId, fields, userId, token, tags } = req.body;
             const name = fields.name;
             //TODO: реализовать tags
-            if ((0, utils_1.checkToken)(token, userId)) {
+            if (!(0, utils_1.checkToken)(token, userId)) {
                 return res.status(500).json({ error: 'TokenError' });
             }
             if (!collectionId || !name || !fields) {
@@ -53,14 +52,6 @@ class ItemController {
             }
             const countDeletedItems = yield Items_1.Items.destroy({ where: { id: item.id }, force: true });
             res.json(countDeletedItems);
-        });
-        this.addComment = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { userId, token, itemId, text } = req.body;
-            if ((0, utils_1.checkToken)(token, userId)) {
-                return res.status(500).json({ error: 'TokenError' });
-            }
-            const newComment = yield Comments_1.Comments.create({ userId, itemId, text, timestamp: `${Date.now()}` });
-            res.json(newComment.dataValues);
         });
     }
 }

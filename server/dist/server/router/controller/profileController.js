@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfileController = void 0;
-const Collections_1 = require("../db/models/Collections");
-const Users_1 = require("../db/models/Users");
+const Collections_1 = require("../../db/models/Collections");
+const Users_1 = require("../../db/models/Users");
 class ProfileController {
     getProfile(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

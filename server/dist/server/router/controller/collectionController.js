@@ -10,12 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectionController = void 0;
-const Collections_1 = require("../db/models/Collections");
-const ItemConfigs_1 = require("../db/models/ItemConfigs");
-const Users_1 = require("../db/models/Users");
-const Items_1 = require("../db/models/Items");
-const utils_1 = require("../utils");
-const Themes_1 = require("../db/models/Themes");
+const Collections_1 = require("../../db/models/Collections");
+const ItemConfigs_1 = require("../../db/models/ItemConfigs");
+const Users_1 = require("../../db/models/Users");
+const Items_1 = require("../../db/models/Items");
+const utils_1 = require("../../utils");
+const Themes_1 = require("../../db/models/Themes");
 class CollectionController {
     constructor() {
         this.createCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {

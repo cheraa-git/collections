@@ -34,7 +34,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = __importStar(require("bcrypt"));
 const jwt = __importStar(require("jsonwebtoken"));
-const Users_1 = require("../db/models/Users");
+const Users_1 = require("../../db/models/Users");
 const SECRET_KEY = process.env.TOKEN_SECTET_KEY + '';
 class AuthController {
     constructor() {
