@@ -13,6 +13,7 @@ exports.Users = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const Collections_1 = require("./Collections");
 const Comments_1 = require("./Comments");
+const Likes_1 = require("./Likes");
 let Users = class Users extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -59,6 +60,10 @@ __decorate([
     (0, sequelize_typescript_1.HasMany)(() => Comments_1.Comments, { onDelete: 'cascade' }),
     __metadata("design:type", Array)
 ], Users.prototype, "comments", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => Likes_1.Likes, { onDelete: 'cascade' }),
+    __metadata("design:type", Array)
+], Users.prototype, "likes", void 0);
 Users = __decorate([
     (0, sequelize_typescript_1.Table)({ timestamps: false, tableName: 'users' })
 ], Users);

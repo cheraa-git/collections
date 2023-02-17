@@ -1,6 +1,7 @@
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript"
 import { Collections } from "./Collections"
 import { Comments } from "./Comments"
+import { Likes } from "./Likes"
 
 
 @Table({ timestamps: false, tableName: 'users' })
@@ -41,4 +42,7 @@ export class Users extends Model {
 
   @HasMany(() => Comments, {onDelete: 'cascade'})
   comments!: Comments[]
+
+  @HasMany(() => Likes, {onDelete: 'cascade'})
+  likes!: Likes[]
 }

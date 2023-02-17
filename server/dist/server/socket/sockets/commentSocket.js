@@ -15,26 +15,27 @@ const Users_1 = require("../../db/models/Users");
 const utils_1 = require("../../utils");
 class CommentSocket {
     constructor(io, socket) {
+        this.io = io;
+        this.socket = socket;
         this.getComments = (itemId) => __awaiter(this, void 0, void 0, function* () {
+            this.socket.join(`item:${itemId}`);
             const comments = yield Comments_1.Comments.findAll({
                 where: { itemId },
                 include: [{ model: Users_1.Users, attributes: ['nickname'] }]
             });
             this.socket.emit('comments', comments.map(c => (0, utils_1.flatJoinedModel)(c, [c.users])));
         });
-        this.addComment = (token, userId, itemId, text, nickname) => __awaiter(this, void 0, void 0, function* () {
+        this.addComment = ({ userId, itemId, text, nickname, token, }) => __awaiter(this, void 0, void 0, function* () {
             if (!(0, utils_1.checkToken)(token, userId)) {
                 return this.socket.emit('token_error');
             }
             const newComment = yield Comments_1.Comments.create({ userId, itemId, text, timestamp: `${Date.now()}` });
-            this.io.sockets.emit('new_comment', Object.assign(Object.assign({}, newComment.dataValues), { nickname }));
+            this.io.to(`item:${itemId}`).emit('new_comment', Object.assign(Object.assign({}, newComment.dataValues), { nickname }));
         });
-        this.socket = socket;
-        this.io = io;
     }
     onEvents() {
-        this.socket.on('get_comments', this.getComments);
-        this.socket.on('add_comment', this.addComment);
+        this.socket.on('get:comments', this.getComments);
+        this.socket.on('add:comment', this.addComment);
     }
 }
 exports.CommentSocket = CommentSocket;

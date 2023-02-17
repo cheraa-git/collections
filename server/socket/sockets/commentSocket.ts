@@ -2,18 +2,15 @@ import { AppServer, AppSocket, SocketController } from "../../types"
 import { Comments } from "../../db/models/Comments"
 import { Users } from "../../db/models/Users"
 import { checkToken, flatJoinedModel } from "../../utils"
-import { Comment } from "../../../common/common-types"
+import { ClientToServerEvents, Comment } from "../../../common/common-types"
 
 export class CommentSocket implements SocketController {
-  private socket: AppSocket
-  private io: AppServer
 
-  constructor(io: AppServer, socket: AppSocket) {
-    this.socket = socket
-    this.io = io
+  constructor(private io: AppServer, private socket: AppSocket) {
   }
 
-  private getComments = async (itemId: number) => {
+  private getComments: ClientToServerEvents['get:comments'] = async (itemId: number) => {
+    this.socket.join(`item:${itemId}`)
     const comments = await Comments.findAll({
       where: { itemId },
       include: [{ model: Users, attributes: ['nickname'] }]
@@ -21,16 +18,16 @@ export class CommentSocket implements SocketController {
     this.socket.emit('comments', comments.map(c => flatJoinedModel(c, [c.users]) as Comment))
   }
 
-  private addComment = async (token: string, userId: number, itemId: number, text: string, nickname: string) => {
+  private addComment: ClientToServerEvents['add:comment'] = async ({ userId, itemId, text, nickname, token, }) => {
     if (!checkToken(token, userId)) {
       return this.socket.emit('token_error')
     }
     const newComment = await Comments.create({ userId, itemId, text, timestamp: `${Date.now()}` })
-    this.io.sockets.emit('new_comment', { ...newComment.dataValues, nickname })
+    this.io.to(`item:${itemId}`).emit('new_comment', { ...newComment.dataValues, nickname })
   }
 
   onEvents() {
-    this.socket.on('get_comments', this.getComments)
-    this.socket.on('add_comment', this.addComment)
+    this.socket.on('get:comments', this.getComments)
+    this.socket.on('add:comment', this.addComment)
   }
 }

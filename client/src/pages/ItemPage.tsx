@@ -1,21 +1,23 @@
 import { FC, useEffect, useState } from "react"
-import {  useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { RootState, useAppDispatch, useAppSelector } from "../store/store"
 import { deleteItem, getItem } from "../store/actions/itemActions"
 import { ItemFieldView } from "../components/item/ItemFieldView"
-import { Button } from "@mui/material"
+import { Box, Button } from "@mui/material"
 import { EditItemDialog } from "../components/item/EditItemDialog"
 import { useCollection } from "../hooks/collectionStateHook"
 import { Comments } from "../components/item/Comments"
+import { Likes } from "../components/item/Likes"
 
 export const ItemPage: FC = () => {
   const dispatch = useAppDispatch()
   const { id, collectionId } = useParams()
   const navigate = useNavigate()
   const { itemConfigs } = useCollection()
-  const items = useAppSelector((state: RootState) => state.item.items)
+  const { items } = useAppSelector((state: RootState) => state.item)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const item = items.find(item => item.id === Number(id))
+
 
   useEffect(() => {
     if (!item && id && collectionId) {
@@ -28,6 +30,7 @@ export const ItemPage: FC = () => {
       dispatch(deleteItem(item, navigate))
     }
   }
+
 
   return (
     <div className="shadow rounded max-w-2xl mx-auto my-5 px-5 py-2">
@@ -43,6 +46,9 @@ export const ItemPage: FC = () => {
           <ItemFieldView item={item} config={config}/>
         </div>
       ))}
+      <Box sx={{ml: 'auto', width: "min-content"}}>
+        <Likes itemId={Number(id)}/>
+      </Box>
       <Comments itemId={Number(id)}/>
     </div>
   )

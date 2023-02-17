@@ -9,6 +9,7 @@ import { Tags } from "./models/Tags"
 import { ItemsTags } from "./models/ItemsTags"
 import { Themes } from "./models/Themes"
 import { Comments } from "./models/Comments"
+import { Likes } from "./models/Likes"
 dotenv.config();
 
 const connection = new Sequelize({
@@ -18,7 +19,7 @@ const connection = new Sequelize({
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
   logging: false,
-  models: [Users, Collections, Items, ItemConfigs, Tags, ItemsTags, Themes, Comments],
+  models: [Users, Collections, Items, ItemConfigs, Tags, ItemsTags, Themes, Comments, Likes],
   dialectOptions: {
     ssl: true,
     native: true,

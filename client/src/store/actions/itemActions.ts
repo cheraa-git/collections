@@ -8,7 +8,16 @@ import { setItemConfigs } from "../slices/collectionSlice"
 import { NavigateFunction } from "react-router-dom"
 import { AppSocket } from "../../types/socket"
 import { io } from "socket.io-client"
-import { addComment, addItem, setComments, setItem, setSocket } from "../slices/itemSlice"
+import {
+  addComment,
+  addItem,
+  addLike,
+  removeLike,
+  setComments,
+  setItem,
+  setLikes,
+  setSocket
+} from "../slices/itemSlice"
 
 export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(setLoading(true))
@@ -50,7 +59,13 @@ export const deleteItem = (item: Item, navigate: NavigateFunction) => async (dis
 
 export const postNewComment = (itemId: number, text: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
   const { user: { currentUser: { id, token, nickname } }, item: { socket } } = getState()
-  socket?.emit('add:comment', token, id, itemId, text, nickname)
+  socket?.emit('add:comment', { token, userId: id, itemId, text, nickname })
+  dispatch(setLoading(true))
+}
+
+export const toggleLike = (itemId: number) => async (dispatch: AppDispatch, getState: () => RootState) => {
+  const { user: { currentUser: { id, token, nickname } }, item: { socket } } = getState()
+  socket?.emit('set:like', { token, userId: id, itemId, nickname })
   dispatch(setLoading(true))
 }
 
@@ -59,6 +74,7 @@ export const connectSocket = (itemId: number) => async (dispatch: AppDispatch,) 
   socket.on('connect', () => {
     dispatch(setSocket(socket))
     socket.emit('get:comments', itemId)
+    socket.emit('get:likes', itemId)
     console.log('connected', socket.id)
   })
 
@@ -69,6 +85,22 @@ export const connectSocket = (itemId: number) => async (dispatch: AppDispatch,) 
 
   socket.on('new_comment', (comment) => {
     dispatch(addComment(comment))
+    dispatch(setLoading(false))
+  })
+
+
+  socket.on('likes', (likes) => {
+    dispatch(setLikes(likes))
+    console.log('LIKES', likes)
+  })
+
+  socket.on('like', (like) => {
+    dispatch(addLike(like))
+    dispatch(setLoading(false))
+  })
+
+  socket.on('cancel_like', (userId) => {
+    dispatch(removeLike({ userId }))
     dispatch(setLoading(false))
   })
 

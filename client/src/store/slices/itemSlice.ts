@@ -1,17 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Comment, Item } from "../../../../common/common-types"
+import { Comment, Item, Like } from "../../../../common/common-types"
 import { AppSocket } from "../../types/socket"
 
 export interface ItemState {
   items: Item[]
   comments: Comment[]
   socket: AppSocket | null
+  likes: Like[]
 }
 
 const initialState: ItemState = {
+  socket: null,
   items: [],
   comments: [],
-  socket: null
+  likes: []
 }
 
 export const itemSlice = createSlice({
@@ -29,6 +31,9 @@ export const itemSlice = createSlice({
     setItems: (state, { payload }: PayloadAction<Item[]>) => {
       state.items = payload
     },
+    setSocket: (state, { payload }: PayloadAction<AppSocket | null>) => {
+      return { ...state, socket: payload }
+    },
     setComments: (state, { payload }: PayloadAction<Comment[]>) => {
       state.comments = payload
     },
@@ -40,12 +45,32 @@ export const itemSlice = createSlice({
     clearComments: (state) => {
       state.comments = []
     },
-    setSocket: (state, { payload }: PayloadAction<AppSocket | null>) => {
-      return { ...state, socket: payload }
+    setLikes: (state, { payload }: PayloadAction<Like[]>) => {
+      state.likes = payload
     },
+    addLike: (state, { payload }: PayloadAction<Like>) => {
+      if (!state.likes.find(like => like.id === payload.id)) {
+        state.likes.push(payload)
+      }
+    },
+    removeLike: (state, { payload }: PayloadAction<{ userId: number }>) => {
+      state.likes = state.likes.filter(like => like.userId !== payload.userId)
+    }
+
   }
 })
 
-export const { addItem, setItem, addComment, clearComments, setComments, setSocket, setItems } = itemSlice.actions
+export const {
+  addItem,
+  setItem,
+  addComment,
+  clearComments,
+  setComments,
+  setSocket,
+  setItems,
+  addLike,
+  setLikes,
+  removeLike
+} = itemSlice.actions
 
 export const ItemReducer = itemSlice.reducer
