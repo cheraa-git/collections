@@ -11,7 +11,7 @@ export class ItemController {
     const { collectionId, fields, userId, token, tags } = req.body
     const name = fields.name
     //TODO: реализовать tags
-    if (checkToken(token, userId)) {
+    if (!checkToken(token, userId)) {
       return res.status(500).json({ error: 'TokenError' })
     }
     if (!collectionId || !name || !fields) {

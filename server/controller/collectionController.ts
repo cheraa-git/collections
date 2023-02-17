@@ -13,7 +13,7 @@ export class CollectionController {
   createCollection = async (req: Request<any, any, CreateCollectionBody>, res: Response) => {
     const { userId, token, title, description, themeId, imageUrl, itemConfigs } = req.body
     const timestamp = `${Date.now()}`
-    if (checkToken(token, userId)) {
+    if (!checkToken(token, userId)) {
       return res.status(500).json({ error: 'TokenError' })
     }
     if (!title || !description || !themeId) {

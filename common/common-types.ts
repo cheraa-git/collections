@@ -53,8 +53,10 @@ export interface Theme {
 }
 
 export interface ClientToServerEvents {
-  get_comments: (itemId: number) => void
-  add_comment: (token: string, userId: number, itemId: number, text: string, nickname: string) => void
+  "get:comments": (itemId: number) => void
+  "get:likes": (itemId: number) => void
+  "add:comment": (token: string, userId: number, itemId: number, text: string, nickname: string) => void
+  "set:like": (token: string, userId: number, itemId: number) => void
 }
 
 export interface ServerToClientEvents {

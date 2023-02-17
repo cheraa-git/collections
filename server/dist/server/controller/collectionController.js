@@ -21,7 +21,7 @@ class CollectionController {
         this.createCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { userId, token, title, description, themeId, imageUrl, itemConfigs } = req.body;
             const timestamp = `${Date.now()}`;
-            if ((0, utils_1.checkToken)(token, userId)) {
+            if (!(0, utils_1.checkToken)(token, userId)) {
                 return res.status(500).json({ error: 'TokenError' });
             }
             if (!title || !description || !themeId) {

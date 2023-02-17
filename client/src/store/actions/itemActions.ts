@@ -49,17 +49,16 @@ export const deleteItem = (item: Item, navigate: NavigateFunction) => async (dis
 }
 
 export const postNewComment = (itemId: number, text: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch(setLoading(true))
   const { user: { currentUser: { id, token, nickname } }, item: { socket } } = getState()
-  socket?.emit('add_comment', token, id, itemId, text, nickname)
-  dispatch(setLoading(false))
+  socket?.emit('add:comment', token, id, itemId, text, nickname)
+  dispatch(setLoading(true))
 }
 
 export const connectSocket = (itemId: number) => async (dispatch: AppDispatch,) => {
   const socket: AppSocket = io(process.env.REACT_APP_SOCKET_URL + '', { transports: ['websocket'] })
   socket.on('connect', () => {
     dispatch(setSocket(socket))
-    socket.emit('get_comments', itemId)
+    socket.emit('get:comments', itemId)
     console.log('connected', socket.id)
   })
 
@@ -70,6 +69,7 @@ export const connectSocket = (itemId: number) => async (dispatch: AppDispatch,) 
 
   socket.on('new_comment', (comment) => {
     dispatch(addComment(comment))
+    dispatch(setLoading(false))
   })
 
   socket.on('token_error', () => {
