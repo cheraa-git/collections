@@ -1,10 +1,9 @@
 import { Request, Response } from "express"
-import { AddCommentBody, CreateItemBody, DeleteItemBody, EditItemBody } from "../../common/request-types"
-import { Items } from "../db/models/Items"
-import { checkToken, filterItem } from "../utils"
-import { ItemConfigs } from "../db/models/ItemConfigs"
-import { Collections } from "../db/models/Collections"
-import { Comments } from "../db/models/Comments"
+import { CreateItemBody, DeleteItemBody, EditItemBody } from "../../../common/request-types"
+import { Items } from "../../db/models/Items"
+import { checkToken, filterItem } from "../../utils"
+import { ItemConfigs } from "../../db/models/ItemConfigs"
+import { Collections } from "../../db/models/Collections"
 
 export class ItemController {
   createItem = async (req: Request<any, any, CreateItemBody>, res: Response) => {
@@ -23,7 +22,7 @@ export class ItemController {
 
   getItem = async (req: Request, res: Response) => {
     const { id, collectionId } = req.params
-    const item = await Items.findOne({ where: { id }})
+    const item = await Items.findOne({ where: { id } })
     const itemConfigs = await ItemConfigs.findAll({ where: { collectionId } })
     res.json({ item: filterItem(item), itemConfigs })
   }
@@ -46,15 +45,6 @@ export class ItemController {
     }
     const countDeletedItems = await Items.destroy({ where: { id: item.id }, force: true })
     res.json(countDeletedItems)
-  }
-
-  addComment = async (req: Request<any, any, AddCommentBody>, res: Response) => {
-    const { userId, token, itemId, text } = req.body
-    if (checkToken(token, userId)) {
-      return res.status(500).json({ error: 'TokenError' })
-    }
-    const newComment = await Comments.create({ userId, itemId, text, timestamp: `${Date.now()}` })
-    res.json(newComment.dataValues)
   }
 
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
-import { Collections } from "../db/models/Collections"
-import { Users } from "../db/models/Users"
-import { GetProfileResponse } from "../../common/response-types"
+import { Collections } from "../../db/models/Collections"
+import { Users } from "../../db/models/Users"
+import { GetProfileResponse } from "../../../common/response-types"
 
 
 export class ProfileController {

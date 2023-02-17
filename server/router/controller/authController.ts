@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import * as bcrypt from "bcrypt"
 import * as jwt from 'jsonwebtoken'
-import { Users } from "../db/models/Users"
+import { Users } from "../../db/models/Users"
 import { JwtPayload } from "jsonwebtoken"
 
 
