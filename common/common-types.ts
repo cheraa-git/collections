@@ -14,9 +14,16 @@ export type Item = {
   id: number
   collectionId: number
   name: string
+  tags: Tag[]
   timestamp: string
   [type: string]: any
 }
+
+export type Tag = {
+  id?: number
+  name: string
+}
+
 
 export interface Comment {
   id: number

@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "../store"
 import { setLoading } from "../slices/appSlice"
 import { CreateItemBody } from "../../../../common/request-types"
 import axios from "../../axios-app"
-import { Item } from "../../../../common/common-types"
+import { Item, Tag } from "../../../../common/common-types"
 import { setItemConfigs } from "../slices/collectionSlice"
 import { NavigateFunction } from "react-router-dom"
 import { AppSocket } from "../../types/socket"
@@ -16,13 +16,13 @@ import {
   setComments,
   setItem,
   setLikes,
-  setSocket
+  setSocket, setTags
 } from "../slices/itemSlice"
 
 export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(setLoading(true))
   const { id: userId, token } = getState().user.currentUser
-  const sendData: CreateItemBody = { userId, token, ...data, tags: '' }
+  const sendData: CreateItemBody = { userId, token, ...data }
   const item = (await axios.post<Item>('/item', sendData)).data
   dispatch(setLoading(false))
   dispatch(addItem(item))
@@ -80,7 +80,7 @@ export const connectSocket = (itemId: number) => async (dispatch: AppDispatch,) 
 
   socket.on('comments', (comments) => {
     dispatch(setComments(comments))
-    console.log('SOCKET_COMMENTS', comments)
+    dispatch(setLoading(false))
   })
 
   socket.on('new_comment', (comment) => {
@@ -91,7 +91,7 @@ export const connectSocket = (itemId: number) => async (dispatch: AppDispatch,) 
 
   socket.on('likes', (likes) => {
     dispatch(setLikes(likes))
-    console.log('LIKES', likes)
+    dispatch(setLoading(false))
   })
 
   socket.on('like', (like) => {
@@ -119,5 +119,10 @@ export const connectSocket = (itemId: number) => async (dispatch: AppDispatch,) 
     socket.close()
     console.log('connect_error')
   })
+}
+
+export const getTags = () => async (dispatch: AppDispatch) => {
+  const tags = (await axios.get<Tag[]>('/item/tags')).data
+  dispatch(setTags(tags))
 }
 

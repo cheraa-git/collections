@@ -7,18 +7,20 @@ import { NotFoundPage } from "./pages/NotFoundPage"
 import { NavBar } from "./components/navbar/NavBar"
 import { CreateCollectionPage } from "./pages/CreateCollectionPage"
 import { clientRoutes } from './constants/routes'
-import { useAppDispatch } from "./store/store"
+import { RootState, useAppDispatch, useAppSelector } from "./store/store"
 import { useAuth } from "./hooks/authHook"
 import { autoLogin } from "./store/actions/userActions"
 import { CollectionPage } from "./pages/CollectionPage"
 import { ItemPage } from "./pages/ItemPage"
 import { getThemes } from "./store/actions/collectionActions"
 import { useCollection } from "./hooks/collectionStateHook"
+import { getTags } from "./store/actions/itemActions"
 
 function App() {
   const dispatch = useAppDispatch()
   const { isAuth } = useAuth()
   const themes = useCollection().themes
+  const tags = useAppSelector((state: RootState) => state.item.tags)
   const { MAIN, CREATE_COLLECTION } = clientRoutes
 
 
@@ -28,6 +30,9 @@ function App() {
     }
     if (themes.length === 0) {
       dispatch(getThemes())
+    }
+    if (tags.length === 0) {
+      dispatch(getTags())
     }
   }, [isAuth, dispatch])
   return (

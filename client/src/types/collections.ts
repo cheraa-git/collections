@@ -1,4 +1,4 @@
-import { Fields } from "../../../common/common-types"
+import { Fields, Tag } from "../../../common/common-types"
 
 export interface CreateCollectionPayload {
   title: string
@@ -22,6 +22,7 @@ export interface EditCollectionPayload {
 export interface CreateItemPayload {
   collectionId: number
   fields: Fields
+  tags: Tag[]
 }
 
 export interface ItemConfigType {

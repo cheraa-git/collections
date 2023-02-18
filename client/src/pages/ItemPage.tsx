@@ -8,6 +8,7 @@ import { EditItemDialog } from "../components/item/EditItemDialog"
 import { useCollection } from "../hooks/collectionStateHook"
 import { Comments } from "../components/item/Comments"
 import { Likes } from "../components/item/Likes"
+import { TagChip } from "../components/TagChip"
 
 export const ItemPage: FC = () => {
   const dispatch = useAppDispatch()
@@ -41,12 +42,15 @@ export const ItemPage: FC = () => {
         <EditItemDialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}
                         collectionId={Number(collectionId)} item={item}/>
       </div>
+      <div className="flex flex-wrap">
+        {item?.tags.map(tag => <TagChip key={tag.id} tag={tag}/>)}
+      </div>
       {itemConfigs.map(config => (
         <div key={config.id}>
           <ItemFieldView item={item} config={config}/>
         </div>
       ))}
-      <Box sx={{ml: 'auto', width: "min-content"}}>
+      <Box sx={{ ml: 'auto', width: "min-content" }}>
         <Likes itemId={Number(id)}/>
       </Box>
       <Comments itemId={Number(id)}/>

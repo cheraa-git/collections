@@ -16,6 +16,7 @@ const Users_1 = require("../../db/models/Users");
 const Items_1 = require("../../db/models/Items");
 const utils_1 = require("../../utils");
 const Themes_1 = require("../../db/models/Themes");
+const Tags_1 = require("../../db/models/Tags");
 class CollectionController {
     constructor() {
         this.createCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -42,7 +43,7 @@ class CollectionController {
                 include: [
                     { model: ItemConfigs_1.ItemConfigs },
                     { model: Users_1.Users, attributes: ['nickname'] },
-                    { model: Items_1.Items }
+                    { model: Items_1.Items, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] }
                 ]
             });
             const collection = Object.assign(Object.assign({}, response === null || response === void 0 ? void 0 : response.dataValues), { userName: response === null || response === void 0 ? void 0 : response.users.nickname, itemConfigs: undefined, users: undefined, items: undefined });

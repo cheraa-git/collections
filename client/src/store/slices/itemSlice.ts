@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Comment, Item, Like } from "../../../../common/common-types"
+import { Comment, Item, Like, Tag } from "../../../../common/common-types"
 import { AppSocket } from "../../types/socket"
 
 export interface ItemState {
@@ -7,13 +7,15 @@ export interface ItemState {
   comments: Comment[]
   socket: AppSocket | null
   likes: Like[]
+  tags: Tag[]
 }
 
 const initialState: ItemState = {
   socket: null,
   items: [],
   comments: [],
-  likes: []
+  likes: [],
+  tags: [],
 }
 
 export const itemSlice = createSlice({
@@ -55,6 +57,9 @@ export const itemSlice = createSlice({
     },
     removeLike: (state, { payload }: PayloadAction<{ userId: number }>) => {
       state.likes = state.likes.filter(like => like.userId !== payload.userId)
+    },
+    setTags: (state, {payload}: PayloadAction<Tag[]>) => {
+      state.tags = payload
     }
 
   }
@@ -70,7 +75,8 @@ export const {
   setItems,
   addLike,
   setLikes,
-  removeLike
+  removeLike,
+  setTags
 } = itemSlice.actions
 
 export const ItemReducer = itemSlice.reducer

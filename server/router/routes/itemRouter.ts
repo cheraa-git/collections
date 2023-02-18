@@ -9,6 +9,7 @@ export const itemRouter = Router()
 itemRouter.post('/', controller.createItem)
 itemRouter.patch('/', controller.editItem)
 itemRouter.delete('/', controller.deleteItem)
+itemRouter.get('/tags', controller.getTags)
 itemRouter.get('/:collectionId/:id', controller.getItem)
 
 
