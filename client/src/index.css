@@ -1,35 +1,159 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600&display=swap');
-@tailwind base;
-@layer base {
-  h1 {
-    @apply text-2xl font-bold;
-  }
-  h2 {
-    @apply text-xl font-bold;
-  }
-  h3 {
-    @apply text-lg font-bold;
-  }
-}
-@tailwind components;
-@tailwind utilities;
+/*@tailwind base;*/
+/*@layer base {*/
+/*    h1 {*/
+/*        @apply text-2xl font-bold;*/
+/*    }*/
 
+/*    h2 {*/
+/*        @apply text-xl font-bold;*/
+/*    }*/
+
+/*    h3 {*/
+/*        @apply text-lg font-bold;*/
+/*    }*/
+/*}*/
+/*@tailwind components;*/
+/*@tailwind utilities;*/
 
 
 body {
-  margin: 0;
-  font-family: 'Nunito Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: #f3f3f3;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 
+:root {
+    --border-color: rgba(138, 138, 138, 0.32)
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+}
+
+.blue {
+    color: #3874CB;
+}
+
+.self-center {
+    align-self: center;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.border {
+    border: 1px solid var(--border-color);
+}
+
+.border-red {
+    border-color: rgb(239 68 68);
+}
+
+.border-b {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.border-t {
+    border-top: 1px solid var(--border-color);
+}
+
+.border-y {
+    border-bottom: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+}
+
+.border-x {
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+}
+
+.flex {
+    display: flex;
+}
+
+.h-min {
+    height: min-content;
+}
+
+.h-max {
+    height: max-content;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.w-min {
+    width: min-content;
+}
+
+.w-max {
+    width: max-content;
+}
+
+.red {
+    color: rgb(248 113 113);
+}
+
+.bg-red {
+    background-color: rgb(254 226 226);
+}
+
+.rounded {
+    border-radius: 0.25rem;
+}
+
+.relative {
+    position: relative;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: .5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .link {
-  color: dodgerblue;
+    position: relative;
+    text-decoration: none;
+    color: #3874CB;
+}
+
+.link:hover {
+    color: #50a8ff;
+    transition: .3s;
+}
+
+.link:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background-color: #50a8ff;
+    transition: 0.35s
+}
+
+.link:hover:before {
+    width: 100%;
 }

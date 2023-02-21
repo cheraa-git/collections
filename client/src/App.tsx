@@ -12,9 +12,10 @@ import { useAuth } from "./hooks/authHook"
 import { autoLogin } from "./store/actions/userActions"
 import { CollectionPage } from "./pages/CollectionPage"
 import { ItemPage } from "./pages/ItemPage"
-import { getThemes } from "./store/actions/collectionActions"
 import { useCollection } from "./hooks/collectionStateHook"
+import { getThemes } from "./store/actions/collectionActions"
 import { getTags } from "./store/actions/itemActions"
+
 
 function App() {
   const dispatch = useAppDispatch()
@@ -34,7 +35,7 @@ function App() {
     if (tags.length === 0) {
       dispatch(getTags())
     }
-  }, [isAuth, dispatch])
+  }, [isAuth, dispatch, tags.length, themes.length])
   return (
     <>
       <NavBar/>

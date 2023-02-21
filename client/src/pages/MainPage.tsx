@@ -4,7 +4,7 @@ import { FC } from "react"
 export const MainPage: FC = () => {
 
   return (
-    <div className="p-5">
+    <div >
       Main Page
     </div>
   )

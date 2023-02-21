@@ -1,0 +1,46 @@
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    width: 100%;
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.44);
+
+}
+
+.navbar > div {
+    position: relative;
+    display: flex;
+    height: 4rem;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0 1rem;
+    max-width: 80rem;
+}
+
+.navbar_dark {
+    background: rgba(0, 0, 0, 0.44);
+}
+
+.search-btn {
+    border-radius: 0.5rem;
+    border: 1px solid rgba(129, 129, 129, 0.12);
+    display: flex;
+    padding: .5rem .5rem;
+    align-self: center;
+    background: rgba(140, 140, 140, 0.13);
+    transition: background-color .3s;
+}
+
+.search-btn:hover {
+    background: rgba(140, 140, 140, 0.2);
+    border: 1px solid rgba(129, 129, 129, 0.2);
+}
+
+.search-btn > .shortcut {
+    display: flex;
+    font-size: .75rem;
+    font-weight: bold;
+    align-self: center;
+}

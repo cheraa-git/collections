@@ -58,7 +58,7 @@ export class ItemController {
   deleteItem = async (req: Request<any, any, DeleteItemBody>, res: Response) => {
     const { item, token } = req.body
     const itemAuthor = await Collections.findOne({ where: { id: item.collectionId }, attributes: ['userId'] })
-    if (checkToken(token, itemAuthor?.userId)) {
+    if (!checkToken(token, itemAuthor?.userId)) {
       return res.status(500).json({ error: 'TokenError' })
     }
     const countDeletedItems = await Items.destroy({ where: { id: item.id }, force: true })

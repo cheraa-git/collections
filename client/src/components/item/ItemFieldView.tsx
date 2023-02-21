@@ -1,8 +1,9 @@
 import { FC } from "react"
 import { Item, ItemConfigType } from "../../../../common/common-types"
 import MDEditor from "@uiw/react-md-editor"
-import { Checkbox } from "@mui/material"
+import { Box, Checkbox, Typography } from "@mui/material"
 import dayjs from "dayjs"
+import { useApp } from "../../hooks/appStateHook"
 
 interface ItemFieldViewProps {
   item?: Item
@@ -11,18 +12,19 @@ interface ItemFieldViewProps {
 
 export const ItemFieldView: FC<ItemFieldViewProps> = ({ config, item }) => {
   const sliceType = config.type.slice(0, -1)
+  const theme = useApp().theme
   const getView = () => {
     if (item) {
       const value = item[config.type]
       switch (sliceType) {
         case 'date':
-          return <p>{value ? dayjs(value as string).format('MM-DD-YYYY') : "-"}</p>
+          return <Typography>{value ? dayjs(value as string).format('MM-DD-YYYY') : "-"}</Typography>
         case 'str':
-          return <p>{value}</p>
+          return <Typography>{value}</Typography>
         case 'txt':
           return <MDEditor.Markdown source={value as string}/>
         case 'numb':
-          return <p>{value}</p>
+          return <Typography>{value}</Typography>
         case 'bool':
           return <Checkbox checked={!!value}/>
         default:
@@ -32,9 +34,9 @@ export const ItemFieldView: FC<ItemFieldViewProps> = ({ config, item }) => {
   }
 
   return (
-    <div className="shadow my-2 p-2 bg-white rounded">
-      <h3>{config.label}</h3>
+    <Box my={1} p={1} className="border rounded" data-color-mode={theme}>
+      <Typography variant="h6">{config.label}</Typography>
       {getView()}
-    </div>
+    </Box>
   )
 }

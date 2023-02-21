@@ -1,21 +1,23 @@
 import { useNavigate } from "react-router-dom"
-import { Button } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
+import { useApp } from "../hooks/appStateHook"
 
 export function NotFoundPage() {
   const navigate = useNavigate()
-
+  const theme = useApp().theme
+  const bgColor = theme === 'light' ? '#fff' : '#121212'
   const goBackPage = () => {
     navigate(-1)
   }
   return (
-    <div className="flex items-center flex-col h-[100vh] tracking-widest">
-      <div className="relative mb-12">
-        <h1 className="font-thin text-[240px] h-[273px] leading-normal">OOPS!</h1>
-        <p className="bg-[#f3f3f3] absolute bottom-0 left-[10%] right-[10%] text-center text-3xl">
+    <Box display="flex" alignItems="center" flexDirection="column" height="100vh" >
+      <Box position="relative" mb={6}>
+        <Typography fontWeight="lighter" fontSize="240px" height="273px" >OOPS!</Typography>
+        <Typography position="absolute" bgcolor={bgColor} bottom={0} left="10%" right="10%" textAlign="center" >
           404 - THE PAGE CAN`T BE FOUND
-        </p>
-      </div>
+        </Typography>
+      </Box>
       <Button variant="contained" onClick={goBackPage} className="py-4">GO BACK PAGE</Button>
-    </div>
+    </Box>
   )
 }

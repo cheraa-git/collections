@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { formatDate } from "../../utils"
-import { IconButton, TextField } from "@mui/material"
+import { dateTimeFormat } from "../../utils"
+import { Box, Divider, IconButton, TextField, Typography } from "@mui/material"
 import { connectSocket, postNewComment } from "../../store/actions/itemActions"
 import { useSnackbar } from "notistack"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { clearComments } from "../../store/slices/itemSlice"
 import SendIcon from '@mui/icons-material/Send'
+import { TypographyLink } from "../UI/TypographyLink"
 
 
 export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
@@ -34,27 +34,25 @@ export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
     }
   }
   return (
-    <div>
-      <div className="border-t border-gray-300 mt-3 mb-3">
-        <h2>Comments</h2>
-        {comments?.map(comment => (
-          <div key={comment.id} className="bg-white border-b px-4 py-1 flex">
-            <Link to={`/profile/${comment.userId}`} className="link mr-3">{comment.nickname}:</Link>
-            <p className="self-center">{comment.text}</p>
-            <p className="ml-auto text-end text-xs min-w-[120px] ">{formatDate(comment.timestamp)}</p>
-          </div>
+    <>
+      <Divider/>
+      <Box my={2}>
+        <Typography variant="h6">Comments</Typography>
+        {comments?.map(({ id, userId, nickname, text, timestamp }) => (
+          <Box py={1} key={id} className="border-b flex">
+            <TypographyLink mr={1} to={`/profile/${userId}`}>{nickname}:</TypographyLink>
+            <Typography alignSelf="center">{text}</Typography>
+            <Typography fontSize="x-small" ml="auto" minWidth={90}>{dateTimeFormat(timestamp)}</Typography>
+          </Box>
         ))}
-      </div>
-      <div className="flex">
-        <TextField value={commentValue} onChange={e => setCommentValue(e.target.value)}
-                   fullWidth
-                   size="small"
-                   multiline
-                   placeholder="Enter comment..."></TextField>
-        <div className="h-min mt-auto ml-2">
-          <IconButton onClick={addCommentHandler}><SendIcon/></IconButton>
-        </div>
-      </div>
-    </div>
+      </Box>
+      <TextField size="small" multiline fullWidth placeholder="Enter comment..."
+                 value={commentValue}
+                 onChange={e => setCommentValue(e.target.value)}
+                 InputProps={{
+                   endAdornment: <IconButton sx={{mt: 'auto'}} onClick={addCommentHandler}><SendIcon/></IconButton>
+                 }}
+      />
+    </>
   )
 }

@@ -1,10 +1,9 @@
 import { FC } from "react"
 import { useAuth } from "../../hooks/authHook"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import { IconButton } from "@mui/material"
+import { IconButton, Typography } from "@mui/material"
 import { toggleLike } from "../../store/actions/itemActions"
+import { FavoriteBorderIcon, FavoriteIcon } from "../UI/icons"
 
 export const Likes: FC<{ itemId: number }> = ({ itemId }) => {
   const dispatch = useAppDispatch()
@@ -20,8 +19,8 @@ export const Likes: FC<{ itemId: number }> = ({ itemId }) => {
   return (
     <>
       <IconButton onClick={likeHandler}>
-        {isLiked ? <FavoriteIcon className="text-red-400"/> : <FavoriteBorderIcon/>}
-        <p className="text-lg">{likes.length}</p>
+        {isLiked ? <FavoriteIcon className="red"/> : <FavoriteBorderIcon/>}
+        <Typography >{likes.length}</Typography>
       </IconButton>
     </>
   )

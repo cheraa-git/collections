@@ -1,0 +1,76 @@
+.drop {
+    border: 2px dashed var(--border-color);
+    position: relative;
+    width: 300px;
+    height: 220px;
+    transition: all .3s;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.drop:hover {
+    border-color: #60A5FAFF;;
+}
+
+.drop-max-size {
+    position: absolute;
+    font-size: 0.875rem ;
+    right: 0.25rem;
+    top: 0.25rem;
+}
+
+.drop-title {
+    position: absolute;
+    top: 45%;
+    text-align: center;
+    width: 100%;
+}
+
+.image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.image {
+    max-width: 250px;
+    max-height: 150px;
+    border-radius: 0.25rem;
+}
+
+.image-close {
+    position: absolute;
+    right: -15px;
+    top: -20px;
+    z-index: 10;
+}
+.image-close > svg {
+    color: rgb(252 165 165)
+}
+.image-close > svg:hover {
+    color: rgb(239 68 68)
+}
+
+.image-name {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.125rem;
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.drop-input {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+}
+
+

@@ -6,8 +6,8 @@ import { setErrorMessage } from "../store/slices/userSlice"
 import { RegisterContent } from "../components/auth/RegisterContent"
 import { LoginContent } from "../components/auth/LoginContent"
 import { useAuth } from "../hooks/authHook"
-import LoginIcon from '@mui/icons-material/Login'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import { LoginIcon, PersonAddIcon } from "../components/UI/icons"
+import { Box, Typography } from "@mui/material"
 
 export function AuthPage() {
   const dispatch = useAppDispatch()
@@ -25,15 +25,16 @@ export function AuthPage() {
   }, [isAuth, navigate])
 
 
-  if (loading) return <div className="text-center my-[40vh]"><Spinner/></div>
+  if (loading) return <Box textAlign="center" my="40vh"><Spinner/></Box>
   return (
-    <div className="bg-white w-min p-7 mx-auto mt-16 rounded">
-
-      <p className="w-full bg-red-100 rounded text-center">{errorMessage}</p>
-      <div className="text-center h-[28px] text-orange-400 mb-4">
-        {mode === 'signup' ? <PersonAddIcon fontSize="large"/> : <LoginIcon fontSize="large"/>}
-      </div>
+    <Box width="min-content" px={8} py={3} mx="auto" mt={8} className="rounded border">
+      <Typography textAlign="center" className="bg-red rounded">{errorMessage}</Typography>
+      <Box textAlign="center" height={28} mb={2}>
+        {mode === 'signup'
+          ? <PersonAddIcon color="primary" fontSize="large"/>
+          : <LoginIcon color="primary" fontSize="large"/>}
+      </Box>
       {mode === 'signup' ? <RegisterContent/> : <LoginContent/>}
-    </div>
+    </Box>
   )
 }

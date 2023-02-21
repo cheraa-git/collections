@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react"
-import { Grid } from "@mui/material"
+import { Container } from "@mui/material"
 import { CollectionCard } from "../components/collection/CollectionCard"
 import { RootState, useAppDispatch, useAppSelector } from "../store/store"
 import { useParams } from "react-router-dom"
@@ -21,15 +21,11 @@ export const ProfilePage: FC = () => {
     }
   }, [userId, dispatch])
   return (
-    <div className="m-6">
+    <Container maxWidth="lg">
       <ProfileUserInfo/>
-      <Grid container spacing={2}>
-        {sortCollections().map(collection => (
-          <Grid item xs={6} key={collection.id}>
-            <CollectionCard collection={collection} user={profileUser}/>
-          </Grid>
-        ))}
-      </Grid>
-    </div>
+      {sortCollections().map(collection => (
+        <CollectionCard key={collection.id} collection={collection} user={profileUser}/>
+      ))}
+    </Container>
   )
 }

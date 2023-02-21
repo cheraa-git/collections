@@ -1,29 +1,26 @@
 import { FC, useEffect, useState } from "react"
 import { RootState, useAppDispatch, useAppSelector } from "../store/store"
-import { Link, useNavigate, useParams } from "react-router-dom"
-import { formatDate } from "../utils"
+import { Link, useParams } from "react-router-dom"
+import { dateFormat } from "../utils"
 import MDEditor from "@uiw/react-md-editor"
-import { Button, Grid, IconButton, Menu, MenuItem } from "@mui/material"
-import AddIcon from '@mui/icons-material/Add'
-import { deleteCollection, getCollection } from "../store/actions/collectionActions"
+import { Box, Button, Grid, Typography } from "@mui/material"
+import { getCollection } from "../store/actions/collectionActions"
 import { EditItemDialog } from "../components/item/EditItemDialog"
 import { ItemCard } from "../components/item/ItemCard"
 import { clearCollectionData } from "../store/slices/collectionSlice"
-import { useConfirm } from "../hooks/confirmHook"
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { useCollection } from "../hooks/collectionStateHook"
+import { AddIcon } from "../components/UI/icons"
+import { useApp } from "../hooks/appStateHook"
+import { EditCollectionMenu } from "../components/collection/EditCollectionMenu"
 
 export const CollectionPage: FC = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
   const { id } = useParams()
-  const { showConfirm } = useConfirm()
-  const { collection, itemConfigs, getThemeName } = useCollection()
+  const { collection, getThemeName } = useCollection()
+  const theme = useApp().theme
   const items = useAppSelector((state: RootState) => state.item.items)
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
-  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
+
 
   useEffect(() => {
     if (collection && collection.id !== Number(id)) {
@@ -34,67 +31,46 @@ export const CollectionPage: FC = () => {
     }
   }, [dispatch, id])
 
-  const deleteHandler = () => {
-    setMenuAnchorEl(null)
-    showConfirm('It will be impossible to restore the collection.', () => {
-      dispatch(deleteCollection(collection, navigate))
-    })
-  }
-
-  const editHandler = () => {
-    setMenuAnchorEl(null)
-    navigate('/create_collection', { state: { editable: { collection, itemConfigs } } })
-  }
 
   if (!collection.id) return <></>
   return (
-    <div className="bg-white max-w-5xl mx-auto my-5 rounded p-5">
+    <Box maxWidth="64rem" mx="auto" my={3} borderRadius=".25rem" p={2}>
       <Grid container spacing={5}>
-        <Grid item md={4} xs={12} hidden={!collection.imageUrl}>
-          <img className="max-h-[50vh] max-w-[300px]" src={collection.imageUrl} alt="collection"/>
+        <Grid item md={4} xs={12} hidden={!collection.imageUrl}>{/*maxWidth="50vh" maxHeight="300px"*/}
+          <img src={collection.imageUrl} alt="collection"/>
         </Grid>
         <Grid item md={8} xs={12}>
-          <h1>{collection.title}</h1>
-          <div data-color-mode="light" className="mb-3">
+          <Typography variant="h4" className="capitalize">{collection.title}</Typography>
+          <Box data-color-mode={theme} mb={2}>
             <MDEditor.Markdown source={collection.description}/>
-          </div>
+          </Box>
         </Grid>
       </Grid>
 
-      <div className="border-y py-2 my-2 flex justify-between">
+      <Box p={2} mt={2} justifyContent="space-between" className="border flex rounded">
         <div>
-          <h3>Theme: {getThemeName()}</h3>
-          <p className="italic">
-            Created by
-            <Link to={`/profile/${collection.userId}`} className="text-orange-400 mx-1">@{collection.userName}</Link>
-            in {formatDate(collection.timestamp)}
-          </p>
+          <Typography variant="h6">Theme: {getThemeName()}</Typography>
+          <i className="flex">
+            <Typography>Created by</Typography>
+            <Link to={`/profile/${collection.userId}`} className="link">
+              <Typography mx={1}>@{collection.userName}</Typography>
+            </Link>
+            <Typography>in {dateFormat(collection.timestamp)}</Typography>
+          </i>
         </div>
-        <div className="h-min my-auto text-blue-500">
+        <Box my="auto" height="min-content">
           <Button onClick={() => setEditItemDialogOpen(true)} hidden={!collection}>
             <AddIcon/>
             add item
           </Button>
-
-          <IconButton onClick={(e) => setMenuAnchorEl(e.currentTarget)}><MoreVertIcon/></IconButton>
-          <Menu open={Boolean(menuAnchorEl)} onClose={() => setMenuAnchorEl(null)} anchorEl={menuAnchorEl}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-          >
-            <MenuItem onClick={editHandler}><EditIcon className="text-gray-500 mr-3"/>Edit collection</MenuItem>
-            <MenuItem onClick={deleteHandler}><DeleteIcon className="text-red-400 mr-3"/>Delete collection</MenuItem>
-          </Menu>
-        </div>
+          <EditCollectionMenu/>
+        </Box>
         <EditItemDialog open={editItemDialogOpen} onClose={() => setEditItemDialogOpen(false)}
                         collectionId={collection.id}/>
-      </div>
+      </Box>
 
-      {
-        items.map(item => <ItemCard item={item} key={item.id}/>)
-      }
+      {items.map(item => <ItemCard item={item} key={item.id}/>)}
 
-    </div>
+    </Box>
   )
 }

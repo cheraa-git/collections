@@ -1,0 +1,8 @@
+[data-color-mode*='dark'] .wmde-markdown,
+[data-color-mode*='dark'] .wmde-markdown-var,
+.wmde-markdown-var[data-color-mode*='dark'],
+.wmde-markdown[data-color-mode*='dark'],
+body[data-color-mode*='dark'] {
+    --color-canvas-default: rgba(255, 255, 255, 0) !important;
+    --color-border-default: #646464;
+}

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { Button, IconButton, MenuItem, TextField } from "@mui/material"
+import { Box, Button, IconButton, MenuItem, TextField, Typography } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useAppDispatch, } from "../store/store"
 import { createCollection, editCollection } from "../store/actions/collectionActions"
@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useSnackbar } from "notistack"
 import { MarkdownFormControl } from "../components/UI/Markdown/MarkdownFormControl"
-import { ImageDrop } from "../components/UI/ImageDrop"
+import { ImageDrop } from "../components/UI/ImageDrop/ImageDrop"
 import { MAX_IMAGE_SIZE } from "../constants/_other"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useApp } from "../hooks/appStateHook"
@@ -92,9 +92,9 @@ export const CreateCollectionPage: FC = () => {
   }
 
   return (
-    <div className="bg-white max-w-3xl mx-auto px-4 my-5 p-5">
-      <h1>Create new collection</h1>
-      <form className="flex flex-col mx-auto px-3" onSubmit={handleSubmit(onSubmit)}>
+    <Box maxWidth="900px" mx="auto" px={5} py={4} className="border-x">
+      <Typography variant="h4">Create new collection</Typography>
+      <Box component="form" display="flex" flexDirection="column" mx="auto" px={1} onSubmit={handleSubmit(onSubmit)}>
 
         <TextField label="Title" margin="normal" {...register('title', { required: true })} error={!!errors.title}/>
 
@@ -103,29 +103,29 @@ export const CreateCollectionPage: FC = () => {
           {themes.map((theme) => <MenuItem key={theme.id} value={theme.id}>{theme.name}</MenuItem>)}
         </TextField>
 
-        <h3>If you want, add a picture of the collection</h3>
-        <ImageDrop className="mx-auto mb-3 mt-1"
-                   imageFile={imageFile}
-                   inputProps={{ ...register('image') }}
-                   clearFile={clearImage}
-                   existingImageUrl={getValues().existingImage}
-        />
+        <Typography variant="h6">If you want, add a picture of the collection</Typography>
+        <Box mx="auto">
+          <ImageDrop imageFile={imageFile}
+                     inputProps={{ ...register('image') }}
+                     clearFile={clearImage}
+                     existingImageUrl={getValues().existingImage}
+          />
+        </Box>
 
-        <MarkdownFormControl control={control} className="mb-4" controlName="description" label="Enter a description"/>
+        <Box mb={2}>
+          <MarkdownFormControl control={control} controlName="description" label="Enter a description"/>
+        </Box>
 
         {fixedConfigInputs.map((config, index) => (
-          <div className="my-1 flex mr-[40px]" key={index}>
-            <TextField className="bg-gray-100" size="small" sx={{ marginRight: "1rem" }} label="type" disabled
-                       value={config[0]} fullWidth/>
-            <TextField className="bg-gray-100" size="small" label="label" disabled value={config[1]} fullWidth/>
-          </div>
+          <Box my={1} display="flex" mr={5} key={index}>
+            <TextField size="small" sx={{ mr: 2 }} label="type" disabled value={config[0]} fullWidth/>
+            <TextField size="small" label="label" disabled value={config[1]} fullWidth/>
+          </Box>
         ))}
 
         {configInputs.map((config, index) => (
-          <div className="flex my-1 w-full" key={index}>
-            <TextField style={{ border: 'none', borderRadius: 0 }} sx={{ marginRight: "1rem" }} select size="small"
-                       label="type" defaultValue=""
-                       fullWidth
+          <Box display="flex" my={1} key={index}>
+            <TextField sx={{ mr: 2 }} select size="small" label="type" fullWidth
                        value={config.type.slice(0, -1)}
                        onChange={(e) => configTypeHandler(index, e.target.value)}
             >
@@ -140,20 +140,20 @@ export const CreateCollectionPage: FC = () => {
                        onChange={e => configLabelHandler(index, e.target.value)}
             />
             <IconButton color="error" onClick={() => removeConfigInput(index)}>
-              <RemoveIcon className="text-red-400"/>
+              <RemoveIcon className="red"/>
             </IconButton>
-          </div>
+          </Box>
         ))}
         <IconButton className="w-min animate-pulse" onClick={addConfigInput}>
-          <AddIcon className="text-orange-400"/>
+          <AddIcon className="blue"/>
         </IconButton>
 
         {
           loading
-            ? <Spinner className="ml-auto mr-1"/>
-            : <Button type="submit" variant="outlined" className="w-[100px] self-end">Save</Button>
+            ? <Box ml="auto"><Spinner/></Box>
+            : <Box alignSelf="end"><Button type="submit" variant="outlined">Save</Button></Box>
         }
-      </form>
-    </div>
+      </Box>
+    </Box>
   )
 }

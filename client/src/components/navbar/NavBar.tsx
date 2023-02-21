@@ -1,38 +1,40 @@
-import { FC } from "react"
+import './styles.css'
+import { FC, useState } from "react"
 import { NavBarMenu } from "./NavBarMenu"
 import { Link } from "react-router-dom"
 import { clientRoutes } from "../../constants/routes"
-import SearchIcon from '@mui/icons-material/Search'
-import { IconButton, InputBase } from "@mui/material"
 import { LoaderLine } from "../UI/Loader/LoaderLine"
 import { useApp } from "../../hooks/appStateHook"
+import { SearchDialog } from "../search/SearchDialog"
+import { SearchButton } from "./SearchButton"
+import { PngLogoIcon } from "../UI/icons"
+import { Box, Typography } from "@mui/material"
 
 export const NavBar: FC = () => {
-  const { loading } = useApp()
+  const { loading, isDark } = useApp()
+  const [searchDialogOpen, setSearchDialogOpen] = useState(false)
+
 
   return (
-    <div className="sticky top-0 z-20">
-      <nav className="bg-gray-800 w-full ">
-        <div className="mx-auto max-w-7xl px-2">
-          <div className="relative flex h-16 items-center text-white">
-            <div className="block sm:flex min-w-[200px]">
-              <Link to={clientRoutes.MAIN}>
-                <h1 className="text-start">Collections</h1>
-              </Link>
-            </div>
-            <div className="ml-auto flex">
-              <div className="bg-white text-gray-600 pl-3 rounded">
-                <InputBase placeholder="Search..."/>
-                <IconButton>
-                  <SearchIcon className=""/>
-                </IconButton>
-              </div>
-              <NavBarMenu/>
-            </div>
-          </div>
+    <>
+      <div className={`navbar ${isDark && 'navbar_dark'} border-b`}>
+        <div>
+          <Box minWidth={220}>
+            <Link to={clientRoutes.MAIN} className="flex">
+              <img src={PngLogoIcon} alt="collections-logo" width={50} height={50}/>
+              <Typography variant="h5" alignSelf="center">collections</Typography>
+            </Link>
+          </Box>
+          <Box ml="auto" display="flex">
+            <SearchButton onClick={() => setSearchDialogOpen(prev => !prev)}/>
+            <SearchDialog open={searchDialogOpen} setOpen={setSearchDialogOpen}/>
+            <NavBarMenu/>
+          </Box>
         </div>
-      </nav>
-      <LoaderLine hidden={!loading}/>
-    </div>
+      </div>
+      <Box >
+        {loading && <LoaderLine/>}
+      </Box>
+    </>
   )
 }

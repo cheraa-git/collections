@@ -7,7 +7,6 @@ const likeSocket_1 = require("./sockets/likeSocket");
 class MainSocket {
     constructor(server) {
         this.onDisconnect = () => {
-            console.log('DISCONNECT:', this.io.sockets.sockets.size);
         };
         this.onError = (error) => {
             console.log("ERROR", error);

@@ -62,7 +62,7 @@ export class CollectionController {
 
   editCollection = async (req: Request<any, any, EditCollectionBody>, res: Response) => {
     const { collection, token, itemConfigs } = req.body
-    if (checkToken(token, collection.userId)) {
+    if (!checkToken(token, collection.userId)) {
       return res.status(500).json({ error: 'TokenError' })
     }
     const editedCollection = await Collections.update(collection, { where: { id: collection.id }, returning: ['*'] })

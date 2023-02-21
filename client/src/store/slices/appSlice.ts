@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Lang, Theme } from "../../types/app"
+import { Lang } from "../../types/app"
 import { LANG, THEME } from "../../constants/localstorage"
+import { PaletteMode } from '@mui/material'
 
 export interface AppState {
-  theme: Theme
+  theme: PaletteMode
   lang: Lang
   loading: boolean
 }
 
 const initialState: AppState = {
-  theme: localStorage.getItem(THEME) as Theme || "lite",
+  theme: localStorage.getItem(THEME) as PaletteMode || "dark",
   lang: localStorage.getItem(LANG) as Lang || 'en',
   loading: false
 }
@@ -22,9 +23,10 @@ export const appSlice = createSlice({
       localStorage.setItem(LANG, payload)
       state.lang = payload
     },
-    setTheme: (state, { payload }: PayloadAction<Theme>) => {
+    setTheme: (state, { payload }: PayloadAction<PaletteMode>) => {
       localStorage.setItem(THEME, payload)
       state.theme = payload
+      document.documentElement.style.setProperty('--color-canvas-default', '#FFFFFF14')
     },
     setLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.loading = payload

@@ -3,17 +3,19 @@ import { useNavigate, useParams } from "react-router-dom"
 import { RootState, useAppDispatch, useAppSelector } from "../store/store"
 import { deleteItem, getItem } from "../store/actions/itemActions"
 import { ItemFieldView } from "../components/item/ItemFieldView"
-import { Box, Button } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import { EditItemDialog } from "../components/item/EditItemDialog"
 import { useCollection } from "../hooks/collectionStateHook"
 import { Comments } from "../components/item/Comments"
 import { Likes } from "../components/item/Likes"
 import { TagChip } from "../components/TagChip"
+import { useConfirm } from "../hooks/confirmHook"
 
 export const ItemPage: FC = () => {
   const dispatch = useAppDispatch()
   const { id, collectionId } = useParams()
   const navigate = useNavigate()
+  const { showConfirm } = useConfirm()
   const { itemConfigs } = useCollection()
   const { items } = useAppSelector((state: RootState) => state.item)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
@@ -28,32 +30,35 @@ export const ItemPage: FC = () => {
 
   const deleteHandler = () => {
     if (item) {
-      dispatch(deleteItem(item, navigate))
+      showConfirm(
+        `are you sure you want to permanently delete "${item.name}"`,
+        () => dispatch(deleteItem(item, navigate))
+      )
     }
   }
 
 
   return (
-    <div className="shadow rounded max-w-2xl mx-auto my-5 px-5 py-2">
-      <div className="bg-white rounded p-2 flex border-b border-blue-400">
-        <h1 className="mr-auto">{item?.name}</h1>
+    <Box py={1} px={3} my={3} mx="auto" maxWidth="42rem" className="border">
+      <Box p={1} className="flex border-b">
+        <Typography variant="h5" mr="auto">{item?.name}</Typography>
         <Button onClick={() => setEditDialogOpen(true)}>edit</Button>
         <Button color="error" onClick={deleteHandler}>Delete</Button>
         <EditItemDialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}
                         collectionId={Number(collectionId)} item={item}/>
-      </div>
-      <div className="flex flex-wrap">
+      </Box>
+      <Box display="flex" flexWrap="wrap">
         {item?.tags.map(tag => <TagChip key={tag.id} tag={tag}/>)}
-      </div>
+      </Box>
       {itemConfigs.map(config => (
-        <div key={config.id}>
+        <Box key={config.id}>
           <ItemFieldView item={item} config={config}/>
-        </div>
+        </Box>
       ))}
-      <Box sx={{ ml: 'auto', width: "min-content" }}>
+      <Box ml="auto" width="min-content">
         <Likes itemId={Number(id)}/>
       </Box>
       <Comments itemId={Number(id)}/>
-    </div>
+    </Box>
   )
 }

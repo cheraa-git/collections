@@ -60,7 +60,7 @@ class CollectionController {
         });
         this.editCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { collection, token, itemConfigs } = req.body;
-            if ((0, utils_1.checkToken)(token, collection.userId)) {
+            if (!(0, utils_1.checkToken)(token, collection.userId)) {
                 return res.status(500).json({ error: 'TokenError' });
             }
             const editedCollection = yield Collections_1.Collections.update(collection, { where: { id: collection.id }, returning: ['*'] });

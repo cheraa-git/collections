@@ -72,7 +72,7 @@ class ItemController {
         this.deleteItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { item, token } = req.body;
             const itemAuthor = yield Collections_1.Collections.findOne({ where: { id: item.collectionId }, attributes: ['userId'] });
-            if ((0, utils_1.checkToken)(token, itemAuthor === null || itemAuthor === void 0 ? void 0 : itemAuthor.userId)) {
+            if (!(0, utils_1.checkToken)(token, itemAuthor === null || itemAuthor === void 0 ? void 0 : itemAuthor.userId)) {
                 return res.status(500).json({ error: 'TokenError' });
             }
             const countDeletedItems = yield Items_1.Items.destroy({ where: { id: item.id }, force: true });

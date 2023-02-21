@@ -1,9 +1,9 @@
 import { FC } from "react"
-import { Link } from "react-router-dom"
-import { Button, TextField } from "@mui/material"
+import { Box, Button, TextField, Typography } from "@mui/material"
 import { useAppDispatch } from "../../store/store"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { authUser } from "../../store/actions/userActions"
+import { TypographyLink } from "../UI/TypographyLink"
 
 
 interface Inputs {
@@ -21,11 +21,11 @@ export const LoginContent: FC = () => {
 
   return (
     <>
-      <div className="text-center mb-4">
-        <h1 className="mb-2">Welcome!</h1>
-        <p className="text-gray-400">Sign in to your account</p>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-[300px]">
+      <Box mb={2} textAlign="center">
+        <Typography variant="h4" mb={1}>Welcome!</Typography>
+        <Typography>Sign in to your account</Typography>
+      </Box>
+      <Box component="form" width={300} onSubmit={handleSubmit(onSubmit)}>
         <TextField variant="standard" label="Email" fullWidth {...register('email', { required: true })}
                    error={!!errors.email}/>
         <TextField variant="standard" label="Password" fullWidth {...register('password', { required: true })}
@@ -33,14 +33,14 @@ export const LoginContent: FC = () => {
                    type="password"
                    margin="normal"
                    autoComplete="on"/>
-        <div className="w-min ml-auto mt-2">
+        <Box ml="auto" mt={1} width="min-content">
           <Button variant="outlined" type="submit">Login</Button>
-        </div>
-      </form>
-      <div className="flex mt-4">
-        <p>Don`t have an account?</p>
-        <Link className="text-orange-600 ml-2" to="/auth/signup">Sign up!</Link>
-      </div>
+        </Box>
+      </Box>
+      <Box display="flex" mt={2}>
+        <Typography fontSize="medium">Don`t have an account?</Typography>
+        <TypographyLink fontSize="medium" ml={1} to="/auth/signup">Sign up!</TypographyLink>
+      </Box>
     </>
   )
 }

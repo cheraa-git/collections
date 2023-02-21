@@ -1,14 +1,17 @@
+import './styles.css'
 import { FC } from "react"
 import MDEditor, { commands } from "@uiw/react-md-editor"
 import rehypeSanitize from "rehype-sanitize"
 import { ControllerRenderProps } from "react-hook-form"
+import { useApp } from "../../../hooks/appStateHook"
 
 
 export const MarkdownEditor: FC<{ field: ControllerRenderProps, error?: boolean }> = ({ field, error }) => {
+  const theme = useApp().theme
   return (
-    <div className={`border-2 rounded ${error && 'border-red-500'}`}>
+    <div className={`${error && 'border-red'}`}>
       <MDEditor
-        data-color-mode="light"
+        data-color-mode={theme}
         height={200}
         {...field}
         previewOptions={{

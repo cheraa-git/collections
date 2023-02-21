@@ -1,5 +1,7 @@
 import { RootState, useAppSelector } from "../store/store"
 
 export const useApp = () => {
-  return useAppSelector((state: RootState) => state.app)
+  const state = useAppSelector((state: RootState) => state.app)
+  const isDark = state.theme === 'dark'
+  return {...state, isDark}
 }

@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { Checkbox, TextField, TextFieldProps } from "@mui/material"
+import { Box, Checkbox, TextField, TextFieldProps, Typography } from "@mui/material"
 import { Control, Controller, RefCallBack } from "react-hook-form"
 import { MarkdownFormControl } from "../UI/Markdown/MarkdownFormControl"
 import { DatePicker } from '@mui/x-date-pickers'
@@ -17,16 +17,23 @@ export const ItemField: FC<ItemFieldProps> = ({ type, label, control, required =
   const sliceType = type.slice(0, -1)
 
   if (sliceType === 'txt') {
-    return <MarkdownFormControl control={control} controlName={type} label={label}/>
+    return (
+      <Box mb={0.7}>
+        <MarkdownFormControl control={control} controlName={type} label={label}/>
+      </Box>
+    )
   }
-  return <Controller
-    name={type} control={control} rules={{ required }}
-    render={({ field: { onChange, ref, onBlur, value }, formState: { errors } }) => (
-      <Field field={{ onBlur, onChange, inputRef: ref, defaultValue: value }}
-             textFieldConfig={{ label, error: !!errors[type], size: 'small', margin: 'dense', fullWidth: true }}
-             sliceType={sliceType}
-      />
-    )}/>
+  return (
+    <Controller
+      name={type} control={control} rules={{ required }}
+      render={({ field: { onChange, ref, onBlur, value }, formState: { errors } }) => (
+        <Field
+          field={{ onBlur, onChange, inputRef: ref, defaultValue: value }}
+          textFieldConfig={{ label, error: !!errors[type], size: 'small', margin: 'dense', fullWidth: true }}
+          sliceType={sliceType}
+        />
+      )}/>
+  )
 }
 
 interface FieldProps {
@@ -69,9 +76,9 @@ const DateInput = (props: FieldProps) => (
 )
 const CheckboxInput = (props: FieldProps) => {
   return (
-    <div className="flex">
-      <p className="self-center">{props.textFieldConfig.label}</p>
+    <Box display="flex" className="flex">
+      <Typography alignSelf="center">{props.textFieldConfig.label}</Typography>
       <Checkbox {...props.field} checked={!!props.field.defaultValue}/>
-    </div>
+    </Box>
   )
 }

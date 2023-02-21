@@ -1,7 +1,11 @@
+import dayjs from "dayjs"
 
-export const formatDate = (timestamp: string) => {
-  const date = new Date(+timestamp)
-  return date.toLocaleString()
+export const dateFormat = (timestamp: string) => {
+  return dayjs(+timestamp).format('DD-MM-YYYY')
+}
+
+export const dateTimeFormat = (timestamp: string) => {
+  return dayjs(+timestamp).format('HH:mm DD-MM-YY')
 }
 
 export const formatFileSize = (bytes: number) => {

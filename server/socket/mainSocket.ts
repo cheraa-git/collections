@@ -12,7 +12,6 @@ export class MainSocket implements SocketController {
   }
 
   private onDisconnect = () => {
-    console.log('DISCONNECT:', this.io.sockets.sockets.size)
   }
 
   private onError = (error: Error) => {

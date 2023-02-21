@@ -1,10 +1,10 @@
 import { FC } from "react"
-import { Link } from "react-router-dom"
-import { Button, TextField } from "@mui/material"
+import { Box, Button, TextField, Typography } from "@mui/material"
 import { useAppDispatch } from "../../store/store"
 import { useSnackbar } from "notistack"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { authUser } from "../../store/actions/userActions"
+import { TypographyLink } from "../UI/TypographyLink"
 
 interface Inputs {
   email: string
@@ -26,31 +26,35 @@ export const RegisterContent: FC = () => {
 
   return (
     <>
-      <div className="text-center mb-4">
-        <h1 className="mb-2">Create Account!</h1>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-[300px]">
+      <Box mb={2} textAlign="center">
+        <Typography variant="h4" mb={1}>Create Account!</Typography>
+      </Box>
+      <Box component="form" width={300} onSubmit={handleSubmit(onSubmit)}>
         <TextField fullWidth label="Name" {...register('nickname', { required: true })} error={!!errors.nickname}
+                   variant="standard"
                    margin="normal"/>
         <TextField fullWidth label="E-mail" {...register('email', { required: true })} error={!!errors.email}
+                   variant="standard"
                    margin="normal"/>
         <TextField fullWidth label="Password" {...register('password', { required: true })} error={!!errors.password}
+                   variant="standard"
                    type="password"
                    margin="normal"
                    autoComplete="off"/>
         <TextField fullWidth label="Confirm your password" {...register('confirmPassword', { required: true })}
+                   variant="standard"
                    error={!!errors.confirmPassword}
                    type="password"
                    margin="normal"
                    autoComplete="off"/>
-        <div className="w-min ml-auto mt-3">
+        <Box ml="auto" mt={1} width="min-content">
           <Button variant="outlined" type="submit">Create</Button>
-        </div>
-      </form>
-      <div className="flex mt-4">
-        <p>Already have an account?</p>
-        <Link className="text-orange-600 ml-2" to="/auth/login">Login!</Link>
-      </div>
+        </Box>
+      </Box>
+      <Box display="flex" mt={2}>
+        <Typography fontSize="medium">Already have an account?</Typography>
+        <TypographyLink fontSize="medium" ml={1} to="/auth/login">Login!</TypographyLink>
+      </Box>
     </>
   )
 }
