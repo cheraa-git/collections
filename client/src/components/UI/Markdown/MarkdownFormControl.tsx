@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { Control, Controller } from "react-hook-form"
 import { MarkdownEditor } from "./MarkdownEditor"
-import { Typography } from "@mui/material"
+import { Text } from "../Text"
 
 interface MarkdownFormControlProps {
   control: Control<any>
@@ -16,7 +16,7 @@ export const MarkdownFormControl: FC<MarkdownFormControlProps> = (props) => {
   const { control, controlName, required = true, className } = props
   return (
     <>
-      <Typography variant="h6">{props.label}</Typography>
+      <Text variant="h6">{props.label}</Text>
       <div className={className}>
         <Controller
           name={controlName}

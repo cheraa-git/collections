@@ -1,7 +1,7 @@
 import './styles.css'
 import { FC } from "react"
-import { Typography } from "@mui/material"
 import { KeyboardCommandKeyIcon, SearchIcon } from "../UI/icons"
+import { Text } from "../UI/Text"
 
 export const SearchButton: FC<{ onClick: () => void }> = ({ onClick }) => {
   const isMacOs = navigator.userAgent.includes('Mac')
@@ -9,7 +9,7 @@ export const SearchButton: FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
     <div className="search-btn" onClick={onClick}>
       <SearchIcon className="blue" sx={{ mr: 2 }} fontSize="small"/>
-      <Typography fontSize="" mr={5}>Search...</Typography>
+      <Text mr={5}>Search...</Text>
       <div className="shortcut">
         {
           isMacOs

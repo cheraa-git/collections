@@ -8,6 +8,7 @@ import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import { SnackbarProvider } from "notistack"
 import { AppThemeProvider } from "./components/hoc/AppThemeProvider"
+import './i18n'
 
 
 const root = ReactDOM.createRoot(

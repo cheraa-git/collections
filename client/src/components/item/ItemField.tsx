@@ -5,6 +5,8 @@ import { MarkdownFormControl } from "../UI/Markdown/MarkdownFormControl"
 import { DatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import 'dayjs/locale/ru'
+import { useApp } from "../../hooks/appStateHook"
 
 interface ItemFieldProps {
   type: string
@@ -15,7 +17,6 @@ interface ItemFieldProps {
 
 export const ItemField: FC<ItemFieldProps> = ({ type, label, control, required = true }) => {
   const sliceType = type.slice(0, -1)
-
   if (sliceType === 'txt') {
     return (
       <Box mb={0.7}>
@@ -63,17 +64,21 @@ const Field = (props: FieldProps) => {
   }
 }
 
-const DateInput = (props: FieldProps) => (
-  <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <DatePicker
-      {...props.field}
-      label={props.textFieldConfig.label}
-      value={props.field.defaultValue || null}
-      renderInput={(params) => <TextField {...params} {...props.textFieldConfig}
-                                          error={params.error || props.textFieldConfig.error}/>}
-    />
-  </LocalizationProvider>
-)
+const DateInput = (props: FieldProps) => {
+  const lang = useApp().lang
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={lang}>
+      <DatePicker
+        {...props.field}
+        label={props.textFieldConfig.label}
+        value={props.field.defaultValue || null}
+        renderInput={(params) => <TextField {...params} {...props.textFieldConfig}
+                                            error={params.error || props.textFieldConfig.error}/>}
+      />
+    </LocalizationProvider>
+  )
+}
+
 const CheckboxInput = (props: FieldProps) => {
   return (
     <Box display="flex" className="flex">

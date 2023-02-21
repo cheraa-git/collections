@@ -2,8 +2,10 @@ import './styles.css'
 import { FC, InputHTMLAttributes } from "react"
 import { formatFileSize } from "../../../utils"
 import { MAX_IMAGE_SIZE } from "../../../constants/_other"
-import { Box, Typography } from "@mui/material"
+import { Box } from "@mui/material"
 import { CloseIcon } from "../icons"
+import { useTranslation } from "react-i18next"
+import { Text } from "../Text"
 
 interface ImageDropProps {
   inputProps?: InputHTMLAttributes<HTMLInputElement>
@@ -14,6 +16,7 @@ interface ImageDropProps {
 }
 
 export const ImageDrop: FC<ImageDropProps> = ({ imageFile, inputProps, className, clearFile, existingImageUrl }) => {
+  const { t } = useTranslation()
   const imageUrl = (imageFile ? URL.createObjectURL(imageFile) : '') || existingImageUrl
   const sizeAllowed = imageFile && imageFile.size > MAX_IMAGE_SIZE
 
@@ -23,11 +26,11 @@ export const ImageDrop: FC<ImageDropProps> = ({ imageFile, inputProps, className
 
       <p className={`drop-max-size ${sizeAllowed && 'red'}`}>
         {imageFile
-          ? `size: ${imageFile && formatFileSize(imageFile.size)}`
-          : `max size: ${formatFileSize(MAX_IMAGE_SIZE)}`
+          ? `${t('size')} ${imageFile && formatFileSize(imageFile.size)}`
+          : `${t('max size')} ${formatFileSize(MAX_IMAGE_SIZE)}`
         }
       </p>
-      <Typography hidden={!!imageUrl} className="drop-title">Drop your image here</Typography>
+      <Text hidden={!!imageUrl} className="drop-title">Drop your image here</Text>
 
       <Box className="image-container">
         <Box hidden={!imageUrl} position="relative">

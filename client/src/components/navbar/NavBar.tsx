@@ -8,7 +8,8 @@ import { useApp } from "../../hooks/appStateHook"
 import { SearchDialog } from "../search/SearchDialog"
 import { SearchButton } from "./SearchButton"
 import { PngLogoIcon } from "../UI/icons"
-import { Box, Typography } from "@mui/material"
+import { Box } from "@mui/material"
+import { Text } from "../UI/Text"
 
 export const NavBar: FC = () => {
   const { loading, isDark } = useApp()
@@ -22,7 +23,7 @@ export const NavBar: FC = () => {
           <Box minWidth={220}>
             <Link to={clientRoutes.MAIN} className="flex">
               <img src={PngLogoIcon} alt="collections-logo" width={50} height={50}/>
-              <Typography variant="h5" alignSelf="center">collections</Typography>
+              <Text variant="h5" alignSelf="center">collections</Text>
             </Link>
           </Box>
           <Box ml="auto" display="flex">
@@ -32,7 +33,7 @@ export const NavBar: FC = () => {
           </Box>
         </div>
       </div>
-      <Box >
+      <Box>
         {loading && <LoaderLine/>}
       </Box>
     </>

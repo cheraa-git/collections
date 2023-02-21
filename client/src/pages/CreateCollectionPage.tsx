@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { Box, Button, IconButton, MenuItem, TextField, Typography } from "@mui/material"
+import { Box, IconButton, MenuItem, TextField } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useAppDispatch, } from "../store/store"
 import { createCollection, editCollection } from "../store/actions/collectionActions"
@@ -14,6 +14,9 @@ import { useApp } from "../hooks/appStateHook"
 import { Spinner } from "../components/UI/Loader/Spinner"
 import { Collection, ItemConfigType } from "../../../common/common-types"
 import { useCollection } from "../hooks/collectionStateHook"
+import { Text } from "../components/UI/Text"
+import { useTranslation } from "react-i18next"
+import { TransButton } from "../components/UI/TransButton"
 
 
 interface Inputs {
@@ -25,6 +28,7 @@ interface Inputs {
 }
 
 export const CreateCollectionPage: FC = () => {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { loading } = useApp()
   const { enqueueSnackbar: snackbar } = useSnackbar()
@@ -33,7 +37,7 @@ export const CreateCollectionPage: FC = () => {
   const { register, handleSubmit, formState: { errors }, watch, setValue, getValues, control } = useForm<Inputs>()
   const [configInputs, setConfigInputs] = useState<ItemConfigType[]>([{ type: '', label: '' }])
   const imageFile = watch('image') && watch('image').length > 0 ? watch('image')[0] : undefined
-  const fixedConfigInputs = [['string', 'name'], ['#tags', 'tags']]
+  const fixedConfigInputs = [['string', 'title'], ['tags', 'tags']]
   const editable: { collection: Collection, itemConfigs: ItemConfigType[] } | undefined = location.state?.editable
   const themes = useCollection().themes
 
@@ -93,17 +97,18 @@ export const CreateCollectionPage: FC = () => {
 
   return (
     <Box maxWidth="900px" mx="auto" px={5} py={4} className="border-x">
-      <Typography variant="h4">Create new collection</Typography>
+      <Text variant="h4">Create collection</Text>
       <Box component="form" display="flex" flexDirection="column" mx="auto" px={1} onSubmit={handleSubmit(onSubmit)}>
 
-        <TextField label="Title" margin="normal" {...register('title', { required: true })} error={!!errors.title}/>
+        <TextField label={t("Title")} margin="normal" {...register('title', { required: true })}
+                   error={!!errors.title}/>
 
-        <TextField select label="Theme" defaultValue={editable?.collection.themeId || ''} margin="normal"
+        <TextField select label={t("Theme")} defaultValue={editable?.collection.themeId || ''} margin="normal"
                    {...register('themeId', { required: true, })} error={!!errors.themeId}>
           {themes.map((theme) => <MenuItem key={theme.id} value={theme.id}>{theme.name}</MenuItem>)}
         </TextField>
 
-        <Typography variant="h6">If you want, add a picture of the collection</Typography>
+        <Text variant="h6">If you want, add a picture of the collection</Text>
         <Box mx="auto">
           <ImageDrop imageFile={imageFile}
                      inputProps={{ ...register('image') }}
@@ -118,24 +123,24 @@ export const CreateCollectionPage: FC = () => {
 
         {fixedConfigInputs.map((config, index) => (
           <Box my={1} display="flex" mr={5} key={index}>
-            <TextField size="small" sx={{ mr: 2 }} label="type" disabled value={config[0]} fullWidth/>
-            <TextField size="small" label="label" disabled value={config[1]} fullWidth/>
+            <TextField size="small" sx={{ mr: 2 }} label={t("type")} disabled value={t(config[0])} fullWidth/>
+            <TextField size="small" label={t("label")} disabled value={t(config[1])} fullWidth/>
           </Box>
         ))}
 
         {configInputs.map((config, index) => (
           <Box display="flex" my={1} key={index}>
-            <TextField sx={{ mr: 2 }} select size="small" label="type" fullWidth
+            <TextField sx={{ mr: 2 }} select size="small" label={t("type")} fullWidth
                        value={config.type.slice(0, -1)}
                        onChange={(e) => configTypeHandler(index, e.target.value)}
             >
-              <MenuItem value="str">string</MenuItem>
-              <MenuItem value="txt">markdown text</MenuItem>
-              <MenuItem value="numb">number</MenuItem>
-              <MenuItem value="bool">boolean</MenuItem>
-              <MenuItem value="date">date</MenuItem>
+              <MenuItem value="str">{t('string')}</MenuItem>
+              <MenuItem value="txt">markdown</MenuItem>
+              <MenuItem value="numb">{t('number')}</MenuItem>
+              <MenuItem value="bool">{t('checkbox')}</MenuItem>
+              <MenuItem value="date">{t('date')}</MenuItem>
             </TextField>
-            <TextField size="small" label="label" fullWidth
+            <TextField size="small" label={t("label")} fullWidth
                        value={config.label}
                        onChange={e => configLabelHandler(index, e.target.value)}
             />
@@ -151,7 +156,7 @@ export const CreateCollectionPage: FC = () => {
         {
           loading
             ? <Box ml="auto"><Spinner/></Box>
-            : <Box alignSelf="end"><Button type="submit" variant="outlined">Save</Button></Box>
+            : <Box alignSelf="end"><TransButton type="submit" variant="outlined">Save</TransButton></Box>
         }
       </Box>
     </Box>

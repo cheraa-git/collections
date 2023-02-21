@@ -5,6 +5,7 @@ import { clientRoutes as routes } from "../../constants/routes"
 import { useAuth } from "../../hooks/authHook"
 import { MenuSettings } from "./MenuSettings"
 import { AccountCircleIcon, AddIcon, LoginIcon, LogoutIcon, MenuIcon, PersonAddIcon } from '../UI/icons'
+import { Text } from "../UI/Text"
 
 
 export const NavBarMenu: FC = () => {
@@ -28,11 +29,14 @@ export const NavBarMenu: FC = () => {
 
   return (
     <>
-      <IconButton onClick={handleClick} sx={{ml: 2}}>
+      <IconButton onClick={handleClick} sx={{ ml: 2 }}>
         <MenuIcon color="primary"/>
       </IconButton>
 
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right', }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right', }}
+      >
 
         <Box hidden={!isAuth}>
           <Link to={`/profile/${currentUser.id}`} onClick={handleClose}>
@@ -45,25 +49,25 @@ export const NavBarMenu: FC = () => {
           <Link to={routes.CREATE_COLLECTION} onClick={handleClose}>
             <MenuItem>
               <AddIcon color="primary"/>
-              <Typography ml={2}>Create collection</Typography>
+              <Text ml={2}>Create collection</Text>
             </MenuItem>
           </Link>
           <MenuItem onClick={logoutHandler}>
             <LogoutIcon color="primary"/>
-            <Typography ml={2}>Logout</Typography>
+            <Text ml={2}>Logout</Text>
           </MenuItem>
         </Box>
 
         <Box hidden={isAuth}>
           <Link to={routes.AUTH.LOGIN}>
             <MenuItem onClick={handleClose}>
-              Login
+              <Text>Login</Text>
               <LoginIcon sx={{ ml: 4 }} color="primary" fontSize="small"/>
             </MenuItem>
           </Link>
           <Link to={routes.AUTH.REGISTER}>
             <MenuItem onClick={handleClose}>
-              Sign up
+              <Text>Sign up</Text>
               <PersonAddIcon sx={{ ml: 2 }} color="primary" fontSize="small"/>
             </MenuItem>
           </Link>

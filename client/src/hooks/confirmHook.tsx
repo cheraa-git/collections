@@ -1,5 +1,7 @@
 import { useSnackbar } from "notistack"
 import { Box, Button, Dialog, Typography } from "@mui/material"
+import { Text } from "../components/UI/Text"
+import { TransButton } from "../components/UI/TransButton"
 
 
 export const useConfirm = () => {
@@ -14,10 +16,10 @@ export const useConfirm = () => {
     <div>
       <Dialog open={true} fullWidth maxWidth="xs" onClose={closeHandler}>
         <Box p={3}>
-          <Typography variant="h5">Are you sure?</Typography>
+          <Text variant="h5">Are you sure?</Text>
           <Typography pb={1} mb={1} className="border-b">{message}</Typography>
           <Box display="flex" justifyContent="space-between">
-            <Button color="inherit" onClick={closeHandler}>Cancel</Button>
+            <TransButton color="inherit" onClick={closeHandler}>Cancel</TransButton>
             <Button onClick={() => {
               action()
               closeHandler()

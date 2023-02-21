@@ -7,9 +7,12 @@ import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { clearComments } from "../../store/slices/itemSlice"
 import SendIcon from '@mui/icons-material/Send'
 import { TypographyLink } from "../UI/TypographyLink"
+import { Text } from "../UI/Text"
+import { useTranslation } from "react-i18next"
 
 
 export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
+  const {t} = useTranslation()
   const dispatch = useAppDispatch()
   const { enqueueSnackbar: snackbar } = useSnackbar()
   const [commentValue, setCommentValue] = useState('')
@@ -26,18 +29,18 @@ export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
   }, [socket, dispatch, itemId])
 
   const addCommentHandler = () => {
-    if (commentValue) {
+    if (commentValue.trim()) {
       dispatch(postNewComment(itemId, commentValue))
       setCommentValue('')
     } else {
-      snackbar('Enter the comment text')
+      snackbar(t('Enter the comment text'))
     }
   }
   return (
     <>
       <Divider/>
       <Box my={2}>
-        <Typography variant="h6">Comments</Typography>
+        <Text variant="h6">Comments</Text>
         {comments?.map(({ id, userId, nickname, text, timestamp }) => (
           <Box py={1} key={id} className="border-b flex">
             <TypographyLink mr={1} to={`/profile/${userId}`}>{nickname}:</TypographyLink>
@@ -46,7 +49,7 @@ export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
           </Box>
         ))}
       </Box>
-      <TextField size="small" multiline fullWidth placeholder="Enter comment..."
+      <TextField size="small" multiline fullWidth placeholder={t("Enter comment...") || ''}
                  value={commentValue}
                  onChange={e => setCommentValue(e.target.value)}
                  InputProps={{

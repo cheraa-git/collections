@@ -3,7 +3,7 @@ import { RootState, useAppSelector } from "../store/store"
 import { useAuth } from "../hooks/authHook"
 import { Link } from "react-router-dom"
 import { clientRoutes as routes } from "../constants/routes"
-import { Button } from "@mui/material"
+import { TransButton } from "./UI/TransButton"
 
 
 export const ProfileUserInfo: FC = () => {
@@ -17,7 +17,7 @@ export const ProfileUserInfo: FC = () => {
         <h1 className="text-xl capitalize font-bold">{profileUser.id === currentUser.id ? currentUser.email : ''}</h1>
       </div>
       <Link to={routes.CREATE_COLLECTION} className="flex text-blue-500">
-        <Button>Create collection</Button>
+        <TransButton>Create collection</TransButton>
       </Link>
     </div>
   )

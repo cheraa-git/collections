@@ -6,11 +6,13 @@ import { dateTimeFormat } from "../../utils"
 import MDEditor from "@uiw/react-md-editor"
 import { Box, Card, Grid, Typography } from "@mui/material"
 import { useCollection } from "../../hooks/collectionStateHook"
-import { ButtonLink } from "../UI/ButtonLink"
 import Chip from "@mui/material/Chip"
 import { TypographyLink } from "../UI/TypographyLink"
 import { useApp } from "../../hooks/appStateHook"
 import { Link } from "react-router-dom"
+import { TransButton } from "../UI/TransButton"
+import Image from 'mui-image'
+
 
 interface CollectionCardProps {
   collection: Collection
@@ -36,8 +38,10 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
         </Box>
       </Box>
       <Grid container spacing={2}>
-        <Grid item md={4} xs={12}>
-          <img src={collection.imageUrl} alt="collection" hidden={!collection.imageUrl}/>
+        <Grid item md={4} xs={12} hidden={!collection.imageUrl}>
+          <Box maxWidth="400px" >
+            <Image src={collection.imageUrl || ''} alt="collection" showLoading/>
+          </Box>
         </Grid>
         <Grid item md={8} xs={12} data-color-mode={appTheme}>
           <Box overflow="auto" pb={2} maxHeight={400}>
@@ -46,7 +50,9 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
         </Grid>
       </Grid>
       <Box display="flex" justifyContent="end" className="border-t w-full">
-        <ButtonLink to={`/collection/${collection.id}`}>Open</ButtonLink>
+        <Link to={`/collection/${collection.id}`}>
+          <TransButton>Open</TransButton>
+        </Link>
       </Box>
     </Card>
   )

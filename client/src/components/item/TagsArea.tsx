@@ -4,6 +4,7 @@ import { Autocomplete, TextField, UseAutocompleteProps } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { matchSorter } from "match-sorter"
 import { Tag } from "../../../../common/common-types"
+import { useTranslation } from "react-i18next"
 
 
 interface TagsAreaProps {
@@ -12,6 +13,7 @@ interface TagsAreaProps {
 }
 
 export const TagsArea: FC<TagsAreaProps> = ({ value, setValue }) => {
+  const {t} = useTranslation()
   const { enqueueSnackbar: snackbar } = useSnackbar()
   const tags = useAppSelector((state: RootState) => state.item.tags)
   const [inputValue, setInputValue] = useState('')
@@ -54,7 +56,7 @@ export const TagsArea: FC<TagsAreaProps> = ({ value, setValue }) => {
       getOptionLabel={getTagName}
       filterOptions={filterOptions}
       filterSelectedOptions
-      renderInput={params => <TextField {...params} size="small" placeholder="Enter tag"/>}
+      renderInput={params => <TextField {...params} size="small" label={t("tags")}/>}
     />
   )
 }

@@ -1,10 +1,13 @@
 import { FC } from "react"
-import { Box, Button, TextField, Typography } from "@mui/material"
+import { Box, TextField } from "@mui/material"
 import { useAppDispatch } from "../../store/store"
 import { useSnackbar } from "notistack"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { authUser } from "../../store/actions/userActions"
-import { TypographyLink } from "../UI/TypographyLink"
+import { useTranslation } from "react-i18next"
+import { Text } from "../UI/Text"
+import { Link } from "react-router-dom"
+import { TransButton } from "../UI/TransButton"
 
 interface Inputs {
   email: string
@@ -14,6 +17,7 @@ interface Inputs {
 }
 
 export const RegisterContent: FC = () => {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { enqueueSnackbar: snackbar } = useSnackbar()
   const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
@@ -27,33 +31,37 @@ export const RegisterContent: FC = () => {
   return (
     <>
       <Box mb={2} textAlign="center">
-        <Typography variant="h4" mb={1}>Create Account!</Typography>
+        <Text variant="h4" mb={1}>Create Account!</Text>
       </Box>
       <Box component="form" width={300} onSubmit={handleSubmit(onSubmit)}>
-        <TextField fullWidth label="Name" {...register('nickname', { required: true })} error={!!errors.nickname}
+        <TextField fullWidth label={t('Nickname')} {...register('nickname', { required: true })}
+                   error={!!errors.nickname}
                    variant="standard"
                    margin="normal"/>
-        <TextField fullWidth label="E-mail" {...register('email', { required: true })} error={!!errors.email}
+        <TextField fullWidth label="Email" {...register('email', { required: true })} error={!!errors.email}
                    variant="standard"
                    margin="normal"/>
-        <TextField fullWidth label="Password" {...register('password', { required: true })} error={!!errors.password}
+        <TextField fullWidth label={t("Password")} {...register('password', { required: true })}
+                   error={!!errors.password}
                    variant="standard"
                    type="password"
                    margin="normal"
                    autoComplete="off"/>
-        <TextField fullWidth label="Confirm your password" {...register('confirmPassword', { required: true })}
+        <TextField fullWidth label={t("Confirm your password")} {...register('confirmPassword', { required: true })}
                    variant="standard"
                    error={!!errors.confirmPassword}
                    type="password"
                    margin="normal"
                    autoComplete="off"/>
         <Box ml="auto" mt={1} width="min-content">
-          <Button variant="outlined" type="submit">Create</Button>
+          <TransButton variant="outlined" type="submit">Create</TransButton>
         </Box>
       </Box>
       <Box display="flex" mt={2}>
-        <Typography fontSize="medium">Already have an account?</Typography>
-        <TypographyLink fontSize="medium" ml={1} to="/auth/login">Login!</TypographyLink>
+        <Text fontSize="medium">Already have an account?</Text>
+        <Link to="/auth/login" className="link">
+          <Text fontSize="medium" ml={1}>Login</Text>
+        </Link>
       </Box>
     </>
   )

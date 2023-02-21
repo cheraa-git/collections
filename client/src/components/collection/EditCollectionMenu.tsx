@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom"
 import { useConfirm } from "../../hooks/confirmHook"
 import { useAppDispatch } from "../../store/store"
 import { useCollection } from "../../hooks/collectionStateHook"
+import { useTranslation } from "react-i18next"
 
 export const EditCollectionMenu: FC = () => {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { showConfirm } = useConfirm()
@@ -35,8 +37,14 @@ export const EditCollectionMenu: FC = () => {
               horizontal: 'right',
             }}
       >
-        <MenuItem onClick={editHandler}><EditIcon sx={{ mr: 2 }}/>Edit collection</MenuItem>
-        <MenuItem onClick={deleteHandler}><DeleteIcon sx={{ mr: 2 }} className="red"/>Delete collection</MenuItem>
+        <MenuItem onClick={editHandler}>
+          <EditIcon sx={{ mr: 2 }}/>
+          {t('Edit collection')}
+        </MenuItem>
+        <MenuItem onClick={deleteHandler}>
+          <DeleteIcon sx={{ mr: 2 }} className="red"/>
+          {t("Delete collection")}
+        </MenuItem>
       </Menu>
     </>
   )

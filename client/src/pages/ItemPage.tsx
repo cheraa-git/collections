@@ -3,15 +3,18 @@ import { useNavigate, useParams } from "react-router-dom"
 import { RootState, useAppDispatch, useAppSelector } from "../store/store"
 import { deleteItem, getItem } from "../store/actions/itemActions"
 import { ItemFieldView } from "../components/item/ItemFieldView"
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import { EditItemDialog } from "../components/item/EditItemDialog"
 import { useCollection } from "../hooks/collectionStateHook"
 import { Comments } from "../components/item/Comments"
 import { Likes } from "../components/item/Likes"
 import { TagChip } from "../components/TagChip"
 import { useConfirm } from "../hooks/confirmHook"
+import { TransButton } from "../components/UI/TransButton"
+import { useTranslation } from "react-i18next"
 
 export const ItemPage: FC = () => {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { id, collectionId } = useParams()
   const navigate = useNavigate()
@@ -31,7 +34,7 @@ export const ItemPage: FC = () => {
   const deleteHandler = () => {
     if (item) {
       showConfirm(
-        `are you sure you want to permanently delete "${item.name}"`,
+        t('Аre you sure you want to permanently delete?', { name: item.name }),
         () => dispatch(deleteItem(item, navigate))
       )
     }
@@ -42,8 +45,8 @@ export const ItemPage: FC = () => {
     <Box py={1} px={3} my={3} mx="auto" maxWidth="42rem" className="border">
       <Box p={1} className="flex border-b">
         <Typography variant="h5" mr="auto">{item?.name}</Typography>
-        <Button onClick={() => setEditDialogOpen(true)}>edit</Button>
-        <Button color="error" onClick={deleteHandler}>Delete</Button>
+        <TransButton onClick={() => setEditDialogOpen(true)}>Edit</TransButton>
+        <TransButton color="error" onClick={deleteHandler}>Delete</TransButton>
         <EditItemDialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}
                         collectionId={Number(collectionId)} item={item}/>
       </Box>

@@ -1,9 +1,12 @@
 import { FC } from "react"
-import { Box, Button, TextField, Typography } from "@mui/material"
+import { Box, TextField } from "@mui/material"
 import { useAppDispatch } from "../../store/store"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { authUser } from "../../store/actions/userActions"
-import { TypographyLink } from "../UI/TypographyLink"
+import { Text } from "../UI/Text"
+import { TransButton } from "../UI/TransButton"
+import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 
 interface Inputs {
@@ -12,6 +15,7 @@ interface Inputs {
 }
 
 export const LoginContent: FC = () => {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
 
@@ -22,24 +26,26 @@ export const LoginContent: FC = () => {
   return (
     <>
       <Box mb={2} textAlign="center">
-        <Typography variant="h4" mb={1}>Welcome!</Typography>
-        <Typography>Sign in to your account</Typography>
+        <Text variant="h4" mb={1}>Welcome!</Text>
+        <Text>Sign in to your account</Text>
       </Box>
       <Box component="form" width={300} onSubmit={handleSubmit(onSubmit)}>
         <TextField variant="standard" label="Email" fullWidth {...register('email', { required: true })}
                    error={!!errors.email}/>
-        <TextField variant="standard" label="Password" fullWidth {...register('password', { required: true })}
+        <TextField variant="standard" label={t("Password")} fullWidth {...register('password', { required: true })}
                    error={!!errors.password}
                    type="password"
                    margin="normal"
                    autoComplete="on"/>
         <Box ml="auto" mt={1} width="min-content">
-          <Button variant="outlined" type="submit">Login</Button>
+          <TransButton variant="outlined" type="submit">Login</TransButton>
         </Box>
       </Box>
       <Box display="flex" mt={2}>
-        <Typography fontSize="medium">Don`t have an account?</Typography>
-        <TypographyLink fontSize="medium" ml={1} to="/auth/signup">Sign up!</TypographyLink>
+        <Text fontSize="medium">Don`t have an account?</Text>
+        <Link to="/auth/signup" className="link">
+          <Text fontSize="medium" ml={1}>Sign up</Text>
+        </Link>
       </Box>
     </>
   )

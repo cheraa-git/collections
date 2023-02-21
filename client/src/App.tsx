@@ -15,9 +15,13 @@ import { ItemPage } from "./pages/ItemPage"
 import { useCollection } from "./hooks/collectionStateHook"
 import { getThemes } from "./store/actions/collectionActions"
 import { getTags } from "./store/actions/itemActions"
+import { useTranslation } from "react-i18next"
+import { useApp } from "./hooks/appStateHook"
 
 
 function App() {
+  const { i18n } = useTranslation()
+  const lang = useApp().lang
   const dispatch = useAppDispatch()
   const { isAuth } = useAuth()
   const themes = useCollection().themes
@@ -35,6 +39,7 @@ function App() {
     if (tags.length === 0) {
       dispatch(getTags())
     }
+    i18n.changeLanguage(lang)
   }, [isAuth, dispatch, tags.length, themes.length])
   return (
     <>

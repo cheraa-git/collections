@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Lang } from "../../types/app"
 import { LANG, THEME } from "../../constants/localstorage"
 import { PaletteMode } from '@mui/material'
+import i18n from "../../i18n"
 
 export interface AppState {
   theme: PaletteMode
@@ -21,6 +22,7 @@ export const appSlice = createSlice({
   reducers: {
     setLang: (state, { payload }: PayloadAction<Lang>) => {
       localStorage.setItem(LANG, payload)
+      i18n.changeLanguage(payload)
       state.lang = payload
     },
     setTheme: (state, { payload }: PayloadAction<PaletteMode>) => {
