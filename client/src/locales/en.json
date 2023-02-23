@@ -52,6 +52,17 @@
     "Аre you sure you want to permanently delete?": "Аre you sure you want to permanently delete \"{{name}}\"?",
     "Are you sure?": "Are you sure?",
     "THE PAGE CAN`T BE FOUND": "THE PAGE CAN`T BE FOUND",
-    "Go back page": "Go back page"
+    "Go back page": "Go back page",
+    "admin": "admin",
+    "There are no comments yet": "There are no comments yet",
+    "Collection": "Collection",
+    "Admin panel": "Admin panel",
+    "Make admins": "Make admins",
+    "Make users": "Make users",
+    "Actions": "Actions",
+    "Block": "Block",
+    "Activate": "Activate",
+    "Multiple actions": "Multiple actions"
+
   }
 }

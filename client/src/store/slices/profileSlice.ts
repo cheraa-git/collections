@@ -12,6 +12,7 @@ const initialState: ProfileState = {
     id: NaN,
     nickname: '',
     avatar: '',
+    status: 'active'
   },
   collections: []
 

@@ -15,8 +15,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import CloseIcon from '@mui/icons-material/Close'
-
-
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import BlockIcon from '@mui/icons-material/Block'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 export {
   LoginIcon,
@@ -35,5 +36,8 @@ export {
   MoreVertIcon,
   FavoriteBorderIcon,
   FavoriteIcon,
-  CloseIcon
+  CloseIcon,
+  AdminPanelSettingsIcon,
+  BlockIcon,
+  CheckCircleOutlineIcon
 }

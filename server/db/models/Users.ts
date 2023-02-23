@@ -32,10 +32,14 @@ export class Users extends Model {
   @Column({ type: DataType.STRING })
   password!: string
 
-  @Column({
-    type: DataType.STRING,
-  })
+  @Column({ type: DataType.STRING, })
   avatarUrl!: string
+
+  @Column({ type: DataType.BOOLEAN, })
+  isAdmin!: boolean
+
+  @Column({ type: DataType.STRING, })
+  status!: 'active' | 'blocked' | 'deleted'
 
   @HasMany(() => Collections, { onDelete: 'cascade' })
   collections!: Collections[]

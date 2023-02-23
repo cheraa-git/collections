@@ -4,9 +4,11 @@ export interface User {
   avatar?: string
   email: string
   token: string
+  isAdmin: boolean
+  status: 'active' | 'blocked' | 'deleted'
 }
 
-export type ProfileUser = Omit<User, "token" | "email">
+export type ProfileUser = Omit<User, "token" | "email" | 'isAdmin'>
 
 export interface AuthData {
   email: string

@@ -47,12 +47,12 @@ class CollectionController {
                 ]
             });
             const collection = Object.assign(Object.assign({}, response === null || response === void 0 ? void 0 : response.dataValues), { userName: response === null || response === void 0 ? void 0 : response.users.nickname, itemConfigs: undefined, users: undefined, items: undefined });
-            const items = response === null || response === void 0 ? void 0 : response.items.map(i => (0, utils_1.filterItem)(i));
+            const items = response === null || response === void 0 ? void 0 : response.items.map(i => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(i)), { userId: response === null || response === void 0 ? void 0 : response.userId })));
             res.json({ collection, itemConfigs: response === null || response === void 0 ? void 0 : response.itemConfigs, items });
         });
         this.deleteCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { collection, token } = req.body;
-            if ((0, utils_1.checkToken)(token, collection.userId)) {
+            if (!(0, utils_1.checkToken)(token, collection.userId)) {
                 return res.status(500).json({ error: 'TokenError' });
             }
             const countDeletedCollections = yield Collections_1.Collections.destroy({ where: { id: collection.id }, force: true });

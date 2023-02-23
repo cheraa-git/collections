@@ -51,16 +51,18 @@ class ItemController {
                 return res.status(500).json({ error: 'Collection data is invalid' });
             }
             const newItem = yield Items_1.Items.create(Object.assign({ collectionId, timestamp: `${Date.now()}` }, fields));
-            res.json(Object.assign(Object.assign({}, (0, utils_1.filterItem)(newItem)), { tags: yield this.createItemTags(tags, newItem.id) }));
+            res.json(Object.assign(Object.assign({}, (0, utils_1.filterItem)(newItem)), { tags: yield this.createItemTags(tags, newItem.id), userId }));
         });
         this.getItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const { id, collectionId } = req.params;
             const item = yield Items_1.Items.findOne({ where: { id }, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] });
             const itemConfigs = yield ItemConfigs_1.ItemConfigs.findAll({ where: { collectionId } });
-            res.json({ item: (0, utils_1.filterItem)(item), itemConfigs });
+            const userId = (_a = (yield Collections_1.Collections.findOne({ where: { id: collectionId }, attributes: ['userId'] }))) === null || _a === void 0 ? void 0 : _a.userId;
+            res.json({ item: Object.assign(Object.assign({}, (0, utils_1.filterItem)(item)), { userId }), itemConfigs });
         });
         this.editItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const _a = req.body, _b = _a.item, { tags } = _b, editedItem = __rest(_b, ["tags"]), { token } = _a;
+            const _b = req.body, _c = _b.item, { tags } = _c, editedItem = __rest(_c, ["tags"]), { token } = _b;
             const itemAuthor = yield Collections_1.Collections.findOne({ where: { id: editedItem.collectionId }, attributes: ['userId'] });
             if (!(0, utils_1.checkToken)(token, itemAuthor === null || itemAuthor === void 0 ? void 0 : itemAuthor.userId)) {
                 return res.status(500).json({ error: 'TokenError' });

@@ -5,6 +5,7 @@ import { CollectionReducer } from "./slices/collectionSlice"
 import { ProfileReducer } from "./slices/profileSlice"
 import { AppReducer } from "./slices/appSlice"
 import { ItemReducer } from "./slices/itemSlice"
+import { AdminReducer } from "./slices/adminSlice"
 
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
     collection: CollectionReducer,
     item: ItemReducer,
     profile: ProfileReducer,
+    admin: AdminReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({
     serializableCheck: {
@@ -25,6 +27,7 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+export type GetState = () => RootState
 
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

@@ -51,6 +51,17 @@
     "Аre you sure you want to permanently delete?": "Вы точно хотите безвозвратно удалить \"{{name}}\"?",
     "Are you sure?": "Вы уверены?",
     "THE PAGE CAN`T BE FOUND": "СТРАНИЦА НЕ НАЙДЕНА",
-    "Go back page": "Вернуться назад"
+    "Go back page": "Вернуться назад",
+    "admin": "админ",
+    "There are no comments yet": "Комментариев пока нет",
+    "Collection": "Коллекция",
+    "Admin panel": "Панель администратора",
+    "Make admins": "Сделать администраторами",
+    "Make users": "Сделать пользователями",
+    "Actions": "Действия",
+    "Block": "Заблокировать",
+    "Activate": "Активировать",
+    "Multiple actions": "Множественные действия"
+
   }
 }

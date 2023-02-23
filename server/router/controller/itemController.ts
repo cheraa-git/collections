@@ -34,14 +34,15 @@ export class ItemController {
       return res.status(500).json({ error: 'Collection data is invalid' })
     }
     const newItem = await Items.create({ collectionId, timestamp: `${Date.now()}`, ...fields })
-    res.json({ ...filterItem(newItem), tags: await this.createItemTags(tags, newItem.id) })
+    res.json({ ...filterItem(newItem), tags: await this.createItemTags(tags, newItem.id), userId })
   }
 
   getItem = async (req: Request, res: Response) => {
     const { id, collectionId } = req.params
     const item = await Items.findOne({ where: { id }, include: [{ model: Tags, through: { attributes: [] } }] })
     const itemConfigs = await ItemConfigs.findAll({ where: { collectionId } })
-    res.json({ item: filterItem(item), itemConfigs })
+    const userId = (await Collections.findOne({ where: { id: collectionId }, attributes: ['userId'] }))?.userId
+    res.json({ item: { ...filterItem(item), userId }, itemConfigs })
   }
 
   editItem = async (req: Request<any, any, EditItemBody>, res: Response) => {

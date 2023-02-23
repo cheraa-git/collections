@@ -37,23 +37,21 @@ export class CollectionController {
       include: [
         { model: ItemConfigs },
         { model: Users, attributes: ['nickname'] },
-        { model: Items, include: [{ model: Tags, through: { attributes: [] } }]  }
+        { model: Items, include: [{ model: Tags, through: { attributes: [] } }] }
       ]
     })
     const collection = {
       ...response?.dataValues,
       userName: response?.users.nickname,
-      itemConfigs: undefined,
-      users: undefined,
-      items: undefined
+      itemConfigs: undefined, users: undefined, items: undefined
     }
-    const items = response?.items.map(i => filterItem(i))
+    const items = response?.items.map(i => ({ ...filterItem(i), userId: response?.userId }))
     res.json({ collection, itemConfigs: response?.itemConfigs, items })
   }
 
   deleteCollection = async (req: Request<any, any, DeleteCollectionBody>, res: Response) => {
     const { collection, token } = req.body
-    if (checkToken(token, collection.userId)) {
+    if (!checkToken(token, collection.userId)) {
       return res.status(500).json({ error: 'TokenError' })
     }
     const countDeletedCollections = await Collections.destroy({ where: { id: collection.id }, force: true })

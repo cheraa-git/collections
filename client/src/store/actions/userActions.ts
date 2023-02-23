@@ -1,9 +1,9 @@
-import { AppDispatch } from "../store"
 import axios from "../../axios-app"
 import { AxiosError } from "axios"
 import { logoutUser, setErrorMessage, setUser, toggleAuthLoading } from "../slices/userSlice"
 import { AuthData, User } from "../../types/user"
 import { apiRoutes } from "../../constants/routes"
+import { AppDispatch } from "../store"
 
 
 export const authUser = (type: 'login' | 'create', data: AuthData) => async (dispatch: AppDispatch) => {

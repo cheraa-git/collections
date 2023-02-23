@@ -48,8 +48,9 @@ class AuthController {
                 return res.status(500).json({ error: 'Registration data invalid' });
             }
             try {
-                const newUser = yield Users_1.Users.create({ nickname, email, password: hashPassword, avatarUrl });
-                const token = jwt.sign({ email, hashPassword, id: newUser.id }, SECRET_KEY);
+                const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' };
+                const newUser = yield Users_1.Users.create(newUserData);
+                const token = jwt.sign({ email, hashPassword, id: newUser.id, isAdmin: false, status: 'active' }, SECRET_KEY);
                 res.json(Object.assign(Object.assign({}, newUser.dataValues), { password: undefined, token }));
             }
             catch (error) {
@@ -61,25 +62,26 @@ class AuthController {
             }
         });
         this.loginUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d;
-            const reqEmail = (_a = req.body.email) === null || _a === void 0 ? void 0 : _a.trim().toLowerCase();
-            const reqPassword = (_b = req.body.password) === null || _b === void 0 ? void 0 : _b.trim();
-            if (!reqEmail || !reqPassword) {
+            var _a, _b;
+            const email = (_a = req.body.email) === null || _a === void 0 ? void 0 : _a.trim().toLowerCase();
+            const password = (_b = req.body.password) === null || _b === void 0 ? void 0 : _b.trim();
+            if (!email || !password) {
                 return res.status(500).json({ error: 'Registration data invalid' });
             }
-            const user = yield this.checkLoginData(reqEmail, reqPassword);
-            if (user.error)
-                return res.status(500).json({ error: user.error });
-            const token = jwt.sign({ email: reqEmail, hashPassword: (_c = user.data) === null || _c === void 0 ? void 0 : _c.password, id: (_d = user.data) === null || _d === void 0 ? void 0 : _d.id }, SECRET_KEY);
-            res.json(Object.assign(Object.assign({}, user.data), { token, password: undefined }));
+            const { error, data: user } = yield this.checkLoginData(email, password);
+            if (error)
+                return res.status(500).json({ error });
+            const token = jwt.sign({ email, hashPassword: user === null || user === void 0 ? void 0 : user.password, id: user === null || user === void 0 ? void 0 : user.id, isAdmin: user === null || user === void 0 ? void 0 : user.isAdmin, status: user === null || user === void 0 ? void 0 : user.status }, SECRET_KEY);
+            res.json(Object.assign(Object.assign({}, user), { token, password: undefined }));
         });
         this.autoLogin = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const token = req.body.token;
             const jwtPayload = jwt.verify(token, SECRET_KEY);
             const iat = jwtPayload.iat;
-            const isExpired = (((iat + 3600) * 24) * 1000) < Date.now(); // TODO: убрать 24 (чтобы срок действия токена был 1 час
+            const isExpired = (((iat + 3600) * 24) * 1000) < Date.now();
+            const statusIsAvailable = jwtPayload.status === 'active';
             const user = yield Users_1.Users.findOne({ where: { email: jwtPayload.email } });
-            if (!user || user.password !== jwtPayload.hashPassword || isExpired) {
+            if (!user || user.password !== jwtPayload.hashPassword || isExpired || !statusIsAvailable) {
                 return res.status(500).json({ error: 'Autologin canceled' });
             }
             res.json(Object.assign(Object.assign({}, user.dataValues), { token, password: undefined }));
@@ -90,6 +92,8 @@ class AuthController {
             const user = yield Users_1.Users.findOne({ where: { email } });
             if (!user)
                 return { error: 'No user with this email was found' };
+            if (user.status !== 'active')
+                return { error: `StatusError: ${user.status}` };
             const comparePassword = yield bcrypt.compare(password, user.password);
             if (!comparePassword)
                 return { error: 'The password is invalid', };

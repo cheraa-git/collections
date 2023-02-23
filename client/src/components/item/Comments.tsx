@@ -9,14 +9,16 @@ import SendIcon from '@mui/icons-material/Send'
 import { TypographyLink } from "../UI/TypographyLink"
 import { Text } from "../UI/Text"
 import { useTranslation } from "react-i18next"
+import { useAuth } from "../../hooks/authHook"
 
 
 export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { enqueueSnackbar: snackbar } = useSnackbar()
-  const [commentValue, setCommentValue] = useState('')
   const { comments, socket } = useAppSelector((state: RootState) => state.item)
+  const { isAuth } = useAuth()
+  const [commentValue, setCommentValue] = useState('')
 
   useEffect(() => {
     if (!socket) {
@@ -49,13 +51,17 @@ export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
           </Box>
         ))}
       </Box>
-      <TextField size="small" multiline fullWidth placeholder={t("Enter comment...") || ''}
-                 value={commentValue}
-                 onChange={e => setCommentValue(e.target.value)}
-                 InputProps={{
-                   endAdornment: <IconButton sx={{mt: 'auto'}} onClick={addCommentHandler}><SendIcon/></IconButton>
-                 }}
-      />
+      {comments.length === 0 && <Text color="gray" textAlign="center" mb={3}>There are no comments yet</Text>}
+      {
+        isAuth &&
+        <TextField size="small" multiline fullWidth placeholder={t("Enter comment...") || ''}
+                   value={commentValue}
+                   onChange={e => setCommentValue(e.target.value)}
+                   InputProps={{
+                     endAdornment: <IconButton sx={{ mt: 'auto' }} onClick={addCommentHandler}><SendIcon/></IconButton>
+                   }}
+        />
+      }
     </>
   )
 }

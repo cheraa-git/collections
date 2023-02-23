@@ -6,7 +6,6 @@ import { MainPage } from "./pages/MainPage"
 import { NotFoundPage } from "./pages/NotFoundPage"
 import { NavBar } from "./components/navbar/NavBar"
 import { CreateCollectionPage } from "./pages/CreateCollectionPage"
-import { clientRoutes } from './constants/routes'
 import { RootState, useAppDispatch, useAppSelector } from "./store/store"
 import { useAuth } from "./hooks/authHook"
 import { autoLogin } from "./store/actions/userActions"
@@ -17,6 +16,7 @@ import { getThemes } from "./store/actions/collectionActions"
 import { getTags } from "./store/actions/itemActions"
 import { useTranslation } from "react-i18next"
 import { useApp } from "./hooks/appStateHook"
+import { AdminPage } from "./pages/AdminPage"
 
 
 function App() {
@@ -26,7 +26,6 @@ function App() {
   const { isAuth } = useAuth()
   const themes = useCollection().themes
   const tags = useAppSelector((state: RootState) => state.item.tags)
-  const { MAIN, CREATE_COLLECTION } = clientRoutes
 
 
   useEffect(() => {
@@ -45,9 +44,10 @@ function App() {
     <>
       <NavBar/>
       <Routes>
-        <Route path={MAIN} element={<MainPage/>}/>
+        <Route path="/" element={<MainPage/>}/>
         <Route path="/auth/:mode" element={<AuthPage/>}/>
-        <Route path={CREATE_COLLECTION} element={<CreateCollectionPage/>}/>
+        <Route path="/admin" element={<AdminPage/>}/>
+        <Route path="create_collection" element={<CreateCollectionPage/>}/>
         <Route path="/profile/:userId" element={<ProfilePage/>}/>
         <Route path="/collection/:id" element={<CollectionPage/>}/>
         <Route path="/collection/:collectionId/:id" element={<ItemPage/>}/>

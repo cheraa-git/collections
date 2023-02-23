@@ -21,7 +21,7 @@ export const CollectionPage: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { id } = useParams()
-  const { collection, getThemeName } = useCollection()
+  const { collection, getThemeName, isAuthor } = useCollection()
   const theme = useApp().theme
   const items = useAppSelector((state: RootState) => state.item.items)
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
@@ -65,7 +65,7 @@ export const CollectionPage: FC = () => {
             <Typography>{t('on')} {dateFormat(collection.timestamp)}</Typography>
           </i>
         </Box>
-        <Box my="auto" height="min-content">
+        <Box my="auto" height="min-content" hidden={!isAuthor}>
           <Button onClick={() => setEditItemDialogOpen(true)} hidden={!collection}>
             <AddIcon/>
             {t('add item')}

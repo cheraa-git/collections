@@ -17,6 +17,7 @@ import { useCollection } from "../hooks/collectionStateHook"
 import { Text } from "../components/UI/Text"
 import { useTranslation } from "react-i18next"
 import { TransButton } from "../components/UI/TransButton"
+import { useAuth } from "../hooks/authHook"
 
 
 interface Inputs {
@@ -34,12 +35,19 @@ export const CreateCollectionPage: FC = () => {
   const { enqueueSnackbar: snackbar } = useSnackbar()
   const navigate = useNavigate()
   const location = useLocation()
+  const { isAuth, currentUser } = useAuth()
   const { register, handleSubmit, formState: { errors }, watch, setValue, getValues, control } = useForm<Inputs>()
   const [configInputs, setConfigInputs] = useState<ItemConfigType[]>([{ type: '', label: '' }])
   const imageFile = watch('image') && watch('image').length > 0 ? watch('image')[0] : undefined
   const fixedConfigInputs = [['string', 'title'], ['tags', 'tags']]
   const editable: { collection: Collection, itemConfigs: ItemConfigType[] } | undefined = location.state?.editable
+  const userId = location.state?.userId ||  currentUser.id
   const themes = useCollection().themes
+
+
+  useEffect(() => {
+    if (!isAuth) navigate('/')
+  }, [isAuth, navigate])
 
   useEffect(() => {
     if (editable) {
@@ -61,7 +69,7 @@ export const CreateCollectionPage: FC = () => {
     if (editable) {
       dispatch(editCollection({ ...editable.collection, ...data, image: data.image[0], itemConfigs, }, navigate))
     } else {
-      dispatch(createCollection({ ...data, image: data.image[0], itemConfigs }, navigate))
+      dispatch(createCollection({ ...data, image: data.image[0], itemConfigs, userId }, navigate))
     }
   }
 
@@ -97,7 +105,7 @@ export const CreateCollectionPage: FC = () => {
 
   return (
     <Box maxWidth="900px" mx="auto" px={5} py={4} className="border-x">
-      <Text variant="h4">Create collection</Text>
+      <Text variant="h4">{editable ? 'Edit' : 'Create'} collection</Text>
       <Box component="form" display="flex" flexDirection="column" mx="auto" px={1} onSubmit={handleSubmit(onSubmit)}>
 
         <TextField label={t("Title")} margin="normal" {...register('title', { required: true })}

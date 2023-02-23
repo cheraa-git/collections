@@ -1,6 +1,7 @@
 import { Fields, Tag } from "../../../common/common-types"
 
 export interface CreateCollectionPayload {
+  userId: number
   title: string
   description: string,
   themeId: number

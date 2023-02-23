@@ -1,8 +1,8 @@
-import { AppDispatch } from "../store"
 import axios from "../../axios-app"
 import { setProfileInfo } from "../slices/profileSlice"
 import { GetProfileResponse } from "../../../../common/response-types"
 import { setLoading } from "../slices/appSlice"
+import { AppDispatch } from "../store"
 
 export const getProfile = (userId: string) => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true))

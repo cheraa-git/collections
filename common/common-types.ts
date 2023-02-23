@@ -12,6 +12,7 @@ export interface Collection {
 
 export type Item = {
   id: number
+  userId: number
   collectionId: number
   name: string
   tags: Tag[]

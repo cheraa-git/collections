@@ -4,7 +4,15 @@ import { Link } from "react-router-dom"
 import { clientRoutes as routes } from "../../constants/routes"
 import { useAuth } from "../../hooks/authHook"
 import { MenuSettings } from "./MenuSettings"
-import { AccountCircleIcon, AddIcon, LoginIcon, LogoutIcon, MenuIcon, PersonAddIcon } from '../UI/icons'
+import {
+  AccountCircleIcon,
+  AddIcon,
+  AdminPanelSettingsIcon,
+  LoginIcon,
+  LogoutIcon,
+  MenuIcon,
+  PersonAddIcon
+} from '../UI/icons'
 import { Text } from "../UI/Text"
 
 
@@ -43,6 +51,14 @@ export const NavBarMenu: FC = () => {
             <MenuItem>
               <AccountCircleIcon color="primary"/>
               <Typography ml={2} className="capitalize">{currentUser.nickname}</Typography>
+              <Text variant="caption" alignSelf="end" ml="auto" hidden={!currentUser.isAdmin}>admin</Text>
+            </MenuItem>
+          </Link>
+
+          <Link to="/admin" onClick={handleClose} hidden={!currentUser.isAdmin}>
+            <MenuItem>
+              <AdminPanelSettingsIcon />
+              <Text ml={2}>Admin panel</Text>
             </MenuItem>
           </Link>
 

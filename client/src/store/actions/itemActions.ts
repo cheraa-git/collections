@@ -1,5 +1,4 @@
 import { CreateItemPayload } from "../../types/collections"
-import { AppDispatch, RootState } from "../store"
 import { setLoading } from "../slices/appSlice"
 import { CreateItemBody } from "../../../../common/request-types"
 import axios from "../../axios-app"
@@ -16,10 +15,12 @@ import {
   setComments,
   setItem,
   setLikes,
-  setSocket, setTags
+  setSocket,
+  setTags
 } from "../slices/itemSlice"
+import { AppDispatch, GetState } from "../store"
 
-export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispatch, getState: GetState) => {
   dispatch(setLoading(true))
   const { id: userId, token } = getState().user.currentUser
   const sendData: CreateItemBody = { userId, token, ...data }
@@ -39,7 +40,7 @@ export const getItem = (collectionId: number, id: number) => async (dispatch: Ap
 }
 
 
-export const editItem = (item: Item) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const editItem = (item: Item) => async (dispatch: AppDispatch, getState: GetState) => {
   dispatch(setLoading(true))
   const token = getState().user.currentUser.token
   const response = await axios.patch<Item>('/item', { item, token })
@@ -47,29 +48,31 @@ export const editItem = (item: Item) => async (dispatch: AppDispatch, getState: 
   dispatch(setLoading(false))
 }
 
-export const deleteItem = (item: Item, navigate: NavigateFunction) => async (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch(setLoading(true))
-  const token = getState().user.currentUser.token
-  //TODO: удалить картинку из firebase
-  const response = await axios.delete('/item', { data: { item, token } })
-  console.log('DELETE', response.data)
-  navigate(`/collection/${item.collectionId}`)
-  dispatch(setLoading(false))
+export const deleteItem = (item: Item, navigate: NavigateFunction) => {
+ return  async (dispatch: AppDispatch, getState: GetState) => {
+    dispatch(setLoading(true))
+    const token = getState().user.currentUser.token
+    //TODO: удалить картинку из firebase
+    const response = await axios.delete('/item', { data: { item, token } })
+    console.log('DELETE', response.data)
+    navigate(`/collection/${item.collectionId}`)
+    dispatch(setLoading(false))
+  }
 }
 
-export const postNewComment = (itemId: number, text: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const postNewComment = (itemId: number, text: string) => async (dispatch: AppDispatch, getState: GetState) => {
   const { user: { currentUser: { id, token, nickname } }, item: { socket } } = getState()
   socket?.emit('add:comment', { token, userId: id, itemId, text, nickname })
   dispatch(setLoading(true))
 }
 
-export const toggleLike = (itemId: number) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const toggleLike = (itemId: number) => async (dispatch: AppDispatch, getState: GetState) => {
   const { user: { currentUser: { id, token, nickname } }, item: { socket } } = getState()
   socket?.emit('set:like', { token, userId: id, itemId, nickname })
   dispatch(setLoading(true))
 }
 
-export const connectSocket = (itemId: number) => async (dispatch: AppDispatch,) => {
+export const connectSocket = (itemId: number) => async (dispatch: AppDispatch) => {
   const socket: AppSocket = io(process.env.REACT_APP_SOCKET_URL + '', { transports: ['websocket'] })
   socket.on('connect', () => {
     dispatch(setSocket(socket))

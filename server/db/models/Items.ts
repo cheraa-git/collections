@@ -78,9 +78,9 @@ export class Items extends Model {
   @BelongsToMany(() => Tags, () => ItemsTags)
   tags!: Tags[]
 
-  @HasMany(() => Comments, {onDelete: 'cascade'})
+  @HasMany(() => Comments, { onDelete: 'cascade' })
   comments!: Comments[]
 
-  @HasMany(() => Likes, {onDelete: 'cascade'})
+  @HasMany(() => Likes, { onDelete: 'cascade' })
   likes!: Likes[]
 }

@@ -47,11 +47,17 @@ __decorate([
     __metadata("design:type", String)
 ], Users.prototype, "password", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.STRING,
-    }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, }),
     __metadata("design:type", String)
 ], Users.prototype, "avatarUrl", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, }),
+    __metadata("design:type", Boolean)
+], Users.prototype, "isAdmin", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, }),
+    __metadata("design:type", String)
+], Users.prototype, "status", void 0);
 __decorate([
     (0, sequelize_typescript_1.HasMany)(() => Collections_1.Collections, { onDelete: 'cascade' }),
     __metadata("design:type", Array)

@@ -7,9 +7,9 @@ import { FavoriteBorderIcon, FavoriteIcon } from "../UI/icons"
 
 export const Likes: FC<{ itemId: number }> = ({ itemId }) => {
   const dispatch = useAppDispatch()
-  const { id: userId } = useAuth().currentUser
+  const { currentUser, isAuth } = useAuth()
   const { likes } = useAppSelector((state: RootState) => state.item)
-  const isLiked = !!likes.find(like => like.userId === userId)
+  const isLiked = !!likes.find(like => like.userId === currentUser.id)
 
 
   const likeHandler = () => {
@@ -18,7 +18,7 @@ export const Likes: FC<{ itemId: number }> = ({ itemId }) => {
 
   return (
     <>
-      <IconButton onClick={likeHandler}>
+      <IconButton onClick={likeHandler} disabled={!isAuth}>
         {isLiked ? <FavoriteIcon className="red"/> : <FavoriteBorderIcon/>}
         <Typography >{likes.length}</Typography>
       </IconButton>

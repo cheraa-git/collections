@@ -2,9 +2,10 @@ import { RootState, useAppSelector } from "../store/store"
 
 export const useCollection = () => {
   const collectionState = useAppSelector((state: RootState) => state.collection)
-
+  const { id: currentUserId, isAdmin } = useAppSelector((state: RootState) => state.user.currentUser)
+  const isAuthor = collectionState.collection.userId === currentUserId || isAdmin
   const getThemeName = (themeId: number = collectionState.collection.themeId) => {
     return collectionState.themes.find(theme => theme.id === themeId)?.name
   }
-  return { getThemeName, ...collectionState }
+  return { getThemeName, isAuthor, ...collectionState }
 }

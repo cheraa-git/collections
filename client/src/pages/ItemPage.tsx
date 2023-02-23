@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { RootState, useAppDispatch, useAppSelector } from "../store/store"
+import { useAppDispatch } from "../store/store"
 import { deleteItem, getItem } from "../store/actions/itemActions"
 import { ItemFieldView } from "../components/item/ItemFieldView"
 import { Box, Typography } from "@mui/material"
@@ -12,6 +12,8 @@ import { TagChip } from "../components/TagChip"
 import { useConfirm } from "../hooks/confirmHook"
 import { TransButton } from "../components/UI/TransButton"
 import { useTranslation } from "react-i18next"
+import { useItem } from "../hooks/itemStateHook"
+import { useAuth } from "../hooks/authHook"
 
 export const ItemPage: FC = () => {
   const { t } = useTranslation()
@@ -20,9 +22,10 @@ export const ItemPage: FC = () => {
   const navigate = useNavigate()
   const { showConfirm } = useConfirm()
   const { itemConfigs } = useCollection()
-  const { items } = useAppSelector((state: RootState) => state.item)
+  const { id: currentUserId, isAdmin } = useAuth().currentUser
   const [editDialogOpen, setEditDialogOpen] = useState(false)
-  const item = items.find(item => item.id === Number(id))
+  const item = useItem().items.find(item => item.id === Number(id))
+  const isAuthor = currentUserId && (item?.userId === currentUserId || isAdmin)
 
 
   useEffect(() => {
@@ -45,8 +48,10 @@ export const ItemPage: FC = () => {
     <Box py={1} px={3} my={3} mx="auto" maxWidth="42rem" className="border">
       <Box p={1} className="flex border-b">
         <Typography variant="h5" mr="auto">{item?.name}</Typography>
-        <TransButton onClick={() => setEditDialogOpen(true)}>Edit</TransButton>
-        <TransButton color="error" onClick={deleteHandler}>Delete</TransButton>
+        <Box hidden={!isAuthor}>
+          <TransButton onClick={() => setEditDialogOpen(true)} hidden={true}>Edit</TransButton>
+          <TransButton color="error" onClick={deleteHandler} hidden={!isAuthor}>Delete</TransButton>
+        </Box>
         <EditItemDialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}
                         collectionId={Number(collectionId)} item={item}/>
       </Box>

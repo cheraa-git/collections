@@ -1,4 +1,3 @@
-import { AppDispatch, RootState } from "../store"
 import axios from "../../axios-app"
 import { CreateCollectionPayload, EditCollectionPayload } from "../../types/collections"
 import { saveImageToCloud } from "../../apis/firebase/firebaseActions"
@@ -8,12 +7,13 @@ import { setLoading } from "../slices/appSlice"
 import { Collection } from "../../../../common/common-types"
 import { NavigateFunction } from "react-router-dom"
 import { setItems } from "../slices/itemSlice"
+import { AppDispatch, GetState } from "../store"
 
 
 export const createCollection = (data: CreateCollectionPayload, navigate: NavigateFunction) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { image, themeId, title, itemConfigs, description } = data
-    const { id: userId, token } = getState().user.currentUser
+  return async (dispatch: AppDispatch, getState: GetState) => {
+    const { image, themeId, title, itemConfigs, description, userId } = data
+    const token = getState().user.currentUser.token
     let imageUrl = ''
     dispatch(setLoading(true))
     if (image) imageUrl = await saveImageToCloud(image)
@@ -26,7 +26,7 @@ export const createCollection = (data: CreateCollectionPayload, navigate: Naviga
 }
 
 export const editCollection = (data: EditCollectionPayload, navigate: NavigateFunction) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch, getState: GetState) => {
     const { image, existingImage, id, title, userId, itemConfigs, themeId, description } = data
     const token = getState().user.currentUser.token
     let imageUrl = ''
@@ -52,16 +52,18 @@ export const getCollection = (id: string) => async (dispatch: AppDispatch) => {
 }
 
 
-export const deleteCollection = (collection: Collection, navigate: NavigateFunction) => async (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch(setLoading(true))
-  const token = getState().user.currentUser.token
-  const response = await axios.delete('/collection', { data: { collection, token } })
-  console.log('DELETE', response.data)
-  navigate(`/profile/${collection.userId}`)
-  dispatch(setLoading(false))
+export const deleteCollection = (collection: Collection, navigate: NavigateFunction) => {
+  return async (dispatch: AppDispatch, getState: GetState) => {
+    dispatch(setLoading(true))
+    const token = getState().user.currentUser.token
+    const response = await axios.delete('/collection', { data: { collection, token } })
+    console.log('DELETE', response.data)
+    navigate(`/profile/${collection.userId}`)
+    dispatch(setLoading(false))
+  }
 }
 
-export const getThemes = () => async (dispatch: AppDispatch,) => {
+export const getThemes = () => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true))
   const response = await axios.get('/collection/themes')
   dispatch(setThemes(response.data))

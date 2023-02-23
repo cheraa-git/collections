@@ -5,6 +5,7 @@ const authRoutes_1 = require("./routes/authRoutes");
 const collectionRoutes_1 = require("./routes/collectionRoutes");
 const itemRouter_1 = require("./routes/itemRouter");
 const profileRoutes_1 = require("./routes/profileRoutes");
+const adminRoutes_1 = require("./routes/adminRoutes");
 class MainRouter {
     constructor(app) {
         this.app = app;
@@ -14,6 +15,7 @@ class MainRouter {
         this.app.use('/collection', collectionRoutes_1.collectionRouter);
         this.app.use('/item', itemRouter_1.itemRouter);
         this.app.use('/profile', profileRoutes_1.profileRouter);
+        this.app.use('/admin', adminRoutes_1.adminRouter);
     }
 }
 exports.MainRouter = MainRouter;

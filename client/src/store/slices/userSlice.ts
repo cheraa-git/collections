@@ -14,6 +14,8 @@ const initialState: UserState = {
     email: '',
     token: '',
     avatar: '',
+    isAdmin: false,
+    status: 'active'
   },
   errorMessage: '',
   loading: false,

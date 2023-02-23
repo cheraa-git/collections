@@ -2,10 +2,18 @@ import React, { FC, ReactNode } from "react"
 import { RootState, useAppSelector } from "../../store/store"
 import { createTheme, ThemeOptions, ThemeProvider } from "@mui/material/styles"
 import CssBaseline from "@mui/material/CssBaseline"
+import { enUS, ruRU } from '@mui/x-data-grid'
 
 export const AppThemeProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const theme = useAppSelector((state: RootState) => state.app.theme)
-
+  const { theme, lang } = useAppSelector((state: RootState) => state.app)
+  const getDataGridLang = () => {
+    if (lang === 'ru') {
+      return ruRU
+    } else if (lang === 'en') {
+      return enUS
+    }
+    return enUS
+  }
   const darkPalette: ThemeOptions['palette'] = {
     text: {
       primary: '#c2c2c2',
@@ -43,8 +51,7 @@ export const AppThemeProvider: FC<{ children: ReactNode }> = ({ children }) => {
         fontWeight: "bold"
       },
     },
-
-  })
+  }, getDataGridLang())
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline/>
