@@ -6,11 +6,11 @@ import { CollectionController } from "../controller/collectionController"
 const controller = new CollectionController()
 export const collectionRouter = Router()
 
-collectionRouter.post('/', controller.createCollection)
-collectionRouter.patch('/', controller.editCollection)
-collectionRouter.delete('/', controller.deleteCollection)
+collectionRouter.post('/', controller.handleCreateCollection)
+collectionRouter.patch('/', controller.handleEditCollection)
+collectionRouter.delete('/', controller.handleDeleteCollection)
 collectionRouter.get('/themes', controller.getThemes)
-collectionRouter.get('/:id', controller.getCollection)
+collectionRouter.get('/:id', controller.handleGetCollection)
 
 
 

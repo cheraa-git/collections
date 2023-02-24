@@ -1,37 +1,24 @@
 import { Request, Response } from "express"
-import * as bcrypt from "bcrypt"
 import * as jwt from 'jsonwebtoken'
 import { JwtPayload } from 'jsonwebtoken'
 import { Users } from "../../db/models/Users"
+import { checkLoginData, registerUser } from "../../service/authService"
 
 
 const SECRET_KEY = process.env.TOKEN_SECTET_KEY + ''
 
 class AuthController {
 
-  private async checkLoginData(email: string, password: string) {
-    const user = await Users.findOne({ where: { email } })
-    if (!user) return { error: 'No user with this email was found' }
-    if (user.status !== 'active') return { error: `StatusError: ${user.status}` }
-    const comparePassword = await bcrypt.compare(password, user.password)
-    if (!comparePassword) return { error: 'The password is invalid', }
-    return { error: '', data: user.dataValues }
-  }
-
-  registerUser = async (req: Request, res: Response) => {
+  handleRegisterUser = async (req: Request, res: Response) => {
     const nickname = req.body.nickname.trim().toLowerCase()
     const email = req.body.email.trim().toLowerCase()
     const avatarUrl = req.body.avatarUrl
     const password = req.body.password.trim()
-    const hashPassword = await bcrypt.hash(password, 10)
     if (!nickname || !email || !password) {
       return res.status(500).json({ error: 'Registration data invalid' })
     }
     try {
-      const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' }
-      const newUser = await Users.create(newUserData)
-      const token = jwt.sign({ email, hashPassword, id: newUser.id, isAdmin: false, status: 'active' }, SECRET_KEY)
-      res.json({ ...newUser.dataValues, password: undefined, token })
+      res.json(await registerUser(nickname, email, avatarUrl, password))
     } catch (error: any) {
       if (error.name === 'SequelizeUniqueConstraintError') {
         res.status(500).json({ error: `${error.errors[0].path} already exists` })
@@ -45,7 +32,7 @@ class AuthController {
     if (!email || !password) {
       return res.status(500).json({ error: 'Registration data invalid' })
     }
-    const { error, data: user } = await this.checkLoginData(email, password)
+    const { error, data: user } = await checkLoginData(email, password)
     if (error) return res.status(500).json({ error })
     const token = jwt.sign(
       { email, hashPassword: user?.password, id: user?.id, isAdmin: user?.isAdmin, status: user?.status },

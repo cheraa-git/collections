@@ -7,7 +7,7 @@ const controller = new AuthController()
 export const authRouter = Router()
 
 authRouter.post('/login', controller.loginUser)
-authRouter.post('/register', controller.registerUser)
+authRouter.post('/register', controller.handleRegisterUser)
 authRouter.post('/autologin', controller.autoLogin)
 
 

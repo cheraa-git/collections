@@ -10,18 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfileController = void 0;
-const Collections_1 = require("../../db/models/Collections");
-const Users_1 = require("../../db/models/Users");
+const profileService_1 = require("../../service/profileService");
 class ProfileController {
-    getProfile(req, res) {
+    handleGetProfile(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userId = req.params.userId;
-            const collections = yield Collections_1.Collections.findAll({ where: { userId } });
-            const user = yield Users_1.Users.findOne({
-                where: { id: userId },
-                attributes: ['id', 'nickname', 'avatarUrl']
-            });
-            res.json({ collections, user: user === null || user === void 0 ? void 0 : user.dataValues });
+            const userId = +req.params.userId;
+            const profile = yield (0, profileService_1.getProfile)(userId);
+            res.json(profile);
         });
     }
 }

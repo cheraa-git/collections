@@ -6,7 +6,7 @@ import { ProfileController } from "../controller/profileController"
 const controller = new ProfileController()
 export const profileRouter = Router()
 
-profileRouter.get('/:userId', controller.getProfile)
+profileRouter.get('/:userId', controller.handleGetProfile)
 
 
 

@@ -17,6 +17,18 @@ export class Items extends Model {
   })
   id!: number
 
+  // @AfterCreate
+  // static addSearchDocument(instance: Items) {
+  //   // const client = new MeiliSearch({
+  //   //   host: 'https://ms-518ffb6bba66-2263.sfo.meilisearch.io',
+  //   //   apiKey: '829655b67f4cde494b70b36b3f3cc4b50a1a0ae1',
+  //   // })
+  //   // const index = client.index('items')
+  //   // index.deleteAllDocuments().then(resp => console.log(resp))
+  //
+  //   // index.addDocuments(q).then(response => console.log('RESPONSE', response))
+  // }
+
   @ForeignKey(() => Collections)
   @Column
   collectionId!: number

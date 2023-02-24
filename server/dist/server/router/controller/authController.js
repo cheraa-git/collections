@@ -32,26 +32,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt = __importStar(require("bcrypt"));
 const jwt = __importStar(require("jsonwebtoken"));
 const Users_1 = require("../../db/models/Users");
+const authService_1 = require("../../service/authService");
 const SECRET_KEY = process.env.TOKEN_SECTET_KEY + '';
 class AuthController {
     constructor() {
-        this.registerUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.handleRegisterUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const nickname = req.body.nickname.trim().toLowerCase();
             const email = req.body.email.trim().toLowerCase();
             const avatarUrl = req.body.avatarUrl;
             const password = req.body.password.trim();
-            const hashPassword = yield bcrypt.hash(password, 10);
             if (!nickname || !email || !password) {
                 return res.status(500).json({ error: 'Registration data invalid' });
             }
             try {
-                const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' };
-                const newUser = yield Users_1.Users.create(newUserData);
-                const token = jwt.sign({ email, hashPassword, id: newUser.id, isAdmin: false, status: 'active' }, SECRET_KEY);
-                res.json(Object.assign(Object.assign({}, newUser.dataValues), { password: undefined, token }));
+                res.json(yield (0, authService_1.registerUser)(nickname, email, avatarUrl, password));
             }
             catch (error) {
                 if (error.name === 'SequelizeUniqueConstraintError') {
@@ -68,7 +64,7 @@ class AuthController {
             if (!email || !password) {
                 return res.status(500).json({ error: 'Registration data invalid' });
             }
-            const { error, data: user } = yield this.checkLoginData(email, password);
+            const { error, data: user } = yield (0, authService_1.checkLoginData)(email, password);
             if (error)
                 return res.status(500).json({ error });
             const token = jwt.sign({ email, hashPassword: user === null || user === void 0 ? void 0 : user.password, id: user === null || user === void 0 ? void 0 : user.id, isAdmin: user === null || user === void 0 ? void 0 : user.isAdmin, status: user === null || user === void 0 ? void 0 : user.status }, SECRET_KEY);
@@ -76,28 +72,11 @@ class AuthController {
         });
         this.autoLogin = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const token = req.body.token;
-            const jwtPayload = jwt.verify(token, SECRET_KEY);
-            const iat = jwtPayload.iat;
-            const isExpired = (((iat + 3600) * 24) * 1000) < Date.now();
-            const statusIsAvailable = jwtPayload.status === 'active';
             const user = yield Users_1.Users.findOne({ where: { email: jwtPayload.email } });
-            if (!user || user.password !== jwtPayload.hashPassword || isExpired || !statusIsAvailable) {
+            if (!user || !(0, authService_1.validateToken)(token, user.password)) {
                 return res.status(500).json({ error: 'Autologin canceled' });
             }
             res.json(Object.assign(Object.assign({}, user.dataValues), { token, password: undefined }));
-        });
-    }
-    checkLoginData(email, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield Users_1.Users.findOne({ where: { email } });
-            if (!user)
-                return { error: 'No user with this email was found' };
-            if (user.status !== 'active')
-                return { error: `StatusError: ${user.status}` };
-            const comparePassword = yield bcrypt.compare(password, user.password);
-            if (!comparePassword)
-                return { error: 'The password is invalid', };
-            return { error: '', data: user.dataValues };
         });
     }
 }

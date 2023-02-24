@@ -9,5 +9,5 @@ const authController_1 = __importDefault(require("../controller/authController")
 const controller = new authController_1.default();
 exports.authRouter = (0, express_1.Router)();
 exports.authRouter.post('/login', controller.loginUser);
-exports.authRouter.post('/register', controller.registerUser);
+exports.authRouter.post('/register', controller.handleRegisterUser);
 exports.authRouter.post('/autologin', controller.autoLogin);
