@@ -27,10 +27,10 @@ export const createItem = async (userId: number, collectionId: number, fields: F
   return { ...filterItem(newItem), tags: await createItemTags(tags, newItem.id), userId }
 }
 
-export const getItem = async (itemId: number, collectionId: number) => {
+export const getItem = async (itemId: number) => {
   const item = await Items.findOne({ where: { id: itemId }, include: [{ model: Tags, through: { attributes: [] } }] })
-  const itemConfigs = await ItemConfigs.findAll({ where: { collectionId } })
-  const userId = (await Collections.findOne({ where: { id: collectionId }, attributes: ['userId'] }))?.userId
+  const itemConfigs = await ItemConfigs.findAll({ where: { collectionId: item?.collectionId } })
+  const userId = (await Collections.findOne({ where: { id: item?.collectionId }, attributes: ['userId'] }))?.userId
   return { item: { ...filterItem(item), userId }, itemConfigs }
 }
 
@@ -48,4 +48,8 @@ export const editItem = async (item: Item) => {
 
 export const deleteItem = async (id: number) => {
   return await Items.destroy({ where: { id }, force: true })
+}
+
+export const getAllItems = async () => {
+  return await Items.findAll()
 }

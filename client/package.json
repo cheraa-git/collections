@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@meilisearch/instant-meilisearch": "^0.10.1-multi-index-search.0",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.7",
     "@mui/x-data-grid": "^5.17.24",
@@ -25,6 +26,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.0",
     "react-i18next": "^12.1.5",
+    "react-instantsearch-dom": "^6.39.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
@@ -36,7 +38,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "eject": "react-scripts eject"
+    "meilisearch": "meilisearch"
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +59,7 @@
     ]
   },
   "devDependencies": {
-    "@types/mui-image": "^1.0.1"
+    "@types/mui-image": "^1.0.1",
+    "@types/react-instantsearch-dom": "^6.12.3"
   }
 }

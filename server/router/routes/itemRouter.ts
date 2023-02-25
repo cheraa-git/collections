@@ -10,7 +10,7 @@ itemRouter.post('/', controller.handlerCreateItem)
 itemRouter.patch('/', controller.handleEditItem)
 itemRouter.delete('/', controller.handleDeleteItem)
 itemRouter.get('/tags', controller.getTags)
-itemRouter.get('/:collectionId/:id', controller.handleGetItem)
+itemRouter.get('/:id', controller.handleGetItem)
 
 
 

@@ -14,11 +14,12 @@ import { TransButton } from "../components/UI/TransButton"
 import { useTranslation } from "react-i18next"
 import { useItem } from "../hooks/itemStateHook"
 import { useAuth } from "../hooks/authHook"
+import { Text } from "../components/UI/Text"
 
 export const ItemPage: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { id, collectionId } = useParams()
+  const { id } = useParams()
   const navigate = useNavigate()
   const { showConfirm } = useConfirm()
   const { itemConfigs } = useCollection()
@@ -29,10 +30,10 @@ export const ItemPage: FC = () => {
 
 
   useEffect(() => {
-    if (!item && id && collectionId) {
-      dispatch(getItem(+collectionId, +id))
+    if (!item && id) {
+      dispatch(getItem(+id))
     }
-  }, [collectionId, item, id, dispatch])
+  }, [item, id, dispatch])
 
   const deleteHandler = () => {
     if (item) {
@@ -43,7 +44,7 @@ export const ItemPage: FC = () => {
     }
   }
 
-
+  if (!item) return <Text>Item not found</Text>
   return (
     <Box py={1} px={3} my={3} mx="auto" maxWidth="42rem" className="border">
       <Box p={1} className="flex border-b">
@@ -52,8 +53,8 @@ export const ItemPage: FC = () => {
           <TransButton onClick={() => setEditDialogOpen(true)} hidden={true}>Edit</TransButton>
           <TransButton color="error" onClick={deleteHandler} hidden={!isAuthor}>Delete</TransButton>
         </Box>
-        <EditItemDialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}
-                        collectionId={Number(collectionId)} item={item}/>
+        <EditItemDialog collectionId={item.collectionId} open={editDialogOpen} onClose={() => setEditDialogOpen(false)}
+                        item={item}/>
       </Box>
       <Box display="flex" flexWrap="wrap">
         {item?.tags.map(tag => <TagChip key={tag.id} tag={tag}/>)}

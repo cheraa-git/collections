@@ -15,7 +15,17 @@ const Users_1 = require("./Users");
 const Items_1 = require("./Items");
 const ItemConfigs_1 = require("./ItemConfigs");
 const Themes_1 = require("./Themes");
+const searchService_1 = require("../../service/searchService");
 let Collections = class Collections extends sequelize_typescript_1.Model {
+    static afterCreateHook(instance) {
+        (0, searchService_1.addCollectionIndex)(instance);
+    }
+    static afterBulkUpdateHook(options) {
+        (0, searchService_1.uploadCollectionIndex)(options.attributes);
+    }
+    static afterBulkDestroyHook(options) {
+        (0, searchService_1.removeCollectionIndex)(options.where.id);
+    }
 };
 __decorate([
     (0, sequelize_typescript_1.Column)({
@@ -72,6 +82,24 @@ __decorate([
     (0, sequelize_typescript_1.HasMany)(() => ItemConfigs_1.ItemConfigs, { onDelete: 'cascade' }),
     __metadata("design:type", Array)
 ], Collections.prototype, "itemConfigs", void 0);
+__decorate([
+    sequelize_typescript_1.AfterCreate,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Collections]),
+    __metadata("design:returntype", void 0)
+], Collections, "afterCreateHook", null);
+__decorate([
+    sequelize_typescript_1.AfterBulkUpdate,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], Collections, "afterBulkUpdateHook", null);
+__decorate([
+    sequelize_typescript_1.AfterBulkDestroy,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], Collections, "afterBulkDestroyHook", null);
 Collections = __decorate([
     (0, sequelize_typescript_1.Table)({ timestamps: false, tableName: 'collections' })
 ], Collections);

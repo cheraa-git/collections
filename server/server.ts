@@ -1,6 +1,6 @@
 'use strict'
 import connection from "./db/db"
-import { config } from "dotenv"
+import dotenv from "dotenv"
 import http from "http"
 import { MainSocket } from "./socket/mainSocket"
 import express from 'express'
@@ -8,7 +8,7 @@ import { MainRouter } from "./router/mainRouter"
 
 
 const cors = require('cors')
-config()
+dotenv.config()
 
 const PORT = process.env.PORT || 8080
 

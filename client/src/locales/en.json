@@ -62,7 +62,13 @@
     "Actions": "Actions",
     "Block": "Block",
     "Activate": "Activate",
-    "Multiple actions": "Multiple actions"
-
+    "Multiple actions": "Multiple actions",
+    "Users management": "Users management",
+    "Indexing": "Indexing",
+    "Indexing items": "Indexing items",
+    "Indexing collections": "Indexing collections",
+    "Indexing comments": "Indexing comments",
+    "Items": "Items",
+    "Search anywhere": "Search anywhere"
   }
 }

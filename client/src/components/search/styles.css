@@ -1,0 +1,38 @@
+.esc-bth {
+    border-radius: 0.5rem;
+    border: 1px solid rgba(129, 129, 129, 0.12);
+    padding: 0 0.5rem;
+    background: rgba(140, 140, 140, 0.13);
+    transition: background-color .3s;
+    width: min-content;
+    margin-left: auto;
+    align-self: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    font-size: .9rem;
+}
+
+.esc-bth:hover {
+    border: 1px solid rgba(129, 129, 129, 0.2);
+    background: rgba(140, 140, 140, 0.2);
+}
+
+.search-card {
+    justify-content: space-between;
+    margin-bottom: .5rem;
+    padding: .25rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    transition: background-color .2s ease-out;
+}
+
+.search-card:hover {
+    background: rgba(129, 129, 129, 0.07);
+}
+
+.search-title {
+    font-weight: bold !important;
+    color: #858585;
+    text-transform: capitalize;
+    font-size: .8rem !important;
+}

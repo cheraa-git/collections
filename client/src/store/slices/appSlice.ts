@@ -8,12 +8,14 @@ export interface AppState {
   theme: PaletteMode
   lang: Lang
   loading: boolean
+  searchOpen: boolean
 }
 
 const initialState: AppState = {
   theme: localStorage.getItem(THEME) as PaletteMode || "dark",
   lang: localStorage.getItem(LANG) as Lang || 'en',
-  loading: false
+  loading: false,
+  searchOpen: false
 }
 
 export const appSlice = createSlice({
@@ -32,10 +34,13 @@ export const appSlice = createSlice({
     },
     setLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.loading = payload
+    },
+    setSearchOpen: (state, { payload }: PayloadAction<boolean>) => {
+      state.searchOpen = payload
     }
   }
 })
 
-export const { setLang, setTheme, setLoading } = appSlice.actions
+export const { setLang, setTheme, setLoading, setSearchOpen } = appSlice.actions
 
 export const AppReducer = appSlice.reducer

@@ -1,5 +1,5 @@
 import './styles.css'
-import { FC, useState } from "react"
+import { FC } from "react"
 import { NavBarMenu } from "./NavBarMenu"
 import { Link } from "react-router-dom"
 import { clientRoutes } from "../../constants/routes"
@@ -10,11 +10,12 @@ import { SearchButton } from "./SearchButton"
 import { PngLogoIcon } from "../UI/icons"
 import { Box } from "@mui/material"
 import { Text } from "../UI/Text"
+import { useAppDispatch } from "../../store/store"
+import { setSearchOpen } from "../../store/slices/appSlice"
 
 export const NavBar: FC = () => {
+  const dispatch = useAppDispatch()
   const { loading, isDark } = useApp()
-  const [searchDialogOpen, setSearchDialogOpen] = useState(false)
-
 
   return (
     <>
@@ -27,8 +28,8 @@ export const NavBar: FC = () => {
             </Link>
           </Box>
           <Box ml="auto" display="flex">
-            <SearchButton onClick={() => setSearchDialogOpen(prev => !prev)}/>
-            <SearchDialog open={searchDialogOpen} setOpen={setSearchDialogOpen}/>
+            <SearchButton onClick={() => dispatch(setSearchOpen(true))}/>
+            <SearchDialog/>
             <NavBarMenu/>
           </Box>
         </div>

@@ -9,4 +9,4 @@ exports.itemRouter.post('/', controller.handlerCreateItem);
 exports.itemRouter.patch('/', controller.handleEditItem);
 exports.itemRouter.delete('/', controller.handleDeleteItem);
 exports.itemRouter.get('/tags', controller.getTags);
-exports.itemRouter.get('/:collectionId/:id', controller.handleGetItem);
+exports.itemRouter.get('/:id', controller.handleGetItem);

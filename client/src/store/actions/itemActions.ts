@@ -30,9 +30,9 @@ export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispa
   console.log('CREATE_ITEM', item)
 }
 
-export const getItem = (collectionId: number, id: number) => async (dispatch: AppDispatch) => {
+export const getItem = (id: number) => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true))
-  const item = (await axios.get(`/item/${collectionId}/${id}`)).data
+  const item = (await axios.get(`/item/${id}`)).data
   dispatch(addItem(item.item))
   dispatch(setItemConfigs(item.itemConfigs))
   dispatch(setLoading(false))
@@ -44,12 +44,13 @@ export const editItem = (item: Item) => async (dispatch: AppDispatch, getState: 
   dispatch(setLoading(true))
   const token = getState().user.currentUser.token
   const response = await axios.patch<Item>('/item', { item, token })
+  console.log('EDIT_ITEM', response.data)
   dispatch(setItem(response.data))
   dispatch(setLoading(false))
 }
 
 export const deleteItem = (item: Item, navigate: NavigateFunction) => {
- return  async (dispatch: AppDispatch, getState: GetState) => {
+  return async (dispatch: AppDispatch, getState: GetState) => {
     dispatch(setLoading(true))
     const token = getState().user.currentUser.token
     //TODO: удалить картинку из firebase

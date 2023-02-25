@@ -39,7 +39,7 @@ function App() {
       dispatch(getTags())
     }
     i18n.changeLanguage(lang)
-  }, [isAuth, dispatch, tags.length, themes.length])
+  }, [isAuth, dispatch, tags.length, themes.length, i18n, lang])
   return (
     <>
       <NavBar/>
@@ -50,7 +50,7 @@ function App() {
         <Route path="create_collection" element={<CreateCollectionPage/>}/>
         <Route path="/profile/:userId" element={<ProfilePage/>}/>
         <Route path="/collection/:id" element={<CollectionPage/>}/>
-        <Route path="/collection/:collectionId/:id" element={<ItemPage/>}/>
+        <Route path="/item/:id" element={<ItemPage/>}/>
         <Route path="*" element={<NotFoundPage/>}/>
       </Routes>
     </>

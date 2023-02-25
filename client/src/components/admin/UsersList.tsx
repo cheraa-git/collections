@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { UserActions } from "./UsersActions"
 import { MultipleActionsMenu } from "./MultipleActionsMenu"
+import { Text } from "../UI/Text"
 
 
 export const UsersList: FC = () => {
@@ -50,7 +51,8 @@ export const UsersList: FC = () => {
 
   return (
     <Box height={window.innerHeight - 200} width="100%" maxWidth={720} mx="auto">
-      <Box width="max-content" ml="auto">
+      <Box display="flex" justifyContent="space-between">
+        <Text alignSelf="center">Users management</Text>
         <MultipleActionsMenu selectionModel={selectionModel as number[]}/>
       </Box>
       <DataGrid

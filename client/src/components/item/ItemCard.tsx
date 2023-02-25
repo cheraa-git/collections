@@ -21,7 +21,7 @@ export const ItemCard: FC<ItemCardProps> = ({ item }) => {
         {item.tags?.map(tag => <TagChip key={tag.id} tag={tag}/>)}
       </Box>
       <Box className={`card-btn-wrapper ${isDark && 'card-btn-wrapper_dark'}`}>
-        <Link to={`/collection/${item.collectionId}/${item.id}`}>
+        <Link to={`/item/${item.id}`}>
           <TransButton size="small">Open</TransButton>
         </Link>
       </Box>

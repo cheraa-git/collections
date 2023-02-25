@@ -1,6 +1,16 @@
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript"
+import {
+  AfterBulkDestroy,
+  AfterCreate,
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table
+} from "sequelize-typescript"
 import { Users } from "./Users"
 import { Items } from "./Items"
+import { addCommentIndex, removeCommentIndex } from "../../service/searchService"
 
 @Table({ timestamps: false, tableName: 'comments' })
 export class Comments extends Model {
@@ -32,4 +42,14 @@ export class Comments extends Model {
 
   @BelongsTo(() => Items)
   items!: Items
+
+  @AfterCreate
+  static afterCreateHook(instance: Comments) {
+    addCommentIndex(instance)
+  }
+
+  @AfterBulkDestroy
+  static afterBulkDestroyHook(options: any): void {
+    removeCommentIndex(options.where.id)
+  }
 }

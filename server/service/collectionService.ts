@@ -46,3 +46,7 @@ export const editCollection = async (collection: Collection, itemConfigs: ItemCo
   })
   return { collection: editedCollection[1][0], itemConfigs: editedConfigs }
 }
+
+export const getAllCollections = async () => {
+  return await Collections.findAll()
+}

@@ -20,8 +20,8 @@ export class ItemController {
   }
 
   handleGetItem = async (req: Request, res: Response) => {
-    const { id, collectionId } = req.params
-    const data = getItem(+id, +collectionId)
+    const { id } = req.params
+    const data = await getItem(+id)
     res.json(data)
   }
 
@@ -30,7 +30,7 @@ export class ItemController {
     if (!checkToken(token, await getItemAuthorId(item.collectionId))) {
       return res.status(500).json({ error: 'TokenError' })
     }
-    const editedItem = editItem(item)
+    const editedItem = await editItem(item)
     res.json(editedItem)
   }
 

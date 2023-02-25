@@ -2,7 +2,7 @@ import axios from "../../axios-app"
 import { setAdmin, setStatus, setUsers } from "../slices/adminSlice"
 import { setLoading } from "../slices/appSlice"
 import { User } from "../../types/user"
-import { AppDispatch, RootState } from "../store"
+import { AppDispatch, GetState, RootState } from "../store"
 
 export const getUsers = () => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true))
@@ -31,6 +31,18 @@ export const setAdminStatus = (ids: number[], status: boolean) => {
     console.log(response.data)
     dispatch(setAdmin({ ids: response.data, status }))
     dispatch(setLoading(false))
+  }
+}
+
+export const indexing = (type: 'items' | 'collections' | 'comments') => {
+  return async (dispatch: AppDispatch, getState: GetState) => {
+    const token = getState().user.currentUser.token
+    try {
+      const response = await axios.post(`/admin/indexing/${type}`, { token })
+      console.log(`INDEXING ${type}`, response.data)
+    } catch (err) {
+      console.log(`INDEXING ${type}`, err)
+    }
   }
 }
 

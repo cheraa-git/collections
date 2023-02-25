@@ -72,8 +72,12 @@ class AuthController {
         });
         this.autoLogin = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const token = req.body.token;
+            const jwtPayload = jwt.verify(token, SECRET_KEY);
+            const iat = jwtPayload.iat;
+            const isExpired = (((iat + 3600) * 24) * 1000) < Date.now();
+            const statusIsAvailable = jwtPayload.status === 'active';
             const user = yield Users_1.Users.findOne({ where: { email: jwtPayload.email } });
-            if (!user || !(0, authService_1.validateToken)(token, user.password)) {
+            if (!user || user.password !== jwtPayload.hashPassword || isExpired || !statusIsAvailable) {
                 return res.status(500).json({ error: 'Autologin canceled' });
             }
             res.json(Object.assign(Object.assign({}, user.dataValues), { token, password: undefined }));

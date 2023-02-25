@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("./db/db"));
-const dotenv_1 = require("dotenv");
+const dotenv_1 = __importDefault(require("dotenv"));
 const http_1 = __importDefault(require("http"));
 const mainSocket_1 = require("./socket/mainSocket");
 const express_1 = __importDefault(require("express"));
 const mainRouter_1 = require("./router/mainRouter");
 const cors = require('cors');
-(0, dotenv_1.config)();
+dotenv_1.default.config();
 const PORT = process.env.PORT || 8080;
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);

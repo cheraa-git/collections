@@ -1,9 +1,21 @@
-import { Table, Column, DataType, ForeignKey, BelongsTo, Model, HasMany } from "sequelize-typescript"
+import {
+  AfterBulkDestroy,
+  AfterBulkUpdate,
+  AfterCreate,
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  HasMany,
+  Model,
+  Table
+} from "sequelize-typescript"
 
 import { Users } from "./Users"
 import { Items } from "./Items"
 import { ItemConfigs } from "./ItemConfigs"
 import { Themes } from "./Themes"
+import { addCollectionIndex, removeCollectionIndex, uploadCollectionIndex } from "../../service/searchService"
 
 
 @Table({ timestamps: false, tableName: 'collections' })
@@ -51,4 +63,19 @@ export class Collections extends Model {
 
   @HasMany(() => ItemConfigs, { onDelete: 'cascade' })
   itemConfigs!: ItemConfigs[]
+
+  @AfterCreate
+  static afterCreateHook(instance: Collections) {
+    addCollectionIndex(instance)
+  }
+
+  @AfterBulkUpdate
+  static afterBulkUpdateHook(options: any) {
+    uploadCollectionIndex(options.attributes)
+  }
+
+  @AfterBulkDestroy
+  static afterBulkDestroyHook(options: any): void {
+    removeCollectionIndex(options.where.id)
+  }
 }

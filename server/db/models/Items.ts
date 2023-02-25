@@ -1,9 +1,22 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript"
+import {
+  AfterBulkDestroy,
+  AfterBulkUpdate,
+  AfterCreate,
+  BelongsTo,
+  BelongsToMany,
+  Column,
+  DataType,
+  ForeignKey,
+  HasMany,
+  Model,
+  Table,
+} from "sequelize-typescript"
 import { Collections } from "./Collections"
 import { Tags } from "./Tags"
 import { ItemsTags } from "./ItemsTags"
 import { Comments } from "./Comments"
 import { Likes } from "./Likes"
+import { addItemIndex, removeItemIndex, uploadItemIndex } from "../../service/searchService"
 
 
 @Table({ timestamps: false, tableName: 'items' })
@@ -16,18 +29,6 @@ export class Items extends Model {
     unique: true,
   })
   id!: number
-
-  // @AfterCreate
-  // static addSearchDocument(instance: Items) {
-  //   // const client = new MeiliSearch({
-  //   //   host: 'https://ms-518ffb6bba66-2263.sfo.meilisearch.io',
-  //   //   apiKey: '829655b67f4cde494b70b36b3f3cc4b50a1a0ae1',
-  //   // })
-  //   // const index = client.index('items')
-  //   // index.deleteAllDocuments().then(resp => console.log(resp))
-  //
-  //   // index.addDocuments(q).then(response => console.log('RESPONSE', response))
-  // }
 
   @ForeignKey(() => Collections)
   @Column
@@ -95,4 +96,19 @@ export class Items extends Model {
 
   @HasMany(() => Likes, { onDelete: 'cascade' })
   likes!: Likes[]
+
+  @AfterCreate
+  static afterCreateHook(instance: Items) {
+    addItemIndex(instance)
+  }
+
+  @AfterBulkUpdate
+  static afterBulkUpdateHook(options: any) {
+    uploadItemIndex(options.attributes)
+  }
+
+  @AfterBulkDestroy
+  static afterBulkDestroyHook(options: any): void {
+    removeItemIndex(options.where.id)
+  }
 }

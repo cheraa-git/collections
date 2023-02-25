@@ -61,7 +61,13 @@
     "Actions": "Действия",
     "Block": "Заблокировать",
     "Activate": "Активировать",
-    "Multiple actions": "Множественные действия"
-
+    "Multiple actions": "Множественные действия",
+    "Users management": "Управление пользователями",
+    "Indexing": "Индексация",
+    "Indexing items": "Индексирование элементов",
+    "Indexing collections": "Индексирование коллекций",
+    "Indexing comments": "Индексирование комментариев",
+    "Items": "Элементы",
+    "Search anywhere": "Поиск по сайту"
   }
 }

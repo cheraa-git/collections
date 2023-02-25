@@ -28,8 +28,8 @@ class ItemController {
             res.json(item);
         });
         this.handleGetItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { id, collectionId } = req.params;
-            const data = (0, itemService_1.getItem)(+id, +collectionId);
+            const { id } = req.params;
+            const data = yield (0, itemService_1.getItem)(+id);
             res.json(data);
         });
         this.handleEditItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -37,7 +37,7 @@ class ItemController {
             if (!(0, utils_1.checkToken)(token, yield (0, itemService_1.getItemAuthorId)(item.collectionId))) {
                 return res.status(500).json({ error: 'TokenError' });
             }
-            const editedItem = (0, itemService_1.editItem)(item);
+            const editedItem = yield (0, itemService_1.editItem)(item);
             res.json(editedItem);
         });
         this.handleDeleteItem = (req, res) => __awaiter(this, void 0, void 0, function* () {

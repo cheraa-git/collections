@@ -1,31 +1,61 @@
+import './styles.css'
 import { FC } from "react"
-import { TransparentDialog } from "../UI/TransparentDialog"
-import { Button } from "@mui/material"
+import { BlurDialog } from "../UI/BlurDialog"
+import { Box, Typography } from "@mui/material"
+import { Index, InstantSearch } from 'react-instantsearch-dom'
+import { instantMeiliSearch } from '@meilisearch/instant-meilisearch'
+import { SearchInput } from "./SearchInput"
+import { SearchItemsList } from "./item/SearchItemsList"
+import { SearchCommentsList } from "./comment/SearchCommentsList"
+import { Text } from "../UI/Text"
+import { useApp } from "../../hooks/appStateHook"
+import { useAppDispatch } from "../../store/store"
+import { setSearchOpen } from "../../store/slices/appSlice"
+import { SearchCollectionList } from "./collection/SearchCollectionList"
 
-interface SearchDialogProps {
-  open: boolean,
-  setOpen: (open: boolean) => void
-}
 
-export const SearchDialog: FC<SearchDialogProps> = ({ open, setOpen }) => {
+export const SearchDialog: FC = () => {
+  const dispatch = useAppDispatch()
+  const { searchOpen } = useApp()
+  const searchClient = instantMeiliSearch('http://localhost:7700')
+
+  const searchCloseHandler = () => {
+    dispatch(setSearchOpen(false))
+  }
 
   document.onkeydown = (e) => {
+    if (e.code === 'Escape' && searchOpen) {
+      e.preventDefault()
+      searchCloseHandler()
+    }
     if ((e.ctrlKey || e.metaKey) && e.code === 'KeyK') {
-      setOpen(!open)
+      dispatch(setSearchOpen(!searchOpen))
     }
   }
+
   return (
-    <TransparentDialog
-      open={open}
-      fullWidth
-      onClose={() => setOpen(false)}
-      onKeyDown={(event) => console.log(event.code)}
-    >
-      <Button onClick={() => setOpen(!open)}>toggle</Button>
-      asdfasdfasdfas
-      as
-      dfa
-      sdf
-    </TransparentDialog>
+    <BlurDialog open={searchOpen} fullWidth onClose={searchCloseHandler} disableEscapeKeyDown>
+      <Box px={2} py={1} maxHeight="70vh">
+        <Box display="flex" justifyContent="space-between" mb={1}>
+          <Text fontSize="x-large">Search anywhere</Text>
+          <Typography className="esc-bth" onClick={searchCloseHandler}>esc</Typography>
+        </Box>
+        <InstantSearch indexName="items" searchClient={searchClient}>
+          <SearchInput/>
+          <Box px={1} mt={1}>
+            <Index indexName="items">
+              <SearchItemsList/>
+            </Index>
+            <Index indexName="collections">
+              <SearchCollectionList/>
+            </Index>
+            <Index indexName="comments">
+              <SearchCommentsList/>
+            </Index>
+          </Box>
+        </InstantSearch>
+      </Box>
+    </BlurDialog>
   )
 }
+

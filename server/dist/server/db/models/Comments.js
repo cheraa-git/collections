@@ -13,7 +13,14 @@ exports.Comments = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const Users_1 = require("./Users");
 const Items_1 = require("./Items");
+const searchService_1 = require("../../service/searchService");
 let Comments = class Comments extends sequelize_typescript_1.Model {
+    static afterCreateHook(instance) {
+        (0, searchService_1.addCommentIndex)(instance);
+    }
+    static afterBulkDestroyHook(options) {
+        (0, searchService_1.removeCommentIndex)(options.where.id);
+    }
 };
 __decorate([
     (0, sequelize_typescript_1.Column)({
@@ -51,6 +58,18 @@ __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => Items_1.Items),
     __metadata("design:type", Items_1.Items)
 ], Comments.prototype, "items", void 0);
+__decorate([
+    sequelize_typescript_1.AfterCreate,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Comments]),
+    __metadata("design:returntype", void 0)
+], Comments, "afterCreateHook", null);
+__decorate([
+    sequelize_typescript_1.AfterBulkDestroy,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], Comments, "afterBulkDestroyHook", null);
 Comments = __decorate([
     (0, sequelize_typescript_1.Table)({ timestamps: false, tableName: 'comments' })
 ], Comments);
