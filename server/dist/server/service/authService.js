@@ -35,25 +35,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkLoginData = exports.registerUser = void 0;
 const bcrypt = __importStar(require("bcrypt"));
 const Users_1 = require("../db/models/Users");
-const jwt = __importStar(require("jsonwebtoken"));
-const SECRET_KEY = process.env.TOKEN_SECTET_KEY + '';
-const registerUser = (nickname, email, avatarUrl, password) => __awaiter(void 0, void 0, void 0, function* () {
-    const hashPassword = yield bcrypt.hash(password, 10);
-    const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' };
-    const newUser = yield Users_1.Users.create(newUserData);
-    const token = jwt.sign({ email, hashPassword, id: newUser.id, isAdmin: false, status: 'active' }, SECRET_KEY);
-    return Object.assign(Object.assign({}, newUser.dataValues), { password: undefined, token });
+const either_1 = require("@sweet-monads/either");
+const AuthorizationError_1 = require("../../common/errors/AuthorizationError");
+const DatabaseError_1 = require("../../common/errors/DatabaseError");
+const tokenService_1 = require("./tokenService");
+const registerUser = (nickname, avatarUrl, password, email) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const hashPassword = yield bcrypt.hash(password, 10);
+        const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' };
+        const newUser = yield Users_1.Users.create(newUserData);
+        const token = (0, tokenService_1.createToken)(newUser);
+        return (0, either_1.right)(Object.assign(Object.assign({}, newUser.dataValues), { password: undefined, token }));
+    }
+    catch (e) {
+        if (e.name === 'SequelizeUniqueConstraintError') {
+            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError(`${e.errors[0].path} already exists`));
+        }
+        else
+            return (0, either_1.left)(new DatabaseError_1.DatabaseError('Register user error', e));
+    }
 });
 exports.registerUser = registerUser;
 const checkLoginData = (email, password) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield Users_1.Users.findOne({ where: { email } });
-    if (!user)
-        return { error: 'No user with this email was found' };
-    if (user.status !== 'active')
-        return { error: `StatusError: ${user.status}` };
-    const comparePassword = yield bcrypt.compare(password, user.password);
-    if (!comparePassword)
-        return { error: 'The password is invalid', };
-    return { error: '', data: user.dataValues };
+    try {
+        const user = yield Users_1.Users.findOne({ where: { email } });
+        if (!user)
+            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError('No user with this email was found'));
+        if (user.status !== 'active')
+            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError(`The user is ${user.status}`));
+        const comparePassword = yield bcrypt.compare(password, user.password);
+        if (!comparePassword)
+            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError('The password is invalid'));
+        return (0, either_1.right)(user.dataValues);
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Check login data error', e));
+    }
 });
 exports.checkLoginData = checkLoginData;

@@ -1,50 +1,53 @@
 import { Request, Response } from "express"
 import { CreateItemBody, DeleteItemBody, EditItemBody } from "../../../common/request-types"
-import { checkToken } from "../../utils"
 import { Tags } from "../../db/models/Tags"
 import { createItem, deleteItem, editItem, getItem, getItemAuthorId } from "../../service/itemService"
+import { checkToken } from "../../service/tokenService"
+import { TokenError } from "../../../common/errors/TokenError"
+import { DatabaseError } from "../../../common/errors/DatabaseError"
 
 export class ItemController {
 
   handlerCreateItem = async (req: Request<any, any, CreateItemBody>, res: Response) => {
     const { collectionId, fields, userId, token, tags } = req.body
-    const name = fields.name
-    if (!checkToken(token, userId)) {
-      return res.status(500).json({ error: 'TokenError' })
-    }
-    if (!collectionId || !name || !fields) {
-      return res.status(500).json({ error: 'Collection data is invalid' })
-    }
-    const item = await createItem(userId, collectionId, fields, tags)
-    res.json(item)
+    if (!checkToken(token, userId)) return res.status(498).json(new TokenError())
+    return (await createItem(userId, collectionId, fields, tags))
+      .mapRight(item => res.json(item))
+      .mapLeft(e => res.status(500).json(e))
   }
 
-  handleGetItem = async (req: Request, res: Response) => {
-    const { id } = req.params
-    const data = await getItem(+id)
-    res.json(data)
+  handleGetItem = async ({ params: { id } }: Request, res: Response) => {
+    return (await getItem(+id))
+      .mapRight(data => res.json(data))
+      .mapLeft(e => res.status(500).json(e))
   }
 
   handleEditItem = async (req: Request<any, any, EditItemBody>, res: Response) => {
     const { item, token } = req.body
     if (!checkToken(token, await getItemAuthorId(item.collectionId))) {
-      return res.status(500).json({ error: 'TokenError' })
+      return res.status(498).json(new TokenError())
     }
-    const editedItem = await editItem(item)
-    res.json(editedItem)
+    return (await editItem(item))
+      .mapRight(editedItem => res.json(editedItem))
+      .mapLeft(e => res.status(500).json(e))
   }
 
   handleDeleteItem = async (req: Request<any, any, DeleteItemBody>, res: Response) => {
     const { item, token } = req.body
     if (!checkToken(token, await getItemAuthorId(item.collectionId))) {
-      return res.status(500).json({ error: 'TokenError' })
+      return res.status(498).json(new TokenError())
     }
-    res.json(await deleteItem(item.id))
+    return (await deleteItem(item.id))
+      .mapRight(r => res.json(r))
+      .mapLeft(e => res.status(500).json(e))
   }
 
   async getTags(req: Request, res: Response) {
-    const tags = await Tags.findAll()
-    res.json(tags)
+    try {
+      res.json(await Tags.findAll())
+    } catch (e) {
+      res.status(500).json(new DatabaseError('Get tags error', e))
+    }
   }
 
 }

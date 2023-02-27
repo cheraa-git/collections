@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next"
 import { Text } from "../UI/Text"
 import { Link } from "react-router-dom"
 import { TransButton } from "../UI/TransButton"
+import { setAuthErrorMessage } from "../../store/slices/userSlice"
 
 interface Inputs {
   email: string
@@ -25,6 +26,7 @@ export const RegisterContent: FC = () => {
   const onSubmit: SubmitHandler<Inputs> = ({ email, password, nickname, confirmPassword }) => {
     if (!email.includes('@')) return snackbar('Email is invalid')
     if (confirmPassword !== password) return snackbar('The password is not equal to the confirm password')
+    dispatch(setAuthErrorMessage(''))
     dispatch(authUser('create', { nickname, email, password }))
   }
 

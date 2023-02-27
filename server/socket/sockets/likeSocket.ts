@@ -1,9 +1,10 @@
 import { AppServer, AppSocket, SocketController } from "../../types"
 import { Likes } from "../../db/models/Likes"
 import { Users } from "../../db/models/Users"
-import { checkToken, flatJoinedModel } from "../../utils"
+import { flatJoinedModel } from "../../utils"
 import { ClientToServerEvents, Like } from "../../../common/common-types"
 import { EmptyResultError } from "sequelize"
+import { checkToken } from "../../service/tokenService"
 
 export class LikeSocket implements SocketController {
 
@@ -31,7 +32,6 @@ export class LikeSocket implements SocketController {
         this.io.to(`item:${itemId}`).emit('cancel_like', userId)
       }
     }
-
 
   }
 

@@ -35,14 +35,8 @@ export interface DeleteCollectionBody {
 
 export interface EditCollectionBody {
   itemConfigs: ItemConfigType[]
-  collection: Collection
+  collection: Omit<Collection, 'timestamp'>
   token: string
 }
 
-export interface AddCommentBody {
-  token: string
-  userId: number
-  itemId: number
-  text: string
-}
 

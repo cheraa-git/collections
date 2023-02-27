@@ -1,16 +1,16 @@
 import { Request, Response } from "express"
-import { GetProfileResponse } from "../../../common/response-types"
 import { getProfile } from "../../service/profileService"
 
 
 export class ProfileController {
 
-  async handleGetProfile(req: Request, res: Response<GetProfileResponse>) {
+  async handleGetProfile(req: Request, res: Response) {
     const userId = +req.params.userId
-    const profile = await getProfile(userId)
-    res.json(profile)
+    const response = await getProfile(userId)
+    response
+      .mapRight(profile => res.json(profile))
+      .mapLeft(e => res.status(500).json(e))
   }
-
 }
 
 

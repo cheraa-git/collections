@@ -1,24 +1,39 @@
-import axios from "../../axios-app"
+import { axiosGet, axiosPost } from "../../apis/axios/axios-app"
 import { setAdmin, setStatus, setUsers } from "../slices/adminSlice"
-import { setLoading } from "../slices/appSlice"
-import { User } from "../../types/user"
+import { setLoading, setUnknownError } from "../slices/appSlice"
 import { AppDispatch, GetState, RootState } from "../store"
+import { User, UserStatus } from "../../../../common/common-types"
+import { DatabaseError } from "../../../../common/errors/DatabaseError"
+import { TokenError } from "../../../../common/errors/TokenError"
+import { onTokenError } from "../slices/userSlice"
+import { IndexingError } from "../../../../common/errors/IndexingError"
+
 
 export const getUsers = () => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true))
-  const users = await axios.get('/admin/users')
-  dispatch(setUsers(users.data))
-  console.log(users.data)
+  const users = (await axiosGet<DatabaseError, User[]>('/admin/users'))
+  users
+    .mapRight(r => dispatch(setUsers(r.data)))
+    .mapLeft(e => console.log(e.response?.data))
   dispatch(setLoading(false))
 }
 
-export const setUsersStatus = (ids: number[], status: User['status']) => {
+export const setUsersStatus = (ids: number[], status: UserStatus) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(setLoading(true))
     const token = getState().user.currentUser.token
-    const response = await axios.post('/admin/users/status', { token, status, userIds: ids })
-    console.log(response.data)
-    dispatch(setStatus({ ids: response.data, status }))
+    const response = await axiosPost<TokenError | DatabaseError, number[]>('/admin/users/status', {
+      token, status, userIds: ids
+    })
+    response
+      .mapRight(r => dispatch(setStatus({ ids: r.data, status })))
+      .mapLeft(e => {
+        if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
+        else {
+          console.log(e.response?.data)
+          dispatch(setUnknownError(true))
+        }
+      })
     dispatch(setLoading(false))
   }
 }
@@ -27,9 +42,18 @@ export const setAdminStatus = (ids: number[], status: boolean) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(setLoading(true))
     const token = getState().user.currentUser.token
-    const response = await axios.post('/admin/users/admin_status', { token, status, userIds: ids })
-    console.log(response.data)
-    dispatch(setAdmin({ ids: response.data, status }))
+    const response = await axiosPost<TokenError | DatabaseError, number[]>('/admin/users/admin_status', {
+      token, status, userIds: ids
+    })
+    response
+      .mapRight(r => dispatch(setAdmin({ ids: r.data, status })))
+      .mapLeft(e => {
+        if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
+        else {
+          console.log(e.response?.data)
+          dispatch(setUnknownError(true))
+        }
+      })
     dispatch(setLoading(false))
   }
 }
@@ -37,12 +61,11 @@ export const setAdminStatus = (ids: number[], status: boolean) => {
 export const indexing = (type: 'items' | 'collections' | 'comments') => {
   return async (dispatch: AppDispatch, getState: GetState) => {
     const token = getState().user.currentUser.token
-    try {
-      const response = await axios.post(`/admin/indexing/${type}`, { token })
-      console.log(`INDEXING ${type}`, response.data)
-    } catch (err) {
-      console.log(`INDEXING ${type}`, err)
-    }
+    const response = await axiosPost<TokenError | IndexingError, { status: string }>(`/admin/indexing/${type}`, { token })
+    response
+      .mapRight(r => console.log(r.data))
+      .mapLeft(e => e.response?.data.name === 'TokenError' ? dispatch(onTokenError()) : console.log(e.response?.data))
+      //TODO: отработать IndexingError
   }
 }
 

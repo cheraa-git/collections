@@ -21,43 +21,51 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectionController = void 0;
-const utils_1 = require("../../utils");
 const Themes_1 = require("../../db/models/Themes");
 const collectionService_1 = require("../../service/collectionService");
+const tokenService_1 = require("../../service/tokenService");
+const TokenError_1 = require("../../../common/errors/TokenError");
+const DatabaseError_1 = require("../../../common/errors/DatabaseError");
 class CollectionController {
     constructor() {
         this.handleCreateCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _a = req.body, { token, itemConfigs } = _a, collection = __rest(_a, ["token", "itemConfigs"]);
             const timestamp = `${Date.now()}`;
-            if (!(0, utils_1.checkToken)(token, collection.userId)) {
-                return res.status(500).json({ error: 'TokenError' });
-            }
-            if (!collection.title || !collection.description || !collection.themeId) {
-                return res.status(500).json({ error: 'Collection data is invalid' });
-            }
-            const newCollection = yield (0, collectionService_1.createCollection)(Object.assign(Object.assign({}, collection), { timestamp }), itemConfigs);
-            res.json(newCollection);
+            if (!(0, tokenService_1.checkToken)(token, collection.userId))
+                return res.status(500).json(new TokenError_1.TokenError());
+            return (yield (0, collectionService_1.createCollection)(Object.assign(Object.assign({}, collection), { timestamp }), itemConfigs))
+                .mapRight(newCollection => res.json(newCollection))
+                .mapLeft(e => res.status(500).json(e));
         });
         this.handleGetCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = +req.params.id;
-            res.json(yield (0, collectionService_1.getCollection)(id));
+            return (yield (0, collectionService_1.getCollection)(id))
+                .mapRight(data => res.json(data))
+                .mapLeft(e => res.status(500).json(e));
         });
         this.handleDeleteCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { collection, token } = req.body;
-            if (!(0, utils_1.checkToken)(token, collection.userId)) {
-                return res.status(500).json({ error: 'TokenError' });
-            }
-            res.json(yield (0, collectionService_1.deleteCollection)(collection.id));
+            if (!(0, tokenService_1.checkToken)(token, collection.userId))
+                return res.status(500).json(new TokenError_1.TokenError());
+            return (yield (0, collectionService_1.deleteCollection)(collection.id))
+                .mapRight(n => res.json(n))
+                .mapLeft(e => res.status(500).json(e));
         });
         this.handleEditCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { collection, token, itemConfigs } = req.body;
-            if (!(0, utils_1.checkToken)(token, collection.userId)) {
-                return res.status(500).json({ error: 'TokenError' });
-            }
-            res.json(yield (0, collectionService_1.editCollection)(collection, itemConfigs));
+            if (!(0, tokenService_1.checkToken)(token, collection.userId))
+                return res.status(500).json(new TokenError_1.TokenError());
+            return (yield (0, collectionService_1.editCollection)(collection, itemConfigs))
+                .mapRight(data => res.json(data))
+                .mapLeft(e => res.status(500).json(e));
         });
         this.getThemes = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            res.json(yield Themes_1.Themes.findAll());
+            try {
+                res.json(yield Themes_1.Themes.findAll());
+            }
+            catch (e) {
+                res.status(500).json(new DatabaseError_1.DatabaseError('Get themes', e));
+            }
         });
     }
 }

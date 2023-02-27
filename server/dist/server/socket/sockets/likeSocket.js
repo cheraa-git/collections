@@ -14,6 +14,7 @@ const Likes_1 = require("../../db/models/Likes");
 const Users_1 = require("../../db/models/Users");
 const utils_1 = require("../../utils");
 const sequelize_1 = require("sequelize");
+const tokenService_1 = require("../../service/tokenService");
 class LikeSocket {
     constructor(io, socket) {
         this.io = io;
@@ -26,7 +27,7 @@ class LikeSocket {
         });
         this.setLike = ({ token, userId, itemId, nickname }) => __awaiter(this, void 0, void 0, function* () {
             try {
-                if (!(0, utils_1.checkToken)(token, userId)) {
+                if (!(0, tokenService_1.checkToken)(token, userId)) {
                     return this.socket.emit('token_error');
                 }
                 const like = yield Likes_1.Likes.create({ userId, itemId }, { ignoreDuplicates: true, });

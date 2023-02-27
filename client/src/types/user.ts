@@ -1,12 +1,6 @@
-export interface User {
-  id: number
-  nickname: string
-  avatar?: string
-  email: string
-  token: string
-  isAdmin: boolean
-  status: 'active' | 'blocked' | 'deleted'
-}
+import { User } from "../../../common/common-types"
+
+
 
 export type ProfileUser = Omit<User, "token" | "email" | 'isAdmin'>
 

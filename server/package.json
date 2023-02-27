@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sweet-monads/either": "^3.1.0",
     "bcrypt": "^5.1.0",
     "concurrently": "^7.6.0",
     "cors": "^2.8.5",

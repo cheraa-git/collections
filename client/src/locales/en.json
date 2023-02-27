@@ -69,6 +69,21 @@
     "Indexing collections": "Indexing collections",
     "Indexing comments": "Indexing comments",
     "Items": "Items",
-    "Search anywhere": "Search anywhere"
+    "Search anywhere": "Search anywhere",
+    "Authorization error": "Authorization error",
+    "email already exists": "Email already exists",
+    "nickname already exists": "Nickname already exists",
+    "No user with this email was found": "No user with this email was found",
+    "The password is invalid": "The password is invalid",
+    "The user is blocked": "The user is blocked. To restore access, contact support",
+    "The user is deleted": "The user is deleted. To restore access, contact support",
+    "Registration data invalid": "Registration data invalid",
+    "Collection data is invalid": "Collection data is invalid",
+    "Item data is invalid": "Item data is invalid",
+    "Item not found": "Item not found",
+    "Go back": "Go back",
+    "Collection not found": "Collection not found",
+    "Something went wrong. Try to return to the main page": "Something went wrong. Try to return to the main page",
+    "Go to the main page": "Go to the main page"
   }
 }

@@ -5,7 +5,7 @@ import { Text } from "../UI/Text"
 import { Box, Button, Menu } from "@mui/material"
 import { useAppDispatch } from "../../store/store"
 import { setAdminStatus, setUsersStatus } from "../../store/actions/adminActions"
-import { User } from "../../types/user"
+import { UserStatus } from "../../../../common/common-types"
 
 export const MultipleActionsMenu: FC<{ selectionModel: number[] }> = ({ selectionModel }) => {
   const dispatch = useAppDispatch()
@@ -18,7 +18,7 @@ export const MultipleActionsMenu: FC<{ selectionModel: number[] }> = ({ selectio
     setAnchorMenu(null)
   }
 
-  const statusHandler = (status: User['status']) => {
+  const statusHandler = (status: UserStatus) => {
     dispatch(setUsersStatus(selectionModel, status))
   }
 

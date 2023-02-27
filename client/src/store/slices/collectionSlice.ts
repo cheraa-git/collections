@@ -5,7 +5,7 @@ export interface CollectionState {
   collection: Collection
   itemConfigs: ItemConfigType[]
   themes: Theme[]
-
+  errorMessage: string
 }
 
 const initialState: CollectionState = {
@@ -20,6 +20,7 @@ const initialState: CollectionState = {
   },
   itemConfigs: [],
   themes: [],
+  errorMessage: ''
 }
 
 export const userSlice = createSlice({
@@ -42,10 +43,19 @@ export const userSlice = createSlice({
     setThemes: (state, { payload }: PayloadAction<Theme[]>) => {
       state.themes = payload
     },
+    setCollectionErrorMessage: (state, { payload }: PayloadAction<string>) => {
+      state.errorMessage = payload
+    }
 
   }
 })
 
-export const { setCollectionData, setItemConfigs, clearCollectionData, setThemes, } = userSlice.actions
+export const {
+  setCollectionData,
+  setItemConfigs,
+  clearCollectionData,
+  setThemes,
+  setCollectionErrorMessage
+} = userSlice.actions
 
 export const CollectionReducer = userSlice.reducer

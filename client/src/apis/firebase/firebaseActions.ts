@@ -1,10 +1,15 @@
 import { storage } from './firebaseConfig'
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 
-export const saveImageToCloud = async (file: File) => {
-  // TODO: отработать исключения
-  const storageRef = ref(storage, `files/${file.name}`)
-  const uploadTask = await uploadBytes(storageRef, file)
-  return await getDownloadURL(uploadTask.ref)
+export const saveImageToCloud = async (file: File | undefined) => {
+  if (!file) return ''
+  try {
+    const storageRef = ref(storage, `files/${file.name}`)
+    const uploadTask = await uploadBytes(storageRef, file)
+    return await getDownloadURL(uploadTask.ref)
+  } catch (e) {
+    console.log(e)
+    return ''
+  }
 }

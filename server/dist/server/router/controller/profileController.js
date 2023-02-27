@@ -15,8 +15,10 @@ class ProfileController {
     handleGetProfile(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = +req.params.userId;
-            const profile = yield (0, profileService_1.getProfile)(userId);
-            res.json(profile);
+            const response = yield (0, profileService_1.getProfile)(userId);
+            response
+                .mapRight(profile => res.json(profile))
+                .mapLeft(e => res.status(500).json(e));
         });
     }
 }

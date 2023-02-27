@@ -2,6 +2,7 @@ import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript"
 import { Collections } from "./Collections"
 import { Comments } from "./Comments"
 import { Likes } from "./Likes"
+import { UserStatus } from "../../../common/common-types"
 
 
 @Table({ timestamps: false, tableName: 'users' })
@@ -39,7 +40,7 @@ export class Users extends Model {
   isAdmin!: boolean
 
   @Column({ type: DataType.STRING, })
-  status!: 'active' | 'blocked' | 'deleted'
+  status!: UserStatus
 
   @HasMany(() => Collections, { onDelete: 'cascade' })
   collections!: Collections[]

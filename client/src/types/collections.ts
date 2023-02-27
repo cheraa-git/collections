@@ -14,7 +14,7 @@ export interface EditCollectionPayload {
   existingImage?: string
   id: number
   image?: File
-  itemConfigs?: ItemConfigType[]
+  itemConfigs: ItemConfigType[]
   themeId: number
   title: string
   userId: number

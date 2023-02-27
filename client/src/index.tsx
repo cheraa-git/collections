@@ -9,6 +9,7 @@ import { BrowserRouter } from "react-router-dom"
 import { SnackbarProvider } from "notistack"
 import { AppThemeProvider } from "./components/hoc/AppThemeProvider"
 import './i18n'
+import { ErrorMessageProvider } from "./components/hoc/ErrorMessageProvider"
 
 
 const root = ReactDOM.createRoot(
@@ -20,7 +21,9 @@ root.render(
       <Provider store={store}>
         <AppThemeProvider>
           <SnackbarProvider autoHideDuration={3000}>
-            <App/>
+            <ErrorMessageProvider>
+              <App/>
+            </ErrorMessageProvider>
           </SnackbarProvider>
         </AppThemeProvider>
       </Provider>

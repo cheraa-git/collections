@@ -11,7 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllComments = void 0;
 const Comments_1 = require("../db/models/Comments");
+const either_1 = require("@sweet-monads/either");
+const DatabaseError_1 = require("../../common/errors/DatabaseError");
 const getAllComments = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Comments_1.Comments.findAll();
+    try {
+        return (0, either_1.right)(yield Comments_1.Comments.findAll());
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Get all comments error', e));
+    }
 });
 exports.getAllComments = getAllComments;

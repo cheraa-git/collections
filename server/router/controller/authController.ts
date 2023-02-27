@@ -1,11 +1,10 @@
 import { Request, Response } from "express"
-import * as jwt from 'jsonwebtoken'
-import { JwtPayload } from 'jsonwebtoken'
 import { Users } from "../../db/models/Users"
 import { checkLoginData, registerUser } from "../../service/authService"
+import { AuthorizationError } from "../../../common/errors/AuthorizationError"
+import { AutoLoginError } from "../../../common/errors/AutoLoginError"
+import { checkAutoLoginToken, createToken } from "../../service/tokenService"
 
-
-const SECRET_KEY = process.env.TOKEN_SECTET_KEY + ''
 
 class AuthController {
 
@@ -15,41 +14,31 @@ class AuthController {
     const avatarUrl = req.body.avatarUrl
     const password = req.body.password.trim()
     if (!nickname || !email || !password) {
-      return res.status(500).json({ error: 'Registration data invalid' })
+      return res.status(401).json(new AuthorizationError('Registration data invalid'))
     }
-    try {
-      res.json(await registerUser(nickname, email, avatarUrl, password))
-    } catch (error: any) {
-      if (error.name === 'SequelizeUniqueConstraintError') {
-        res.status(500).json({ error: `${error.errors[0].path} already exists` })
-      } else console.log(error)
-    }
+    const response = await registerUser(nickname, email, avatarUrl, password)
+    response
+      .mapRight(user => res.json(user))
+      .mapLeft(e => res.status(401).json(e))
   }
 
-  loginUser = async (req: Request, res: Response) => {
+  handleLoginUser = async (req: Request, res: Response) => {
     const email = req.body.email?.trim().toLowerCase()
     const password = req.body.password?.trim()
     if (!email || !password) {
-      return res.status(500).json({ error: 'Registration data invalid' })
+      return res.status(401).json(new AuthorizationError('Registration data invalid'))
     }
-    const { error, data: user } = await checkLoginData(email, password)
-    if (error) return res.status(500).json({ error })
-    const token = jwt.sign(
-      { email, hashPassword: user?.password, id: user?.id, isAdmin: user?.isAdmin, status: user?.status },
-      SECRET_KEY
-    )
-    res.json({ ...user, token, password: undefined })
+    const response = await checkLoginData(email, password)
+    response
+      .mapRight(user => res.json({ ...user, token: createToken(user), password: undefined }))
+      .mapLeft(e => res.status(401).json(e))
   }
 
-  autoLogin = async (req: Request, res: Response) => {
-    const token = req.body.token
-    const jwtPayload = jwt.verify(token, SECRET_KEY) as JwtPayload
-    const iat = jwtPayload.iat as number
-    const isExpired = (((iat + 3600) * 24) * 1000) < Date.now()
-    const statusIsAvailable = jwtPayload.status === 'active'
-    const user = await Users.findOne({ where: { email: jwtPayload.email } })
-    if (!user || user.password !== jwtPayload.hashPassword || isExpired || !statusIsAvailable) {
-      return res.status(500).json({ error: 'Autologin canceled' })
+  handleAutoLogin = async ({ body: { token } }: Request, res: Response) => {
+    const { email, hashPassword, isAvailable } = checkAutoLoginToken(token)
+    const user = await Users.findOne({ where: { email } })
+    if (!user || user.password !== hashPassword || !isAvailable) {
+      return res.status(500).json(new AutoLoginError())
     }
     res.json({ ...user.dataValues, token, password: undefined })
   }

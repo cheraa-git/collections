@@ -1,4 +1,4 @@
-import axios from "./axios-app"
+import axios from "./apis/axios/axios-app"
 
 export const registerManyUsers = async () => {
   for (let i = 700; i < 1000; i++) {

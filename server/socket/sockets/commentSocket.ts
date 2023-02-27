@@ -1,8 +1,9 @@
 import { AppServer, AppSocket, SocketController } from "../../types"
 import { Comments } from "../../db/models/Comments"
 import { Users } from "../../db/models/Users"
-import { checkToken, flatJoinedModel } from "../../utils"
+import { flatJoinedModel } from "../../utils"
 import { ClientToServerEvents, Comment } from "../../../common/common-types"
+import { checkToken } from "../../service/tokenService"
 
 export class CommentSocket implements SocketController {
 

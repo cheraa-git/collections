@@ -1,7 +1,4 @@
 import { Items } from "./db/models/Items"
-import dotenv from "dotenv"
-import * as jwt from "jsonwebtoken"
-import { JwtPayload } from "jsonwebtoken"
 import { Model } from "sequelize-typescript"
 
 export const filterItem = (item: Items | null) => {
@@ -13,20 +10,6 @@ export const filterItem = (item: Items | null) => {
     }
   })
   return filterItem
-}
-
-export const checkToken = (token?: string, userId?: number): boolean => {
-  if (!token || !userId) return false
-  dotenv.config()
-  const jwtPayload = jwt.verify(token, String(process.env.TOKEN_SECTET_KEY)) as JwtPayload
-  return (jwtPayload.id === userId || jwtPayload.isAdmin) ?? jwtPayload.status === 'active'
-}
-
-export const checkAdminToken = (token?: string) => {
-  if (!token) return false
-  dotenv.config()
-  const jwtPayload = jwt.verify(token, String(process.env.TOKEN_SECTET_KEY)) as JwtPayload
-  return jwtPayload.isAdmin && jwtPayload.status === 'active'
 }
 
 export const flatJoinedModel = (obj: Model, from: Model[]) => {

@@ -16,43 +16,71 @@ const Users_1 = require("../db/models/Users");
 const Items_1 = require("../db/models/Items");
 const Tags_1 = require("../db/models/Tags");
 const utils_1 = require("../utils");
+const either_1 = require("@sweet-monads/either");
+const DatabaseError_1 = require("../../common/errors/DatabaseError");
 const createCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, void 0, function* () {
-    const newCollection = yield Collections_1.Collections.create(collection);
-    if (itemConfigs && itemConfigs.length > 0) {
-        const configs = itemConfigs.map(config => (Object.assign(Object.assign({}, config), { collectionId: newCollection.id })));
-        yield ItemConfigs_1.ItemConfigs.bulkCreate(configs);
+    try {
+        const newCollection = yield Collections_1.Collections.create(collection);
+        if (itemConfigs && itemConfigs.length > 0) {
+            const configs = itemConfigs.map(config => (Object.assign(Object.assign({}, config), { collectionId: newCollection.id })));
+            yield ItemConfigs_1.ItemConfigs.bulkCreate(configs);
+        }
+        return (0, either_1.right)(newCollection.dataValues);
     }
-    return newCollection.dataValues;
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Create collection error', e));
+    }
 });
 exports.createCollection = createCollection;
 const getCollection = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield Collections_1.Collections.findOne({
-        where: { id },
-        include: [
-            { model: ItemConfigs_1.ItemConfigs },
-            { model: Users_1.Users, attributes: ['nickname'] },
-            { model: Items_1.Items, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] }
-        ]
-    });
-    const collection = Object.assign(Object.assign({}, response === null || response === void 0 ? void 0 : response.dataValues), { userName: response === null || response === void 0 ? void 0 : response.users.nickname, itemConfigs: undefined, users: undefined, items: undefined });
-    const items = response === null || response === void 0 ? void 0 : response.items.map(i => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(i)), { userId: response === null || response === void 0 ? void 0 : response.userId })));
-    return { collection, itemConfigs: response === null || response === void 0 ? void 0 : response.itemConfigs, items };
+    try {
+        const response = yield Collections_1.Collections.findOne({
+            where: { id },
+            include: [
+                { model: ItemConfigs_1.ItemConfigs },
+                { model: Users_1.Users, attributes: ['nickname'] },
+                { model: Items_1.Items, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] }
+            ]
+        });
+        if (!response)
+            return (0, either_1.right)(undefined);
+        const collection = Object.assign(Object.assign({}, response.dataValues), { userName: response.users.nickname, itemConfigs: undefined, users: undefined, items: undefined });
+        const items = response.items.map(i => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(i)), { userId: response.userId })));
+        return (0, either_1.right)({ collection, itemConfigs: response.itemConfigs, items });
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Get collection error', e));
+    }
 });
 exports.getCollection = getCollection;
 const deleteCollection = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Collections_1.Collections.destroy({ where: { id }, force: true });
+    try {
+        return (0, either_1.right)(yield Collections_1.Collections.destroy({ where: { id }, force: true }));
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Delete collection error'));
+    }
 });
 exports.deleteCollection = deleteCollection;
 const editCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, void 0, function* () {
-    const editedCollection = yield Collections_1.Collections.update(collection, { where: { id: collection.id }, returning: ['*'] });
-    const editedConfigs = yield ItemConfigs_1.ItemConfigs.bulkCreate(itemConfigs, {
-        updateOnDuplicate: ['type', 'label'],
-        returning: ['*']
-    });
-    return { collection: editedCollection[1][0], itemConfigs: editedConfigs };
+    try {
+        const editedCollection = yield Collections_1.Collections.update(collection, { where: { id: collection.id }, returning: ['*'] });
+        const editedConfigs = yield ItemConfigs_1.ItemConfigs.bulkCreate(itemConfigs, {
+            updateOnDuplicate: ['type', 'label'], returning: ['*']
+        });
+        return (0, either_1.right)({ collection: editedCollection[1][0], itemConfigs: editedConfigs });
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Edit collection error', e));
+    }
 });
 exports.editCollection = editCollection;
 const getAllCollections = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Collections_1.Collections.findAll();
+    try {
+        return (0, either_1.right)(yield Collections_1.Collections.findAll());
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Get all collection error'));
+    }
 });
 exports.getAllCollections = getAllCollections;

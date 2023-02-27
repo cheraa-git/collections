@@ -13,6 +13,7 @@ exports.CommentSocket = void 0;
 const Comments_1 = require("../../db/models/Comments");
 const Users_1 = require("../../db/models/Users");
 const utils_1 = require("../../utils");
+const tokenService_1 = require("../../service/tokenService");
 class CommentSocket {
     constructor(io, socket) {
         this.io = io;
@@ -26,7 +27,7 @@ class CommentSocket {
             this.socket.emit('comments', comments.map(c => (0, utils_1.flatJoinedModel)(c, [c.users])));
         });
         this.addComment = ({ userId, itemId, text, nickname, token, }) => __awaiter(this, void 0, void 0, function* () {
-            if (!(0, utils_1.checkToken)(token, userId)) {
+            if (!(0, tokenService_1.checkToken)(token, userId)) {
                 return this.socket.emit('token_error');
             }
             const newComment = yield Comments_1.Comments.create({ userId, itemId, text, timestamp: `${Date.now()}` });

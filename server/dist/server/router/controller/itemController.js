@@ -10,48 +10,53 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ItemController = void 0;
-const utils_1 = require("../../utils");
 const Tags_1 = require("../../db/models/Tags");
 const itemService_1 = require("../../service/itemService");
+const tokenService_1 = require("../../service/tokenService");
+const TokenError_1 = require("../../../common/errors/TokenError");
+const DatabaseError_1 = require("../../../common/errors/DatabaseError");
 class ItemController {
     constructor() {
         this.handlerCreateItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { collectionId, fields, userId, token, tags } = req.body;
-            const name = fields.name;
-            if (!(0, utils_1.checkToken)(token, userId)) {
-                return res.status(500).json({ error: 'TokenError' });
-            }
-            if (!collectionId || !name || !fields) {
-                return res.status(500).json({ error: 'Collection data is invalid' });
-            }
-            const item = yield (0, itemService_1.createItem)(userId, collectionId, fields, tags);
-            res.json(item);
+            if (!(0, tokenService_1.checkToken)(token, userId))
+                return res.status(498).json(new TokenError_1.TokenError());
+            return (yield (0, itemService_1.createItem)(userId, collectionId, fields, tags))
+                .mapRight(item => res.json(item))
+                .mapLeft(e => res.status(500).json(e));
         });
-        this.handleGetItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            const data = yield (0, itemService_1.getItem)(+id);
-            res.json(data);
+        this.handleGetItem = ({ params: { id } }, res) => __awaiter(this, void 0, void 0, function* () {
+            return (yield (0, itemService_1.getItem)(+id))
+                .mapRight(data => res.json(data))
+                .mapLeft(e => res.status(500).json(e));
         });
         this.handleEditItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { item, token } = req.body;
-            if (!(0, utils_1.checkToken)(token, yield (0, itemService_1.getItemAuthorId)(item.collectionId))) {
-                return res.status(500).json({ error: 'TokenError' });
+            if (!(0, tokenService_1.checkToken)(token, yield (0, itemService_1.getItemAuthorId)(item.collectionId))) {
+                return res.status(498).json(new TokenError_1.TokenError());
             }
-            const editedItem = yield (0, itemService_1.editItem)(item);
-            res.json(editedItem);
+            return (yield (0, itemService_1.editItem)(item))
+                .mapRight(editedItem => res.json(editedItem))
+                .mapLeft(e => res.status(500).json(e));
         });
         this.handleDeleteItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { item, token } = req.body;
-            if (!(0, utils_1.checkToken)(token, yield (0, itemService_1.getItemAuthorId)(item.collectionId))) {
-                return res.status(500).json({ error: 'TokenError' });
+            if (!(0, tokenService_1.checkToken)(token, yield (0, itemService_1.getItemAuthorId)(item.collectionId))) {
+                return res.status(498).json(new TokenError_1.TokenError());
             }
-            res.json(yield (0, itemService_1.deleteItem)(item.id));
+            return (yield (0, itemService_1.deleteItem)(item.id))
+                .mapRight(r => res.json(r))
+                .mapLeft(e => res.status(500).json(e));
         });
     }
     getTags(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const tags = yield Tags_1.Tags.findAll();
-            res.json(tags);
+            try {
+                res.json(yield Tags_1.Tags.findAll());
+            }
+            catch (e) {
+                res.status(500).json(new DatabaseError_1.DatabaseError('Get tags error', e));
+            }
         });
     }
 }

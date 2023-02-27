@@ -68,6 +68,21 @@
     "Indexing collections": "Индексирование коллекций",
     "Indexing comments": "Индексирование комментариев",
     "Items": "Элементы",
-    "Search anywhere": "Поиск по сайту"
+    "Search anywhere": "Поиск по сайту",
+    "Authorization error": "Ошибка авторизации",
+    "email already exists": "Эта почта уже зарегистрирована",
+    "nickname already exists": "Имя пользователя занято",
+    "No user with this email was found": "Пользователь с этим адресом электронной почты не найден",
+    "The password is invalid": "Пароль недействителен",
+    "The user is blocked": "Пользователь заблокирован. Чтобы восстановить доступ, обратитесь в службу поддержки",
+    "The user is deleted": "Пользователь удален. Чтобы восстановить доступ, обратитесь в службу поддержки",
+    "Registration data invalid": "Регистрационные данные недействительны",
+    "Collection data is invalid": "Данные коллекции некорректны",
+    "Item data is invalid": "Данные элемента некорректны",
+    "Item not found": "Элемент не найден",
+    "Go back": "Вернуться назад",
+    "Collection not found": "Коллекция не найдена",
+    "Something went wrong. Try to return to the main page": "Что-то пошло не так. Попробуйте вернуться на главную страницу.",
+    "Go to the main page": "Вернуться на главную"
   }
 }

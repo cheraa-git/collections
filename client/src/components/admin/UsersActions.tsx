@@ -3,7 +3,7 @@ import { AdminPanelSettingsIcon, BlockIcon, CheckCircleOutlineIcon, DeleteIcon }
 import { setAdminStatus, setUsersStatus } from "../../store/actions/adminActions"
 import { IconButton } from "@mui/material"
 import { GridRenderCellParams } from "@mui/x-data-grid"
-import { User } from "../../types/user"
+import { UserStatus } from "../../../../common/common-types"
 
 export const UserActions = (params: GridRenderCellParams) => {
   const dispatch = useAppDispatch()
@@ -11,7 +11,7 @@ export const UserActions = (params: GridRenderCellParams) => {
   const blockColor = params.row.status === 'blocked' ? 'warning' : 'action'
   const deleteColor = params.row.status === 'deleted' ? 'error' : 'action'
 
-  const setStatusHandler = (status: User['status']) => {
+  const setStatusHandler = (status: UserStatus) => {
     dispatch(setUsersStatus([params.row.id], status))
   }
 

@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { User } from '../../types/user'
+import { User, UserStatus } from "../../../../common/common-types"
 
 export interface AdminState {
   users: Omit<User, 'token'>[]
-
+  errorMessage: string
 }
 
 const initialState: AdminState = {
-  users: []
+  users: [],
+  errorMessage: ''
 }
 
 export const adminSlice = createSlice({
@@ -17,7 +18,7 @@ export const adminSlice = createSlice({
     setUsers: (state, { payload }: PayloadAction<Omit<User, 'token'>[]>) => {
       state.users = payload
     },
-    setStatus: (state, { payload }: PayloadAction<{ ids: number[], status: User['status'] }>) => {
+    setStatus: (state, { payload }: PayloadAction<{ ids: number[], status: UserStatus }>) => {
       state.users = state.users.map(user => {
         if (payload.ids.includes(user.id)) {
           user.status = payload.status
@@ -32,10 +33,13 @@ export const adminSlice = createSlice({
         }
         return user
       })
+    },
+    setAdminErrorMessage: (state, {payload}: PayloadAction<string>) => {
+      state.errorMessage = payload
     }
   }
 })
 
-export const { setUsers, setStatus, setAdmin } = adminSlice.actions
+export const { setUsers, setStatus, setAdmin, setAdminErrorMessage } = adminSlice.actions
 
 export const AdminReducer = adminSlice.reducer

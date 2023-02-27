@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, useNavigate } from "react-router-dom"
 import { AuthPage } from "./pages/AuthPage"
 import { ProfilePage } from "./pages/ProfilePage"
 import { MainPage } from "./pages/MainPage"
@@ -20,18 +20,16 @@ import { AdminPage } from "./pages/AdminPage"
 
 
 function App() {
+  const navigate = useNavigate()
   const { i18n } = useTranslation()
   const lang = useApp().lang
   const dispatch = useAppDispatch()
-  const { isAuth } = useAuth()
+  const { isAuth, tokenError } = useAuth()
   const themes = useCollection().themes
   const tags = useAppSelector((state: RootState) => state.item.tags)
 
 
   useEffect(() => {
-    if (!isAuth) {
-      dispatch(autoLogin())
-    }
     if (themes.length === 0) {
       dispatch(getThemes())
     }
@@ -39,7 +37,11 @@ function App() {
       dispatch(getTags())
     }
     i18n.changeLanguage(lang)
-  }, [isAuth, dispatch, tags.length, themes.length, i18n, lang])
+    if (tokenError) navigate('/auth/login')
+    if (!isAuth) {
+      dispatch(autoLogin())
+    }
+  }, [isAuth, dispatch, tags.length, themes.length, i18n, lang, tokenError])
   return (
     <>
       <NavBar/>

@@ -1,7 +1,7 @@
 import { CreateItemPayload } from "../../types/collections"
-import { setLoading } from "../slices/appSlice"
+import { setLoading, setUnknownError } from "../slices/appSlice"
 import { CreateItemBody } from "../../../../common/request-types"
-import axios from "../../axios-app"
+import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
 import { Item, Tag } from "../../../../common/common-types"
 import { setItemConfigs } from "../slices/collectionSlice"
 import { NavigateFunction } from "react-router-dom"
@@ -14,38 +14,67 @@ import {
   removeLike,
   setComments,
   setItem,
+  setItemErrorMessage,
   setLikes,
   setSocket,
   setTags
 } from "../slices/itemSlice"
 import { AppDispatch, GetState } from "../store"
+import { DatabaseError } from "../../../../common/errors/DatabaseError"
+import { GetItemResponse } from "../../../../common/response-types"
+import { TokenError } from "../../../../common/errors/TokenError"
+import { onTokenError } from "../slices/userSlice"
+import { NotFoundError } from "../../../../common/errors/NotFoundError"
 
 export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispatch, getState: GetState) => {
   dispatch(setLoading(true))
   const { id: userId, token } = getState().user.currentUser
   const sendData: CreateItemBody = { userId, token, ...data }
-  const item = (await axios.post<Item>('/item', sendData)).data
+  const itemResponse = await axiosPost<DatabaseError | TokenError, Item>('/item', sendData)
+  itemResponse
+    .mapRight(({ data: item }) => dispatch(addItem(item)))
+    .mapLeft(e => {
+      if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
+      else {
+        console.log(e.response?.data)
+        dispatch(setUnknownError(true))
+      }
+    })
   dispatch(setLoading(false))
-  dispatch(addItem(item))
-  console.log('CREATE_ITEM', item)
 }
 
 export const getItem = (id: number) => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true))
-  const item = (await axios.get(`/item/${id}`)).data
-  dispatch(addItem(item.item))
-  dispatch(setItemConfigs(item.itemConfigs))
+  const itemResponse = await axiosGet<DatabaseError | NotFoundError, GetItemResponse>(`/item/${id}`)
+  itemResponse
+    .mapRight(({ data }) => {
+      dispatch(addItem(data.item))
+      dispatch(setItemConfigs(data.itemConfigs))
+    })
+    .mapLeft(e => {
+      if (e.response?.data.name === 'NotFoundError') dispatch(setItemErrorMessage('Item not found'))
+      if (e.response?.data.name === 'DatabaseError') {
+        console.log(e.response?.data)
+        dispatch(setUnknownError(true))
+      }
+    })
   dispatch(setLoading(false))
-  console.log('GET_ITEM', item)
 }
 
 
 export const editItem = (item: Item) => async (dispatch: AppDispatch, getState: GetState) => {
   dispatch(setLoading(true))
   const token = getState().user.currentUser.token
-  const response = await axios.patch<Item>('/item', { item, token })
-  console.log('EDIT_ITEM', response.data)
-  dispatch(setItem(response.data))
+  const itemResponse = await axiosPatch<TokenError | DatabaseError, Item>('/item', { item, token })
+  itemResponse
+    .mapRight(({ data: item }) => dispatch(setItem(item)))
+    .mapLeft(e => {
+      if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
+      else {
+        console.log(e.response?.data)
+        dispatch(setUnknownError(true))
+      }
+    })
   dispatch(setLoading(false))
 }
 
@@ -53,10 +82,16 @@ export const deleteItem = (item: Item, navigate: NavigateFunction) => {
   return async (dispatch: AppDispatch, getState: GetState) => {
     dispatch(setLoading(true))
     const token = getState().user.currentUser.token
-    //TODO: удалить картинку из firebase
-    const response = await axios.delete('/item', { data: { item, token } })
-    console.log('DELETE', response.data)
-    navigate(`/collection/${item.collectionId}`)
+    const response = await axiosDelete<TokenError | DatabaseError>('/item', { data: { item, token } })
+    response
+      .mapRight(() => navigate(`/collection/${item.collectionId}`))
+      .mapLeft(e => {
+        if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
+        else {
+          console.log(e.response?.data)
+          dispatch(setUnknownError(true))
+        }
+      })
     dispatch(setLoading(false))
   }
 }
@@ -126,7 +161,8 @@ export const connectSocket = (itemId: number) => async (dispatch: AppDispatch) =
 }
 
 export const getTags = () => async (dispatch: AppDispatch) => {
-  const tags = (await axios.get<Tag[]>('/item/tags')).data
-  dispatch(setTags(tags))
+  (await axiosGet<DatabaseError, Tag[]>('/item/tags'))
+    .mapRight(({ data: tags }) => dispatch(setTags(tags)))
+    .mapLeft(e => console.log(e.response?.data))
 }
 

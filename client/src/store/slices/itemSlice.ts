@@ -8,6 +8,7 @@ export interface ItemState {
   socket: AppSocket | null
   likes: Like[]
   tags: Tag[]
+  errorMessage: string
 }
 
 const initialState: ItemState = {
@@ -16,6 +17,7 @@ const initialState: ItemState = {
   comments: [],
   likes: [],
   tags: [],
+  errorMessage: ''
 }
 
 export const itemSlice = createSlice({
@@ -58,8 +60,11 @@ export const itemSlice = createSlice({
     removeLike: (state, { payload }: PayloadAction<{ userId: number }>) => {
       state.likes = state.likes.filter(like => like.userId !== payload.userId)
     },
-    setTags: (state, {payload}: PayloadAction<Tag[]>) => {
+    setTags: (state, { payload }: PayloadAction<Tag[]>) => {
       state.tags = payload
+    },
+    setItemErrorMessage: (state, {payload}: PayloadAction<string>) => {
+      state.errorMessage = payload
     }
 
   }
@@ -76,7 +81,8 @@ export const {
   addLike,
   setLikes,
   removeLike,
-  setTags
+  setTags,
+  setItemErrorMessage
 } = itemSlice.actions
 
 export const ItemReducer = itemSlice.reducer

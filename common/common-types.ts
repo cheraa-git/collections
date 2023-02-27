@@ -1,4 +1,14 @@
 
+export interface User {
+  id: number
+  nickname: string
+  avatar?: string
+  email: string
+  token: string
+  isAdmin: boolean
+  status: UserStatus
+}
+
 export interface Collection {
   id: number
   userId: number
@@ -75,6 +85,8 @@ export interface ServerToClientEvents {
   token_error: () => void
 }
 
-
 export interface SocketData {
 }
+
+export type UserStatus = 'active' | 'blocked' | 'deleted'
+

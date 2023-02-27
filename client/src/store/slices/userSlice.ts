@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { User } from "../../types/user"
+import { User } from "../../../../common/common-types"
 
 export interface UserState {
   currentUser: User
   errorMessage: string
+  tokenError: string
   loading: boolean
 }
 
@@ -18,6 +19,7 @@ const initialState: UserState = {
     status: 'active'
   },
   errorMessage: '',
+  tokenError: '',
   loading: false,
 }
 
@@ -25,7 +27,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setErrorMessage: (state, { payload: message }: PayloadAction<string>) => {
+    setAuthErrorMessage: (state, { payload: message }: PayloadAction<string>) => {
       state.errorMessage = message
     },
     toggleAuthLoading: (state, { payload }: PayloadAction<boolean | undefined>) => {
@@ -38,10 +40,15 @@ export const userSlice = createSlice({
     logoutUser: state => {
       localStorage.removeItem('token')
       state.currentUser = initialState.currentUser
+    },
+    onTokenError: state => {
+      localStorage.removeItem('token')
+      state.currentUser = initialState.currentUser
+      state.tokenError = 'Authorization error'
     }
   }
 })
 
-export const { toggleAuthLoading, setErrorMessage, setUser, logoutUser } = userSlice.actions
+export const { toggleAuthLoading, setAuthErrorMessage, setUser, logoutUser, onTokenError } = userSlice.actions
 
 export const UserReducer = userSlice.reducer

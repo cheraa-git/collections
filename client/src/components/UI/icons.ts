@@ -18,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import BlockIcon from '@mui/icons-material/Block'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import ReplyIcon from '@mui/icons-material/Reply'
 
 export {
   LoginIcon,
@@ -39,5 +40,6 @@ export {
   CloseIcon,
   AdminPanelSettingsIcon,
   BlockIcon,
-  CheckCircleOutlineIcon
+  CheckCircleOutlineIcon,
+  ReplyIcon
 }

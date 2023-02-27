@@ -9,13 +9,15 @@ export interface AppState {
   lang: Lang
   loading: boolean
   searchOpen: boolean
+  isUnknownError: boolean
 }
 
 const initialState: AppState = {
   theme: localStorage.getItem(THEME) as PaletteMode || "dark",
   lang: localStorage.getItem(LANG) as Lang || 'en',
   loading: false,
-  searchOpen: false
+  searchOpen: false,
+  isUnknownError: false
 }
 
 export const appSlice = createSlice({
@@ -37,10 +39,14 @@ export const appSlice = createSlice({
     },
     setSearchOpen: (state, { payload }: PayloadAction<boolean>) => {
       state.searchOpen = payload
+    },
+    setUnknownError: (state, { payload }: PayloadAction<boolean>) => {
+      state.isUnknownError = payload
     }
+
   }
 })
 
-export const { setLang, setTheme, setLoading, setSearchOpen } = appSlice.actions
+export const { setLang, setTheme, setLoading, setSearchOpen, setUnknownError } = appSlice.actions
 
 export const AppReducer = appSlice.reducer
