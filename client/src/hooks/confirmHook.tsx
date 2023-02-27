@@ -1,7 +1,7 @@
 import { useSnackbar } from "notistack"
 import { Box, Button, Dialog, Typography } from "@mui/material"
-import { Text } from "../components/UI/Text"
-import { TransButton } from "../components/UI/TransButton"
+import { Text } from "../common/Text"
+import { TransButton } from "../common/TransButton"
 
 
 export const useConfirm = () => {

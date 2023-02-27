@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Lang } from "../../types/app"
 import { LANG, THEME } from "../../constants/localstorage"
 import { PaletteMode } from '@mui/material'
-import i18n from "../../i18n"
+import i18n from "../../locales/i18n"
 
 export interface AppState {
   theme: PaletteMode

@@ -7,9 +7,9 @@ import { store } from "./store/store"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import { SnackbarProvider } from "notistack"
-import { AppThemeProvider } from "./components/hoc/AppThemeProvider"
-import './i18n'
-import { ErrorMessageProvider } from "./components/hoc/ErrorMessageProvider"
+import { AppThemeProvider } from "./app/hoc/AppThemeProvider"
+import './locales/i18n'
+import { ErrorMessageProvider } from "./app/hoc/ErrorMessageProvider"
 
 
 const root = ReactDOM.createRoot(
