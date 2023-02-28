@@ -84,6 +84,12 @@
     "Go back": "Go back",
     "Collection not found": "Collection not found",
     "Something went wrong. Try to return to the main page": "Something went wrong. Try to return to the main page",
-    "Go to the main page": "Go to the main page"
+    "Go to the main page": "Go to the main page",
+    "Edit profile": "Edit profile",
+    "New password": "New password",
+    "To change the profile, enter the old password": "To change the profile, enter the old password",
+    "* after saving, an email with a confirmation link will be sent to your email": "* after saving, an email with a confirmation link will be sent to your email",
+    "Confirmation of account changes...": "Confirmation of account changes...",
+    "Creating an account...": "Creating an account..."
   }
 }

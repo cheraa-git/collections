@@ -1,14 +1,16 @@
-import dotenv from "dotenv"
 import * as jwt from "jsonwebtoken"
 import { JwtPayload } from "jsonwebtoken"
 import { Users } from "../db/models/Users"
+import * as bcrypt from "bcrypt"
+import { EditProfileTokenData } from "../../common/common-types"
+import { Either, left, right } from "@sweet-monads/either"
+import { TokenError } from "../../common/errors/TokenError"
 
 
 const TOKEN_SECRET_KEY = String(process.env.TOKEN_SECTET_KEY)
 
 export const checkToken = (token?: string, userId?: number): boolean => {
   if (!token || !userId) return false
-  dotenv.config()
   try {
     const jwtPayload = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload
     return (jwtPayload.id === userId || jwtPayload.isAdmin) && jwtPayload.status === 'active'
@@ -21,18 +23,16 @@ export const checkAutoLoginToken = (token: string): { email: string, hashPasswor
   try {
     const jwtPayload = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload
     const iat = jwtPayload.iat as number
-    const isExpired = (((iat + 3600) * 24) * 1000) < Date.now()
+    const isExpired = ((iat + 3600 * 24) * 1000) < Date.now()
     const statusIsAvailable = jwtPayload.status === 'active'
-    const isAvailable = isExpired && statusIsAvailable
+    const isAvailable = !isExpired && statusIsAvailable
     return { email: jwtPayload.email, hashPassword: jwtPayload.hashPassword, isAvailable }
   } catch (e) {
     return { email: '', hashPassword: '', isAvailable: false }
   }
 }
-
 export const checkAdminToken = (token?: string): boolean => {
   if (!token) return false
-  dotenv.config()
   try {
     const jwtPayload = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload
     return jwtPayload.isAdmin && jwtPayload.status === 'active'
@@ -51,4 +51,21 @@ export const createToken = (user: Users) => {
       status: user.status
     }
     , TOKEN_SECRET_KEY)
+}
+
+export const createEditProfileToken = async (data: EditProfileTokenData) => {
+  if (data.password) data.password = await bcrypt.hash(data.password, 10)
+  return jwt.sign(data, TOKEN_SECRET_KEY)
+}
+
+export const parseEditProfileToken = (token?: string): Either<TokenError, EditProfileTokenData> => {
+  if (!token) return left(new TokenError('parseEditProfileToken: Token not found'))
+  try {
+    const payload = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload
+    return right(
+      { email: payload?.email, password: payload?.password, nickname: payload?.nickname, oldEmail: payload.oldEmail }
+    )
+  } catch (e) {
+    return left(new TokenError('parseEditProfileToken: Error'))
+  }
 }

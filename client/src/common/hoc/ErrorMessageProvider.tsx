@@ -3,11 +3,12 @@ import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { useSnackbar } from "notistack"
 import { setItemErrorMessage } from "../../store/slices/itemSlice"
 import { IconButton, Tooltip } from "@mui/material"
-import { ReplyIcon } from "../../common/icons"
+import { ReplyIcon } from "../icons"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { setCollectionErrorMessage } from "../../store/slices/collectionSlice"
 import { setUnknownError } from "../../store/slices/appSlice"
+import { setProfileErrorMessage } from "../../store/slices/profileSlice"
 
 export const ErrorMessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { t } = useTranslation()
@@ -16,6 +17,7 @@ export const ErrorMessageProvider: FC<{ children: ReactNode }> = ({ children }) 
   const { enqueueSnackbar: snackbar, closeSnackbar } = useSnackbar()
   const itemErrorMessage = useAppSelector((state: RootState) => state.item.errorMessage)
   const collectionErrorMessage = useAppSelector((state: RootState) => state.collection.errorMessage)
+  const profileErrorMessage = useAppSelector((state: RootState) => state.profile.errorMessage)
   const isUnknownError = useAppSelector((state: RootState) => state.app.isUnknownError)
 
   const onGoBack = () => {
@@ -42,19 +44,24 @@ export const ErrorMessageProvider: FC<{ children: ReactNode }> = ({ children }) 
   }
 
   useEffect(() => {
-    if (itemErrorMessage) {
-      showErrorSnackbar(itemErrorMessage)
-      dispatch(setItemErrorMessage(''))
-    }
-    if (collectionErrorMessage) {
-      showErrorSnackbar(collectionErrorMessage)
-      dispatch(setCollectionErrorMessage(''))
-    }
-    if (isUnknownError) {
-      showErrorSnackbar('Something went wrong. Try to return to the main page', onGoHome, 'Go to the main page')
-      dispatch(setUnknownError(false))
-    }
-  }, [itemErrorMessage, collectionErrorMessage, isUnknownError])
+      if (itemErrorMessage) {
+        showErrorSnackbar(itemErrorMessage)
+        dispatch(setItemErrorMessage(''))
+      }
+      if (collectionErrorMessage) {
+        showErrorSnackbar(collectionErrorMessage)
+        dispatch(setCollectionErrorMessage(''))
+      }
+      if (isUnknownError) {
+        showErrorSnackbar('Something went wrong. Try to return to the main page', onGoHome, 'Go to the main page')
+        dispatch(setUnknownError(false))
+      }
+      if (profileErrorMessage) {
+        showErrorSnackbar(profileErrorMessage)
+        dispatch(setProfileErrorMessage(''))
+      }
+    },
+    [itemErrorMessage, collectionErrorMessage, isUnknownError, dispatch, onGoHome, profileErrorMessage])
   return (
     <>
       {children}

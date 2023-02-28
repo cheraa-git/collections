@@ -83,6 +83,12 @@
     "Go back": "Вернуться назад",
     "Collection not found": "Коллекция не найдена",
     "Something went wrong. Try to return to the main page": "Что-то пошло не так. Попробуйте вернуться на главную страницу.",
-    "Go to the main page": "Вернуться на главную"
+    "Go to the main page": "Вернуться на главную",
+    "Edit profile": "Изменить профиль",
+    "New password": "Новый пароль",
+    "To change the profile, enter the old password": "Для изменения профиля, введите старый пароль",
+    "* after saving, an email with a confirmation link will be sent to your email": "* после сохранения, вам на почту будет отправлено письмо с ссылкой подтверждения",
+    "Confirmation of account changes...": "Подтверждение изменений аккаунта...",
+    "Creating an account...": "Создание аккаунта..."
   }
 }

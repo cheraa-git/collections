@@ -16,7 +16,7 @@ class AuthController {
     if (!nickname || !email || !password) {
       return res.status(401).json(new AuthorizationError('Registration data invalid'))
     }
-    const response = await registerUser(nickname, email, avatarUrl, password)
+    const response = await registerUser(nickname, email, password, avatarUrl)
     response
       .mapRight(user => res.json(user))
       .mapLeft(e => res.status(401).json(e))

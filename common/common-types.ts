@@ -1,4 +1,3 @@
-
 export interface User {
   id: number
   nickname: string
@@ -54,6 +53,7 @@ export interface Like {
 
 export interface Fields {
   name: string
+
   [type: string]: string | number | boolean
 }
 
@@ -89,4 +89,11 @@ export interface SocketData {
 }
 
 export type UserStatus = 'active' | 'blocked' | 'deleted'
+
+export interface EditProfileTokenData {
+  email?: string,
+  nickname?: string,
+  password?: string
+  oldEmail: string
+}
 

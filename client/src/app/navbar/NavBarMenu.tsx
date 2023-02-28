@@ -51,13 +51,13 @@ export const NavBarMenu: FC = () => {
             <MenuItem>
               <AccountCircleIcon color="primary"/>
               <Typography ml={2} className="capitalize">{currentUser.nickname}</Typography>
-              <Text variant="caption" alignSelf="end" ml="auto" hidden={!currentUser.isAdmin}>admin</Text>
+              <Text variant="caption" alignSelf="center" ml="auto" hidden={!currentUser.isAdmin}>admin</Text>
             </MenuItem>
           </Link>
 
           <Link to="/admin" onClick={handleClose} hidden={!currentUser.isAdmin}>
             <MenuItem>
-              <AdminPanelSettingsIcon />
+              <AdminPanelSettingsIcon/>
               <Text ml={2}>Admin panel</Text>
             </MenuItem>
           </Link>

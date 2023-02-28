@@ -17,6 +17,7 @@ import { getTags } from "./store/actions/itemActions"
 import { useTranslation } from "react-i18next"
 import { useApp } from "./hooks/appStateHook"
 import { AdminPage } from "./app/admin/AdminPage"
+import { ConfirmationPage } from "./app/auth/ConfirmationPage"
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
       <NavBar/>
       <Routes>
         <Route path="/" element={<MainPage/>}/>
+        <Route path="/confirmation/:mode/:token" element={<ConfirmationPage/>}/>
         <Route path="/auth/:mode" element={<AuthPage/>}/>
         <Route path="/admin" element={<AdminPage/>}/>
         <Route path="create_collection" element={<CreateCollectionPage/>}/>

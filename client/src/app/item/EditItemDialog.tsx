@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react"
 import { ItemField } from "./ItemField"
-import { Box, Dialog, TextField } from "@mui/material"
+import { Box, TextField } from "@mui/material"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { useAppDispatch } from "../../store/store"
 import { createItem, editItem } from "../../store/actions/itemActions"
@@ -10,6 +10,7 @@ import { TagsArea } from "./TagsArea"
 import { Text } from "../../common/Text"
 import { TransButton } from "../../common/TransButton"
 import { useTranslation } from "react-i18next"
+import { BlurDialog } from "../../common/BlurDialog"
 
 
 interface EditItemDialogProps {
@@ -44,7 +45,7 @@ export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collect
 
 
   return (
-    <Dialog open={open} fullWidth onClose={onClose}>
+    <BlurDialog open={open} fullWidth onClose={onClose}>
       <Box component="form" px={3} py={1} onSubmit={handleSubmit(submitHandler)}>
         <Text variant="h5">{item ? 'Edit' : 'Create'} item</Text>
         <TextField label={t("title")} size="small" margin="dense" fullWidth
@@ -68,6 +69,6 @@ export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collect
           <TransButton type="submit">Save</TransButton>
         </Box>
       </Box>
-    </Dialog>
+    </BlurDialog>
   )
 }

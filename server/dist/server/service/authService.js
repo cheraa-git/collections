@@ -39,7 +39,7 @@ const either_1 = require("@sweet-monads/either");
 const AuthorizationError_1 = require("../../common/errors/AuthorizationError");
 const DatabaseError_1 = require("../../common/errors/DatabaseError");
 const tokenService_1 = require("./tokenService");
-const registerUser = (nickname, avatarUrl, password, email) => __awaiter(void 0, void 0, void 0, function* () {
+const registerUser = (nickname, email, password, avatarUrl) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const hashPassword = yield bcrypt.hash(password, 10);
         const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' };

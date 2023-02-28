@@ -7,13 +7,11 @@ import { DatabaseError } from "../../common/errors/DatabaseError"
 import { createToken } from "./tokenService"
 
 
-
-
 interface RegisterUser {
-  (nickname: string, email: string, avatarUrl: string, password: string): Promise<Either<AuthorizationError | DatabaseError, User>>
+  (nickname: string, email: string, password: string, avatarUrl: string,): Promise<Either<AuthorizationError | DatabaseError, User>>
 }
 
-export const registerUser: RegisterUser = async (nickname, avatarUrl, password, email) => {
+export const registerUser: RegisterUser = async (nickname, email, password, avatarUrl) => {
   try {
     const hashPassword = await bcrypt.hash(password, 10)
     const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' }
