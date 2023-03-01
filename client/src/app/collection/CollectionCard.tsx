@@ -12,11 +12,12 @@ import { useApp } from "../../hooks/appStateHook"
 import { Link } from "react-router-dom"
 import { TransButton } from "../../common/TransButton"
 import Image from 'mui-image'
+import { ArticleTwoToneIcon } from "../../common/icons"
 
 
 interface CollectionCardProps {
   collection: Collection
-  user: ProfileUser
+  user?: ProfileUser
 }
 
 export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) => {
@@ -33,13 +34,16 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
           <Typography minWidth="max-content" variant="caption">{dateTimeFormat(collection.timestamp)}</Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <TypographyLink to={`/profile/${collection.userId}`} className="capitalize">@{user.nickname}</TypographyLink>
+
+          <TypographyLink to={`/profile/${collection.userId}`} className="capitalize">
+            {user?.nickname || collection.userNickname}
+          </TypographyLink>
           <Chip label={getThemeName(collection.themeId)} size="small" sx={{ mb: 1 }}/>
         </Box>
       </Box>
       <Grid container spacing={2}>
         <Grid item md={4} xs={12} hidden={!collection.imageUrl}>
-          <Box maxWidth="400px" >
+          <Box maxWidth="400px">
             <Image src={collection.imageUrl || ''} alt="collection" showLoading/>
           </Box>
         </Grid>
@@ -49,7 +53,15 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
           </Box>
         </Grid>
       </Grid>
-      <Box display="flex" justifyContent="end" className="border-t w-full">
+      <Box display="flex" justifyContent="space-between" className="border-t w-full">
+        {
+          collection.countItems &&
+          <Box display="flex" mt={1}>
+            <ArticleTwoToneIcon/>
+            <Typography>{collection.countItems}</Typography>
+          </Box>
+        }
+
         <Link to={`/collection/${collection.id}`}>
           <TransButton>Open</TransButton>
         </Link>

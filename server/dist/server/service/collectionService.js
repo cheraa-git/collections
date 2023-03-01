@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllCollections = exports.editCollection = exports.deleteCollection = exports.getCollection = exports.createCollection = void 0;
+exports.getNextCollections = exports.getAllCollections = exports.editCollection = exports.deleteCollection = exports.getCollection = exports.createCollection = void 0;
 const Collections_1 = require("../db/models/Collections");
 const ItemConfigs_1 = require("../db/models/ItemConfigs");
 const Users_1 = require("../db/models/Users");
@@ -18,6 +18,7 @@ const Tags_1 = require("../db/models/Tags");
 const utils_1 = require("../utils");
 const either_1 = require("@sweet-monads/either");
 const DatabaseError_1 = require("../../common/errors/DatabaseError");
+const collectionQueries_1 = require("./queries/collectionQueries");
 const createCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newCollection = yield Collections_1.Collections.create(collection);
@@ -34,18 +35,18 @@ const createCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, 
 exports.createCollection = createCollection;
 const getCollection = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield Collections_1.Collections.findOne({
+        const response = (yield Collections_1.Collections.findOne({
             where: { id },
             include: [
                 { model: ItemConfigs_1.ItemConfigs },
-                { model: Users_1.Users, attributes: ['nickname'] },
+                { model: Users_1.Users },
                 { model: Items_1.Items, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] }
             ]
-        });
+        }));
         if (!response)
             return (0, either_1.right)(undefined);
         const collection = Object.assign(Object.assign({}, response.dataValues), { userName: response.users.nickname, itemConfigs: undefined, users: undefined, items: undefined });
-        const items = response.items.map(i => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(i)), { userId: response.userId })));
+        const items = response.items.map(i => (Object.assign({}, (0, utils_1.filterItem)(i))));
         return (0, either_1.right)({ collection, itemConfigs: response.itemConfigs, items });
     }
     catch (e) {
@@ -84,3 +85,16 @@ const getAllCollections = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAllCollections = getAllCollections;
+const getNextCollections = (offset, limit) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const collections = (yield (0, collectionQueries_1.getCollectionsByItemCountQuery)(offset, limit))
+            .map((w) => (Object.assign(Object.assign({}, w.collections.dataValues), { userNickname: w.collections.users.nickname, countItems: w.dataValues.count, users: undefined })));
+        if (collections.length === 0)
+            return (0, either_1.right)([]);
+        return (0, either_1.right)(collections);
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('getNextCollections: Error', e));
+    }
+});
+exports.getNextCollections = getNextCollections;

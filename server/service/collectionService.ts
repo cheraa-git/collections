@@ -8,6 +8,7 @@ import { filterItem } from "../utils"
 import { Either, left, right } from "@sweet-monads/either"
 import { DatabaseError } from "../../common/errors/DatabaseError"
 import { EditCollectionResponse, GetCollectionResponse } from "../../common/response-types"
+import { getCollectionsByItemCountQuery } from "./queries/collectionQueries"
 
 
 interface CreateCollection {
@@ -29,21 +30,21 @@ export const createCollection: CreateCollection = async (collection, itemConfigs
 
 export const getCollection = async (id: number): Promise<Either<DatabaseError, GetCollectionResponse | undefined>> => {
   try {
-    const response = await Collections.findOne({
+    const response = (await Collections.findOne({
       where: { id },
       include: [
         { model: ItemConfigs },
-        { model: Users, attributes: ['nickname'] },
+        { model: Users },
         { model: Items, include: [{ model: Tags, through: { attributes: [] } }] }
       ]
-    })
+    }))
     if (!response) return right(undefined)
     const collection = {
       ...response.dataValues,
       userName: response.users.nickname,
       itemConfigs: undefined, users: undefined, items: undefined
     }
-    const items = response.items.map(i => ({ ...filterItem(i), userId: response.userId } as Item))
+    const items = response.items.map(i => ({ ...filterItem(i) } as Item))
     return right({ collection, itemConfigs: response.itemConfigs, items })
   } catch (e) {
     return left(new DatabaseError('Get collection error', e))
@@ -79,5 +80,22 @@ export const getAllCollections = async (): Promise<Either<DatabaseError, Collect
     return right(await Collections.findAll())
   } catch (e) {
     return left(new DatabaseError('Get all collection error'))
+  }
+}
+
+export const getNextCollections = async (offset: number, limit: number): Promise<Either<DatabaseError, Collection[]>> => {
+  try {
+    const collections = (await getCollectionsByItemCountQuery(offset, limit))
+      .map((w: any) => ({
+          ...w.collections.dataValues,
+          userNickname: w.collections.users.nickname,
+          countItems: w.dataValues.count,
+          users: undefined
+        })
+      )
+    if (collections.length === 0) return right([])
+    return right(collections)
+  } catch (e) {
+    return left(new DatabaseError('getNextCollections: Error', e))
   }
 }

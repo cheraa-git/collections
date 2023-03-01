@@ -9,4 +9,5 @@ exports.collectionRouter.post('/', controller.handleCreateCollection);
 exports.collectionRouter.patch('/', controller.handleEditCollection);
 exports.collectionRouter.delete('/', controller.handleDeleteCollection);
 exports.collectionRouter.get('/themes', controller.getThemes);
+exports.collectionRouter.get('/next', controller.handleGetNextCollections);
 exports.collectionRouter.get('/:id', controller.handleGetCollection);

@@ -4,7 +4,7 @@ import { Model } from "sequelize-typescript"
 export const filterItem = (item: Items | null) => {
   if (!item) return {}
   const filterItem: { [key: string]: any } = {}
-  Object.entries(item?.dataValues).forEach(([key, value]) => {
+  Object.entries(item?.dataValues || item).forEach(([key, value]) => {
     if (value) {
       filterItem[key] = value
     }

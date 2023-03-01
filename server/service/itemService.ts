@@ -9,6 +9,8 @@ import { Either, left, right } from "@sweet-monads/either"
 import { DatabaseError } from "../../common/errors/DatabaseError"
 import { GetItemResponse } from "../../common/response-types"
 import { NotFoundError } from "../../common/errors/NotFoundError"
+import { Users } from "../db/models/Users"
+import { Sequelize } from "sequelize-typescript"
 
 
 const createItemTags = async (tags: Tag[], itemId: number): Promise<Either<DatabaseError, Tag[]>> => {
@@ -42,19 +44,22 @@ export const createItem: CreateItem = async (userId, collectionId, fields, tags)
     const timestamp = `${Date.now()}`
     const newItem = await Items.create({ collectionId, timestamp, ...fields })
     const newTagsResponse = await createItemTags(tags, newItem.id)
-    return newTagsResponse.map(newTags => ({ ...filterItem(newItem), tags: newTags, userId } as Item))
+    return newTagsResponse.map(newTags => ({ ...filterItem(newItem), tags: newTags } as Item))
   } catch (e) {
+    console.log(e)
     return left(new DatabaseError('Create item error', e))
   }
 }
 
+
 export const getItem = async (itemId: number): Promise<Either<DatabaseError | NotFoundError, GetItemResponse>> => {
   try {
-    const item = await Items.findOne({ where: { id: itemId }, include: [{ model: Tags, through: { attributes: [] } }] })
+
+    const item = await Items.findOne({ where: { id: itemId }, include: { model: Tags, through: { attributes: [] } } })
     if (!item) return left(new NotFoundError(`Item number ${itemId} not found`))
     const itemConfigs = await ItemConfigs.findAll({ where: { collectionId: item?.collectionId } })
-    const userId = (await Collections.findOne({ where: { id: item?.collectionId }, attributes: ['userId'] }))?.userId
-    return right({ item: { ...filterItem(item), userId } as Item, itemConfigs })
+    const user = (await Collections.findOne({ where: { id: item.collectionId }, include: Users }))?.users
+    return right({ item: { ...filterItem(item), userId: user?.id, userNickname: user?.nickname } as Item, itemConfigs })
   } catch (e) {
     console.log('item', e)
     return left(new DatabaseError('Get item error', e))
@@ -95,5 +100,19 @@ export const getAllItems = async (): Promise<Either<DatabaseError, Items[]>> => 
     return right(await Items.findAll())
   } catch (e) {
     return left(new DatabaseError('Delete item error', e))
+  }
+}
+
+export const getNextItems = async (offset: number, limit: number): Promise<Either<DatabaseError, Items[]>> => {
+  try {
+    const items = await Items.findAll({
+      offset, limit,
+      include: [{ model: Tags, through: { attributes: [] } }],
+      order: [Sequelize.literal('timestamp DESC')]
+    })
+    if (items.length === 0) return right([])
+    return right(items.map(item => (filterItem(item) as Items)))
+  } catch (e) {
+    return left(new DatabaseError('getNextItems: Error', e))
   }
 }

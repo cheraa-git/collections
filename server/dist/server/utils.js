@@ -5,7 +5,7 @@ const filterItem = (item) => {
     if (!item)
         return {};
     const filterItem = {};
-    Object.entries(item === null || item === void 0 ? void 0 : item.dataValues).forEach(([key, value]) => {
+    Object.entries((item === null || item === void 0 ? void 0 : item.dataValues) || item).forEach(([key, value]) => {
         if (value) {
             filterItem[key] = value;
         }

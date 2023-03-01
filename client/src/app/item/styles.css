@@ -3,14 +3,24 @@
     display: flex;
     padding: .5rem 1rem;
     position: relative;
-    height: 50px;
+    height: 60px;
 }
 
 .item-card > .card-header {
     margin-right: .5rem;
+}
+
+.card-title {
     font-weight: bold;
     align-self: center;
 }
+
+.card-date {
+    font-weight: bold;
+    align-self: center;
+}
+
+
 
 .item-card > .card-tags {
     display: flex;

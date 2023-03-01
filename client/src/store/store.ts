@@ -6,6 +6,7 @@ import { ProfileReducer } from "./slices/profileSlice"
 import { AppReducer } from "./slices/appSlice"
 import { ItemReducer } from "./slices/itemSlice"
 import { AdminReducer } from "./slices/adminSlice"
+import { MainReducer } from "./slices/mainSlice"
 
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
     item: ItemReducer,
     profile: ProfileReducer,
     admin: AdminReducer,
+    main: MainReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({
     serializableCheck: {

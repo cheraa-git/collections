@@ -50,15 +50,16 @@ export const getItem = (id: number) => async (dispatch: AppDispatch) => {
     .mapRight(({ data }) => {
       dispatch(addItem(data.item))
       dispatch(setItemConfigs(data.itemConfigs))
+      dispatch(setLoading(false))
     })
     .mapLeft(e => {
       if (e.response?.data.name === 'NotFoundError') dispatch(setItemErrorMessage('Item not found'))
       if (e.response?.data.name === 'DatabaseError') {
         console.log(e.response?.data)
         dispatch(setUnknownError(true))
+        dispatch(setLoading(false))
       }
     })
-  dispatch(setLoading(false))
 }
 
 

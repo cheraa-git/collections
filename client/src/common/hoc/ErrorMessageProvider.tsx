@@ -26,7 +26,7 @@ export const ErrorMessageProvider: FC<{ children: ReactNode }> = ({ children }) 
   }
 
   const onGoHome = () => {
-    navigate('/')
+    document.location.href = '/'
     closeSnackbar()
   }
 

@@ -60,7 +60,7 @@ export const CollectionPage: FC = () => {
           <i className="flex">
             <Text>Created by</Text>
             <TypographyLink to={`/profile/${collection.userId}`} mx={1} className="link">
-              @{collection.userName}
+              @{collection.userNickname}
             </TypographyLink>
             <Typography>{t('on')} {dateFormat(collection.timestamp)}</Typography>
           </i>

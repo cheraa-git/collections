@@ -27,6 +27,7 @@ export const itemSlice = createSlice({
     addItem: (state, { payload }: PayloadAction<Item>) => {
       if (!state.items.find(item => item.id === payload.id)) {
         state.items.push(payload)
+        console.log(payload)
       }
     },
     setItem: (state, { payload }: PayloadAction<Item>) => {

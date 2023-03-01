@@ -90,6 +90,9 @@
     "To change the profile, enter the old password": "To change the profile, enter the old password",
     "* after saving, an email with a confirmation link will be sent to your email": "* after saving, an email with a confirmation link will be sent to your email",
     "Confirmation of account changes...": "Confirmation of account changes...",
-    "Creating an account...": "Creating an account..."
+    "Creating an account...": "Creating an account...",
+    "Open collection": "Open collection",
+    "author": "author:",
+    "Collections": "Collections"
   }
 }

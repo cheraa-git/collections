@@ -1,7 +1,13 @@
 import { Request, Response } from "express"
 import { CreateCollectionBody, DeleteCollectionBody, EditCollectionBody, } from "../../../common/request-types"
 import { Themes } from "../../db/models/Themes"
-import { createCollection, deleteCollection, editCollection, getCollection } from "../../service/collectionService"
+import {
+  createCollection,
+  deleteCollection,
+  editCollection,
+  getCollection,
+  getNextCollections
+} from "../../service/collectionService"
 import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../common/errors/TokenError"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
@@ -48,5 +54,13 @@ export class CollectionController {
     } catch (e) {
       res.status(500).json(new DatabaseError('Get themes', e))
     }
+  }
+
+  async handleGetNextCollections({ query: { offset, limit } }: Request, res: Response) {
+    if (!offset || !limit) return res.json([])
+    const collectionsResponse = await getNextCollections(Number(offset), Number(limit))
+    collectionsResponse
+      .mapRight(items => res.json(items))
+      .mapLeft(e => res.status(500).json(e))
   }
 }

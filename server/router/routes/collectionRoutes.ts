@@ -10,7 +10,9 @@ collectionRouter.post('/', controller.handleCreateCollection)
 collectionRouter.patch('/', controller.handleEditCollection)
 collectionRouter.delete('/', controller.handleDeleteCollection)
 collectionRouter.get('/themes', controller.getThemes)
+collectionRouter.get('/next', controller.handleGetNextCollections)
 collectionRouter.get('/:id', controller.handleGetCollection)
+
 
 
 

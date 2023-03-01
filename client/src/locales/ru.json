@@ -89,6 +89,9 @@
     "To change the profile, enter the old password": "Для изменения профиля, введите старый пароль",
     "* after saving, an email with a confirmation link will be sent to your email": "* после сохранения, вам на почту будет отправлено письмо с ссылкой подтверждения",
     "Confirmation of account changes...": "Подтверждение изменений аккаунта...",
-    "Creating an account...": "Создание аккаунта..."
+    "Creating an account...": "Создание аккаунта...",
+    "Open collection": "Открыть коллекцию",
+    "author": "автор:",
+    "Collections": "Коллекции"
   }
 }

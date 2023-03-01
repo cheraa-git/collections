@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { CreateItemBody, DeleteItemBody, EditItemBody } from "../../../common/request-types"
 import { Tags } from "../../db/models/Tags"
-import { createItem, deleteItem, editItem, getItem, getItemAuthorId } from "../../service/itemService"
+import { createItem, deleteItem, editItem, getItem, getItemAuthorId, getNextItems } from "../../service/itemService"
 import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../common/errors/TokenError"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
@@ -48,6 +48,14 @@ export class ItemController {
     } catch (e) {
       res.status(500).json(new DatabaseError('Get tags error', e))
     }
+  }
+
+  async handleGetNextItems({ query: { offset, limit } }: Request, res: Response) {
+    if (!offset || !limit) return res.json([])
+    const itemsResponse = await getNextItems(Number(offset), Number(limit))
+    itemsResponse
+      .mapRight(items => res.json(items))
+      .mapLeft(e => res.status(500).json(e))
   }
 
 }

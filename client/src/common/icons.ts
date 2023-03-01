@@ -19,7 +19,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import BlockIcon from '@mui/icons-material/Block'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import ReplyIcon from '@mui/icons-material/Reply'
-
+import ArticleTwoToneIcon from '@mui/icons-material/ArticleTwoTone';
 export {
   LoginIcon,
   PersonAddIcon,
@@ -41,5 +41,6 @@ export {
   AdminPanelSettingsIcon,
   BlockIcon,
   CheckCircleOutlineIcon,
-  ReplyIcon
+  ReplyIcon,
+  ArticleTwoToneIcon
 }

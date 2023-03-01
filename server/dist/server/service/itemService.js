@@ -20,7 +20,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllItems = exports.deleteItem = exports.editItem = exports.getItemAuthorId = exports.getItem = exports.createItem = void 0;
+exports.getNextItems = exports.getAllItems = exports.deleteItem = exports.editItem = exports.getItemAuthorId = exports.getItem = exports.createItem = void 0;
 const Items_1 = require("../db/models/Items");
 const utils_1 = require("../utils");
 const Tags_1 = require("../db/models/Tags");
@@ -30,6 +30,8 @@ const Collections_1 = require("../db/models/Collections");
 const either_1 = require("@sweet-monads/either");
 const DatabaseError_1 = require("../../common/errors/DatabaseError");
 const NotFoundError_1 = require("../../common/errors/NotFoundError");
+const Users_1 = require("../db/models/Users");
+const sequelize_typescript_1 = require("sequelize-typescript");
 const createItemTags = (tags, itemId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const addedTags = tags.filter(tag => tag.id);
@@ -57,9 +59,10 @@ const createItem = (userId, collectionId, fields, tags) => __awaiter(void 0, voi
         const timestamp = `${Date.now()}`;
         const newItem = yield Items_1.Items.create(Object.assign({ collectionId, timestamp }, fields));
         const newTagsResponse = yield createItemTags(tags, newItem.id);
-        return newTagsResponse.map(newTags => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(newItem)), { tags: newTags, userId })));
+        return newTagsResponse.map(newTags => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(newItem)), { tags: newTags })));
     }
     catch (e) {
+        console.log(e);
         return (0, either_1.left)(new DatabaseError_1.DatabaseError('Create item error', e));
     }
 });
@@ -67,12 +70,12 @@ exports.createItem = createItem;
 const getItem = (itemId) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const item = yield Items_1.Items.findOne({ where: { id: itemId }, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] });
+        const item = yield Items_1.Items.findOne({ where: { id: itemId }, include: { model: Tags_1.Tags, through: { attributes: [] } } });
         if (!item)
             return (0, either_1.left)(new NotFoundError_1.NotFoundError(`Item number ${itemId} not found`));
         const itemConfigs = yield ItemConfigs_1.ItemConfigs.findAll({ where: { collectionId: item === null || item === void 0 ? void 0 : item.collectionId } });
-        const userId = (_a = (yield Collections_1.Collections.findOne({ where: { id: item === null || item === void 0 ? void 0 : item.collectionId }, attributes: ['userId'] }))) === null || _a === void 0 ? void 0 : _a.userId;
-        return (0, either_1.right)({ item: Object.assign(Object.assign({}, (0, utils_1.filterItem)(item)), { userId }), itemConfigs });
+        const user = (_a = (yield Collections_1.Collections.findOne({ where: { id: item.collectionId }, include: Users_1.Users }))) === null || _a === void 0 ? void 0 : _a.users;
+        return (0, either_1.right)({ item: Object.assign(Object.assign({}, (0, utils_1.filterItem)(item)), { userId: user === null || user === void 0 ? void 0 : user.id, userNickname: user === null || user === void 0 ? void 0 : user.nickname }), itemConfigs });
     }
     catch (e) {
         console.log('item', e);
@@ -121,3 +124,19 @@ const getAllItems = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAllItems = getAllItems;
+const getNextItems = (offset, limit) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const items = yield Items_1.Items.findAll({
+            offset, limit,
+            include: [{ model: Tags_1.Tags, through: { attributes: [] } }],
+            order: [sequelize_typescript_1.Sequelize.literal('timestamp DESC')]
+        });
+        if (items.length === 0)
+            return (0, either_1.right)([]);
+        return (0, either_1.right)(items.map(item => (0, utils_1.filterItem)(item)));
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('getNextItems: Error', e));
+    }
+});
+exports.getNextItems = getNextItems;

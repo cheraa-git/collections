@@ -36,12 +36,13 @@ export const CreateCollectionPage: FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { isAuth, currentUser } = useAuth()
-  const { register, handleSubmit, formState: { errors }, watch, setValue, getValues, control } = useForm<Inputs>()
+  const
+    { register, handleSubmit, formState: { errors }, watch, setValue, reset, getValues, control } = useForm<Inputs>()
   const [configInputs, setConfigInputs] = useState<ItemConfigType[]>([{ type: '', label: '' }])
   const imageFile = watch('image') && watch('image').length > 0 ? watch('image')[0] : undefined
   const fixedConfigInputs = [['string', 'title'], ['tags', 'tags']]
   const editable: { collection: Collection, itemConfigs: ItemConfigType[] } | undefined = location.state?.editable
-  const userId = location.state?.userId ||  currentUser.id
+  const userId = location.state?.userId || currentUser.id
   const themes = useCollection().themes
 
 
@@ -51,10 +52,8 @@ export const CreateCollectionPage: FC = () => {
 
   useEffect(() => {
     if (editable) {
-      setValue('title', editable.collection.title)
-      setValue('description', editable.collection.description)
-      setValue('themeId', editable.collection.themeId)
-      setValue('existingImage', editable.collection.imageUrl)
+      const { title, description, themeId, imageUrl } = editable.collection
+      reset({ title, description, themeId, existingImage: imageUrl })
       setConfigInputs(editable.itemConfigs)
     }
   }, [])

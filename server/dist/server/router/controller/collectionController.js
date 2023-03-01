@@ -68,5 +68,15 @@ class CollectionController {
             }
         });
     }
+    handleGetNextCollections({ query: { offset, limit } }, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!offset || !limit)
+                return res.json([]);
+            const collectionsResponse = yield (0, collectionService_1.getNextCollections)(Number(offset), Number(limit));
+            collectionsResponse
+                .mapRight(items => res.json(items))
+                .mapLeft(e => res.status(500).json(e));
+        });
+    }
 }
 exports.CollectionController = CollectionController;

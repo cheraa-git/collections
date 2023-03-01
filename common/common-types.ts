@@ -11,18 +11,20 @@ export interface User {
 export interface Collection {
   id: number
   userId: number
-  userName?: string
+  userNickname?: string
   title: string
   description: string
   themeId: number
   timestamp: string
   imageUrl?: string
+  countItems?: string
 }
 
 export type Item = {
   id: number
-  userId: number
   collectionId: number
+  userId?: number
+  userNickname?: string
   name: string
   tags: Tag[]
   timestamp: string
