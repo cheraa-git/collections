@@ -1,7 +1,7 @@
-import { axiosGet, axiosPost } from "../../apis/axios/axios-app"
-import { setProfileErrorMessage, setProfileInfo } from "../slices/profileSlice"
+import { axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
+import { setProfileAvatar, setProfileErrorMessage, setProfileInfo } from "../slices/profileSlice"
 import { setLoading, setUnknownError } from "../slices/appSlice"
-import { AppDispatch } from "../store"
+import { AppDispatch, GetState } from "../store"
 import { GetProfileResponse } from "../../../../common/response-types"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { EditProfileBody } from "../../../../common/request-types"
@@ -9,6 +9,9 @@ import { AuthorizationError } from "../../../../common/errors/AuthorizationError
 import { GmailError } from "../../../../common/errors/GmailError"
 import { Either, left } from "@sweet-monads/either"
 import { AxiosResponse } from "axios"
+import { saveImageToCloud } from "../../apis/firebase/firebaseActions"
+import { TokenError } from "../../../../common/errors/TokenError"
+import { onTokenError } from "../slices/userSlice"
 
 export const getProfile = (userId: string) => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true))
@@ -35,7 +38,27 @@ export const sendConfirmProfileChange = (data: EditProfileBody) => async (dispat
     })
 }
 
-export const editProfile = async (editToken?: string): Promise<Either<any, AxiosResponse<number>>> => {
+export const editProfileInfo = async (editToken?: string): Promise<Either<any, AxiosResponse<number>>> => {
   if (!editToken) return left(new Error())
   return (await axiosPost<any, number>('/profile/edit', { token: editToken }))
+}
+
+export const editProfileImage = (userId: number, image?: File) => async (dispatch: AppDispatch, getState: GetState) => {
+  const token = getState().user.currentUser.token
+  let avatarUrl = await saveImageToCloud(image)
+  dispatch(setLoading(true))
+  const response = await axiosPatch<TokenError | DatabaseError, {avatarUrl: string}>('/profile/edit_avatar', {
+    avatarUrl, token, userId
+  })
+  response
+    .mapRight(({ data }) => dispatch(setProfileAvatar(data.avatarUrl)))
+    .mapLeft(e => {
+      if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
+      else {
+        console.log(e.response?.data)
+        dispatch(setUnknownError(true))
+      }
+    })
+  dispatch(setLoading(false))
+
 }

@@ -21,9 +21,7 @@ export const ImageDrop: FC<ImageDropProps> = ({ imageFile, inputProps, className
   const sizeAllowed = imageFile && imageFile.size > MAX_IMAGE_SIZE
 
   return (
-    <Box
-      className={`drop ${className}`}>
-
+    <Box className={`drop ${className}`}>
       <p className={`drop-max-size ${sizeAllowed && 'red'}`}>
         {imageFile
           ? `${t('size')} ${imageFile && formatFileSize(imageFile.size)}`

@@ -2,7 +2,7 @@
     border: 2px dashed var(--border-color);
     position: relative;
     width: 300px;
-    height: 220px;
+    height: 240px;
     transition: all .3s;
     background: rgba(255, 255, 255, 0.08);
 }
@@ -12,6 +12,7 @@
 }
 
 .drop-max-size {
+    margin: 0;
     position: absolute;
     font-size: 0.875rem ;
     right: 0.25rem;

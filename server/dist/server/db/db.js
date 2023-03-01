@@ -27,5 +27,11 @@ const connection = new sequelize_typescript_1.Sequelize({
         ssl: true,
         native: true,
     },
+    pool: {
+        min: 0,
+        max: 10,
+        idle: 8000,
+        acquire: 8000,
+    }
 });
 exports.default = connection;

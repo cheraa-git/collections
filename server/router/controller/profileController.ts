@@ -1,8 +1,10 @@
 import { Request, Response } from "express"
-import { editProfile, getProfile } from "../../service/profileService"
+import { editAvatar, editProfile, getProfile } from "../../service/profileService"
 import { EditProfileBody } from "../../../common/request-types"
 import { checkLoginData } from "../../service/authService"
 import { sendConfirmProfileChange } from "../../service/emailService"
+import { checkToken } from "../../service/tokenService"
+import { TokenError } from "../../../common/errors/TokenError"
 
 
 export class ProfileController {
@@ -29,6 +31,15 @@ export class ProfileController {
   async handleEditProfile({ body: { token } }: Request, res: Response) {
     (await editProfile(token))
       .mapRight(userId => res.json(userId))
+      .mapLeft(e => res.status(500).json(e))
+  }
+
+  async handleEditAvatar(req: Request, res: Response) {
+    const { token, userId, avatarUrl } = req.body
+    if (!checkToken(token, userId)) return res.status(498).json(new TokenError())
+    const response = await editAvatar(userId, avatarUrl)
+    response
+      .mapRight(r => res.json(r))
       .mapLeft(e => res.status(500).json(e))
   }
 }

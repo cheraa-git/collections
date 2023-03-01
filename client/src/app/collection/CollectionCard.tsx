@@ -1,4 +1,3 @@
-import './styles.css'
 import { FC } from "react"
 import { Collection } from "../../../../common/common-types"
 import { ProfileUser } from "../../types/user"
@@ -25,7 +24,7 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
   const { getThemeName } = useCollection()
 
   return (
-    <Card className="card" sx={{ px: 2, py: 1, my: 2 }}>
+    <Card className="border" sx={{ px: 2, py: 1, my: 2 }}>
       <Box mb={1} className="border-b w-full">
         <Box display="flex" justifyContent="space-between" flexWrap="wrap">
           <Link to={`/collection/${collection.id}`}>
@@ -36,7 +35,7 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
         <Box display="flex" justifyContent="space-between">
 
           <TypographyLink to={`/profile/${collection.userId}`} className="capitalize">
-            {user?.nickname || collection.userNickname}
+            {user?.nickname || collection.userName}
           </TypographyLink>
           <Chip label={getThemeName(collection.themeId)} size="small" sx={{ mb: 1 }}/>
         </Box>
@@ -44,7 +43,7 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
       <Grid container spacing={2}>
         <Grid item md={4} xs={12} hidden={!collection.imageUrl}>
           <Box maxWidth="400px">
-            <Image src={collection.imageUrl || ''} alt="collection" showLoading/>
+            <Image src={collection.imageUrl || ''} alt="collection" showLoading duration={500}/>
           </Box>
         </Grid>
         <Grid item md={8} xs={12} data-color-mode={appTheme}>

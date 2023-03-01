@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { Spinner } from "../../common/Loader/Spinner"
 import { Box } from "@mui/material"
 import { Text } from "../../common/Text"
-import { editProfile } from "../../store/actions/profileActions"
+import { editProfileInfo } from "../../store/actions/profileActions"
 import { useAppDispatch } from "../../store/store"
 import { setUnknownError } from "../../store/slices/appSlice"
 
@@ -15,7 +15,7 @@ export const ConfirmationPage: FC = () => {
 
   useEffect(() => {
     (async function () {
-      const response = await editProfile(token)
+      const response = await editProfileInfo(token)
       response
         .mapRight(({ data: userId }) => navigate(`/profile/${userId}`))
         .mapLeft(() => dispatch(setUnknownError(true)))

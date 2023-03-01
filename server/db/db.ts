@@ -1,6 +1,6 @@
 'use strict'
-import { Sequelize } from 'sequelize-typescript';
-import dotenv from 'dotenv';
+import { Sequelize } from 'sequelize-typescript'
+import dotenv from 'dotenv'
 import { Users } from "./models/Users"
 import { Collections } from "./models/Collections"
 import { Items } from "./models/Items"
@@ -10,7 +10,8 @@ import { ItemsTags } from "./models/ItemsTags"
 import { Themes } from "./models/Themes"
 import { Comments } from "./models/Comments"
 import { Likes } from "./models/Likes"
-dotenv.config();
+
+dotenv.config()
 
 const connection = new Sequelize({
   dialect: 'postgres',
@@ -24,9 +25,15 @@ const connection = new Sequelize({
     ssl: true,
     native: true,
   },
-});
+  pool: {
+    min: 0,
+    max: 10,
+    idle: 8000,
+    acquire: 8000,
+  }
+})
 
-export default connection;
+export default connection
 
 
 

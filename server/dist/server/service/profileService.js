@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editProfile = exports.getProfile = void 0;
+exports.editAvatar = exports.editProfile = exports.getProfile = void 0;
 const Collections_1 = require("../db/models/Collections");
 const Users_1 = require("../db/models/Users");
 const either_1 = require("@sweet-monads/either");
@@ -38,7 +38,20 @@ const editProfile = (token) => __awaiter(void 0, void 0, void 0, function* () {
         }));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('editProfile Error', e));
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('editProfile: Error', e));
     }
 });
 exports.editProfile = editProfile;
+const editAvatar = (userId, avatar) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const updatedUser = (yield Users_1.Users.update({ avatarUrl: avatar }, {
+            where: { id: userId },
+            returning: ['avatarUrl']
+        }))[1][0];
+        return (0, either_1.right)({ avatarUrl: updatedUser.avatarUrl });
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('editAvatar: Error', e));
+    }
+});
+exports.editAvatar = editAvatar;

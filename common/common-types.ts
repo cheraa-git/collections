@@ -1,7 +1,7 @@
 export interface User {
   id: number
   nickname: string
-  avatar?: string
+  avatarUrl?: string
   email: string
   token: string
   isAdmin: boolean
@@ -11,7 +11,7 @@ export interface User {
 export interface Collection {
   id: number
   userId: number
-  userNickname?: string
+  userName?: string
   title: string
   description: string
   themeId: number

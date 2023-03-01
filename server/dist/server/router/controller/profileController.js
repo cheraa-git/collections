@@ -24,6 +24,8 @@ exports.ProfileController = void 0;
 const profileService_1 = require("../../service/profileService");
 const authService_1 = require("../../service/authService");
 const emailService_1 = require("../../service/emailService");
+const tokenService_1 = require("../../service/tokenService");
+const TokenError_1 = require("../../../common/errors/TokenError");
 class ProfileController {
     handleGetProfile(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -50,6 +52,17 @@ class ProfileController {
         return __awaiter(this, void 0, void 0, function* () {
             (yield (0, profileService_1.editProfile)(token))
                 .mapRight(userId => res.json(userId))
+                .mapLeft(e => res.status(500).json(e));
+        });
+    }
+    handleEditAvatar(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { token, userId, avatarUrl } = req.body;
+            if (!(0, tokenService_1.checkToken)(token, userId))
+                return res.status(498).json(new TokenError_1.TokenError());
+            const response = yield (0, profileService_1.editAvatar)(userId, avatarUrl);
+            response
+                .mapRight(r => res.json(r))
                 .mapLeft(e => res.status(500).json(e));
         });
     }

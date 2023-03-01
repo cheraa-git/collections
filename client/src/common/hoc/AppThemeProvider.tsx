@@ -31,7 +31,7 @@ export const AppThemeProvider: FC<{ children: ReactNode }> = ({ children }) => {
       ...palette
     },
     typography: {
-      fontFamily: "'Ubuntu', sans-serif;",
+      fontFamily: "'Nunito', sans-serif;",
       fontWeightRegular: '300',
       h1: {
         fontWeight: "bold"

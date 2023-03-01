@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from "react"
 import { BlurDialog } from "../../common/BlurDialog"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
-import { EditIcon } from "../../common/icons"
-import { Box, Button, TextField } from "@mui/material"
+import { Box, MenuItem, TextField } from "@mui/material"
 import { Text } from "../../common/Text"
 import { TransButton } from "../../common/TransButton"
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -19,7 +18,7 @@ interface Inputs {
   newPassword: string
 }
 
-export const EditProfileDialog: FC = () => {
+export const EditInfoMenuItem: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { enqueueSnackbar: snackbar } = useSnackbar()
@@ -49,21 +48,23 @@ export const EditProfileDialog: FC = () => {
     if (nickname && nickname !== currentUser.nickname) sendData.nickname = nickname
     if (newPassword) sendData.password = newPassword
     dispatch(sendConfirmProfileChange(sendData))
+    onClose()
   }
 
   return (
     <>
-      <Button size="small" onClick={() => setOpen(true)}><EditIcon fontSize="small"/></Button>
+      <MenuItem onClick={() => setOpen(true)}>{t('Edit profile info')}</MenuItem>
       <BlurDialog open={open} onClose={onClose} fullWidth>
         <Box component="form" px={3} py={1} onSubmit={handleSubmit(submitHandler)}>
           <Text variant="h5">Edit profile</Text>
-          <TextField label={t("Nickname")} size="small" margin="dense" fullWidth{...register('nickname')}/>
+          <TextField label={t("Nickname")} autoComplete="username" size="small" margin="dense"
+                     fullWidth{...register('nickname')}/>
           <TextField label="Email" size="small" margin="dense" fullWidth{...register('email')} error={!!errors.email}/>
-          <TextField type="password" label={t("New password")} size="small" margin="dense"
+          <TextField type="password" autoComplete="new-password" label={t("New password")} size="small" margin="dense"
                      fullWidth{...register('newPassword')}/>
 
           <Text mt={2}>To change the profile, enter the old password</Text>
-          <TextField label={t("Password")} type="password" size="small" margin="dense"
+          <TextField label={t("Password")} type="password" size="small" margin="dense" autoComplete="new-password"
                      fullWidth{...register('oldPassword', { required: true })}
                      error={!!errors.oldPassword}/>
 

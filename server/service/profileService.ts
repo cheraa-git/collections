@@ -28,7 +28,18 @@ export const editProfile = async (token: string): Promise<Either<DatabaseError |
         return user[1][0].id
       })
   } catch (e) {
-    return left(new DatabaseError('editProfile Error', e))
+    return left(new DatabaseError('editProfile: Error', e))
   }
 }
 
+export const editAvatar = async (userId: number, avatar: string): Promise<Either<DatabaseError, { avatarUrl: string }>> => {
+  try {
+    const updatedUser = (await Users.update({ avatarUrl: avatar }, {
+      where: { id: userId },
+      returning: ['avatarUrl']
+    }))[1][0]
+    return right({ avatarUrl: updatedUser.avatarUrl })
+  } catch (e) {
+    return left(new DatabaseError('editAvatar: Error', e))
+  }
+}

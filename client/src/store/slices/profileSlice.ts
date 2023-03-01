@@ -12,7 +12,7 @@ const initialState: ProfileState = {
   profileUser: {
     id: NaN,
     nickname: '',
-    avatar: '',
+    avatarUrl: '',
     status: 'active'
   },
   collections: [],
@@ -30,10 +30,13 @@ export const profileSlice = createSlice({
     },
     setProfileErrorMessage: (state, {payload}: PayloadAction<string>) => {
       state.errorMessage = payload
+    },
+    setProfileAvatar: (state, {payload}: PayloadAction<string>) => {
+      state.profileUser.avatarUrl = payload
     }
   }
 })
 
-export const {setProfileInfo, setProfileErrorMessage} = profileSlice.actions
+export const {setProfileInfo, setProfileErrorMessage, setProfileAvatar} = profileSlice.actions
 
 export const ProfileReducer = profileSlice.reducer

@@ -6,8 +6,8 @@ import Image from "mui-image"
 import { AccountCircleIcon, AddIcon } from "../../common/icons"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { EditProfileDialog } from "./EditProfileDialog"
 import { Text } from "../../common/Text"
+import { EditProfileMenu } from "./EditProfileMenu"
 
 
 export const ProfileUserInfo: FC = () => {
@@ -20,13 +20,13 @@ export const ProfileUserInfo: FC = () => {
   return (
     <Box display="flex" flexWrap="wrap" mb={1} p={2} className="flex bg-gray border">
       <Image
-        src=""
+        src={profileUser.avatarUrl || ''}
         errorIcon={<Box fontSize="100px" height={120}><AccountCircleIcon color="disabled" fontSize="inherit"/></Box>}
-        showLoading={true} width={200} height={200} fit="cover" className="rounded"/>
+        showLoading width={200} height={200} fit="cover" className="rounded" duration={500}/>
       <Box>
         <Box ml={1} mb={1}>
           <Text color="gray">Nickname</Text>
-          <Typography fontSize="xx-large" className="capitalize" ml={2} mr={1}>@{profileUser.nickname}</Typography>
+          <Typography fontSize="x-large" className="capitalize" ml={2} mr={1}>{profileUser.nickname}</Typography>
         </Box>
         <Box ml={1} hidden={!isAuthor}>
           <Text color="gray">Email</Text>
@@ -37,7 +37,7 @@ export const ProfileUserInfo: FC = () => {
         isAuthor &&
         <Box ml="auto" display="flex" flexDirection="column" justifyContent="space-between">
           <Box ml="auto">
-            <EditProfileDialog/>
+            <EditProfileMenu/>
           </Box>
           <Button onClick={() => navigate('/create_collection', { state: { userId: profileUser.id } })}>
             <AddIcon/>{t('Collection')}

@@ -14,7 +14,6 @@ const initialState: UserState = {
     nickname: '',
     email: '',
     token: '',
-    avatar: '',
     isAdmin: false,
     status: 'active'
   },

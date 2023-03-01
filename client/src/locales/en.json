@@ -19,7 +19,7 @@
     "If you want, add a picture of the collection": "If you want, add a picture of the collection",
     "Drop your image here": "Drop your image here",
     "max size": "max size",
-    "size": "размер",
+    "size": "size",
     "Enter a description": "Enter a description",
     "type": "type",
     "label": "label",
@@ -93,6 +93,9 @@
     "Creating an account...": "Creating an account...",
     "Open collection": "Open collection",
     "author": "author:",
-    "Collections": "Collections"
+    "Collections": "Collections",
+    "Edit profile info": "Edit profile info",
+    "Edit avatar": "Edit avatar",
+    "Changing the avatar": "Changing the avatar"
   }
 }

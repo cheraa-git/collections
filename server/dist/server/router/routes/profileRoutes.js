@@ -7,4 +7,5 @@ const controller = new profileController_1.ProfileController();
 exports.profileRouter = (0, express_1.Router)();
 exports.profileRouter.post('/confirm_edit', controller.handleSendConfirmationEmail);
 exports.profileRouter.post('/edit', controller.handleEditProfile);
+exports.profileRouter.patch('/edit_avatar', controller.handleEditAvatar);
 exports.profileRouter.get('/:userId', controller.handleGetProfile);
