@@ -50,9 +50,10 @@ export class ItemController {
     }
   }
 
-  async handleGetNextItems({ query: { offset, limit } }: Request, res: Response) {
+  async handleGetNextItems({ query: { offset, limit, tagIds } }: Request, res: Response) {
     if (!offset || !limit) return res.json([])
-    const itemsResponse = await getNextItems(Number(offset), Number(limit))
+    const parsedTagIds = tagIds ? JSON.parse(tagIds as string) : undefined
+    const itemsResponse = await getNextItems(Number(offset), Number(limit), parsedTagIds)
     itemsResponse
       .mapRight(items => res.json(items))
       .mapLeft(e => res.status(500).json(e))

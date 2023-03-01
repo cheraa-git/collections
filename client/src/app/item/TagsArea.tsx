@@ -10,9 +10,11 @@ import { useTranslation } from "react-i18next"
 interface TagsAreaProps {
   value: Tag[]
   setValue: (tags: Tag[]) => void
+  freeSolo?: boolean
+  placeholder?: string
 }
 
-export const TagsArea: FC<TagsAreaProps> = ({ value, setValue }) => {
+export const TagsArea: FC<TagsAreaProps> = ({ value, setValue, freeSolo = true, placeholder = 'tags' }) => {
   const {t} = useTranslation()
   const { enqueueSnackbar: snackbar } = useSnackbar()
   const tags = useAppSelector((state: RootState) => state.item.tags)
@@ -44,7 +46,8 @@ export const TagsArea: FC<TagsAreaProps> = ({ value, setValue }) => {
     <Autocomplete
       disablePortal
       clearOnEscape
-      freeSolo
+      freeSolo={freeSolo}
+      noOptionsText={t('No tags found')}
       autoComplete
       multiple
       options={tags}
@@ -54,9 +57,10 @@ export const TagsArea: FC<TagsAreaProps> = ({ value, setValue }) => {
       inputValue={inputValue}
       onInputChange={(_, newInputValue) => inputHandler(newInputValue)}
       getOptionLabel={getTagName}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       filterOptions={filterOptions}
       filterSelectedOptions
-      renderInput={params => <TextField {...params} size="small" label={t("tags")}/>}
+      renderInput={params => <TextField {...params} size="small" label={t(placeholder)}/>}
     />
   )
 }

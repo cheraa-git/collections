@@ -68,7 +68,7 @@
     "Indexing collections": "Индексирование коллекций",
     "Indexing comments": "Индексирование комментариев",
     "Items": "Элементы",
-    "Search anywhere": "Поиск по сайту",
+    "Site search": "Поиск по сайту",
     "Authorization error": "Ошибка авторизации",
     "email already exists": "Эта почта уже зарегистрирована",
     "nickname already exists": "Имя пользователя занято",
@@ -95,6 +95,8 @@
     "Collections": "Коллекции",
     "Edit profile info": "Изменить данные профиля",
     "Edit avatar": "Изменить аватар",
-    "Changing the avatar": "Изменение аватара"
+    "Changing the avatar": "Изменение аватара",
+    "No tags found": "Тэги не найдены",
+    "tags search": "поиск по тэгам"
   }
 }

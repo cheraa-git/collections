@@ -3,26 +3,34 @@ import { Box, Container } from "@mui/material"
 import { ItemsList } from "./ItemsList"
 import { CollectionsList } from "./CollectionsList"
 import { TransButton } from "../../common/TransButton"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 export const MainPage: FC = () => {
-  const [contentType, setContentType] = useState<'items' | 'collections'>('items')
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [contentType, setContentType] = useState<'items' | 'collections'>(location.state?.contentType || 'items')
+
+  const setContentTypeHandler = (value: 'items' | 'collections') => {
+    setContentType(value)
+    navigate('.', {state: {contentType: value}})
+  }
 
   return (
     <Box my={2}>
       <Container maxWidth="lg" className="">
-        <Box width="max-content" ml="auto">
+        <Box width="max-content" ml="auto" mb={1}>
           <TransButton
             variant={contentType === 'items' ? 'outlined' : 'text'}
             disabled={contentType === 'items'}
-            onClick={() => setContentType('items')}
+            onClick={() => setContentTypeHandler('items')}
           >
             Items
           </TransButton>
           <TransButton
             variant={contentType === 'collections' ? 'outlined' : 'text'}
             disabled={contentType === 'collections'}
-            onClick={() => setContentType('collections')}
+            onClick={() => setContentTypeHandler('collections')}
           >
             Collections
           </TransButton>

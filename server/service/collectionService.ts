@@ -85,7 +85,7 @@ export const getAllCollections = async (): Promise<Either<DatabaseError, Collect
 
 export const getNextCollections = async (offset: number, limit: number): Promise<Either<DatabaseError, Collection[]>> => {
   try {
-    const collections = (await getCollectionsByItemCountQuery(offset, limit))
+    const collections = (await getCollectionsByItemCountQuery({ offset, limit }))
       .map((w: any) => ({
           ...w.collections.dataValues,
           userNickname: w.collections.users.nickname,

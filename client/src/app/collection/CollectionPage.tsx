@@ -21,7 +21,7 @@ export const CollectionPage: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { id } = useParams()
-  const { collection, getThemeName, isAuthor } = useCollection()
+  const { collection, getTheme, isAuthor } = useCollection()
   const theme = useApp().theme
   const items = useAppSelector((state: RootState) => state.item.items)
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
@@ -56,7 +56,7 @@ export const CollectionPage: FC = () => {
 
       <Box p={2} mt={2} justifyContent="space-between" className="border flex rounded">
         <Box>
-          <Typography variant="h6">{t('Theme')}: {getThemeName()}</Typography>
+          <Typography variant="h6">{t('Theme')}: {getTheme()?.name}</Typography>
           <i className="flex">
             <Text>Created by</Text>
             <TypographyLink to={`/profile/${collection.userId}`} mx={1} className="link">

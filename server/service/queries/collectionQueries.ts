@@ -3,10 +3,10 @@ import { Sequelize } from "sequelize"
 import { Collections } from "../../db/models/Collections"
 import { Users } from "../../db/models/Users"
 
-export const getCollectionsByItemCountQuery = async (offset?: number, limit?: number) => {
+export const getCollectionsByItemCountQuery = async (params: { offset?: number, limit?: number }) => {
   return  await Items.findAll({
-    offset,
-    limit,
+    offset: params.offset,
+    limit: params.limit,
     attributes: [[Sequelize.fn('count', Sequelize.col('collectionId')), 'count']],
     include: [{
       model: Collections,

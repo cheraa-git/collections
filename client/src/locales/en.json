@@ -69,7 +69,7 @@
     "Indexing collections": "Indexing collections",
     "Indexing comments": "Indexing comments",
     "Items": "Items",
-    "Search anywhere": "Search anywhere",
+    "Site search": "Site search",
     "Authorization error": "Authorization error",
     "email already exists": "Email already exists",
     "nickname already exists": "Nickname already exists",
@@ -96,6 +96,8 @@
     "Collections": "Collections",
     "Edit profile info": "Edit profile info",
     "Edit avatar": "Edit avatar",
-    "Changing the avatar": "Changing the avatar"
+    "Changing the avatar": "Changing the avatar",
+    "No tags found": "No tags found",
+    "tags search": "tags search"
   }
 }

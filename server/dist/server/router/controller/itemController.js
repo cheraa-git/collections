@@ -59,11 +59,12 @@ class ItemController {
             }
         });
     }
-    handleGetNextItems({ query: { offset, limit } }, res) {
+    handleGetNextItems({ query: { offset, limit, tagIds } }, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!offset || !limit)
                 return res.json([]);
-            const itemsResponse = yield (0, itemService_1.getNextItems)(Number(offset), Number(limit));
+            const parsedTagIds = tagIds ? JSON.parse(tagIds) : undefined;
+            const itemsResponse = yield (0, itemService_1.getNextItems)(Number(offset), Number(limit), parsedTagIds);
             itemsResponse
                 .mapRight(items => res.json(items))
                 .mapLeft(e => res.status(500).json(e));

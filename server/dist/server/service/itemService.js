@@ -31,7 +31,7 @@ const either_1 = require("@sweet-monads/either");
 const DatabaseError_1 = require("../../common/errors/DatabaseError");
 const NotFoundError_1 = require("../../common/errors/NotFoundError");
 const Users_1 = require("../db/models/Users");
-const sequelize_typescript_1 = require("sequelize-typescript");
+const itemQueries_1 = require("./queries/itemQueries");
 const createItemTags = (tags, itemId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const addedTags = tags.filter(tag => tag.id);
@@ -70,7 +70,7 @@ exports.createItem = createItem;
 const getItem = (itemId) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const item = yield Items_1.Items.findOne({ where: { id: itemId }, include: { model: Tags_1.Tags, through: { attributes: [] } } });
+        const item = yield (0, itemQueries_1.getItemWithTagsQuery)({ itemId });
         if (!item)
             return (0, either_1.left)(new NotFoundError_1.NotFoundError(`Item number ${itemId} not found`));
         const itemConfigs = yield ItemConfigs_1.ItemConfigs.findAll({ where: { collectionId: item === null || item === void 0 ? void 0 : item.collectionId } });
@@ -124,18 +124,15 @@ const getAllItems = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAllItems = getAllItems;
-const getNextItems = (offset, limit) => __awaiter(void 0, void 0, void 0, function* () {
+const getNextItems = (offset, limit, tagIds) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const items = yield Items_1.Items.findAll({
-            offset, limit,
-            include: [{ model: Tags_1.Tags, through: { attributes: [] } }],
-            order: [sequelize_typescript_1.Sequelize.literal('timestamp DESC')]
-        });
+        const items = yield (0, itemQueries_1.getRangeItemsQuery)({ offset, limit, tagIds });
         if (items.length === 0)
             return (0, either_1.right)([]);
         return (0, either_1.right)(items.map(item => (0, utils_1.filterItem)(item)));
     }
     catch (e) {
+        console.log(e);
         return (0, either_1.left)(new DatabaseError_1.DatabaseError('getNextItems: Error', e));
     }
 });

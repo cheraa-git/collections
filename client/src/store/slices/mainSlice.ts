@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Collection, Item } from "../../../../common/common-types"
+import { Collection, Item, Tag } from "../../../../common/common-types"
 
 export interface MainState {
   errorMessage: string
@@ -7,6 +7,7 @@ export interface MainState {
   items: Item[],
   hasMoreItems: boolean
   hasMoreCollections: boolean
+  searchTags: Tag[]
 }
 
 const initialState: MainState = {
@@ -14,7 +15,8 @@ const initialState: MainState = {
   collections: [],
   items: [],
   hasMoreCollections: true,
-  hasMoreItems: true
+  hasMoreItems: true,
+  searchTags: []
 }
 
 export const mainSlice = createSlice({
@@ -29,20 +31,26 @@ export const mainSlice = createSlice({
       const newCollections = payload.filter(newCollection => {
         if (!state.collections?.find(collection => collection.id === newCollection.id)) return newCollection
       })
-      state.collections = [ ...state.collections, ...newCollections ]
+      state.collections = [...state.collections, ...newCollections]
     },
     addMainItems: (state, { payload }: PayloadAction<Item[]>) => {
       if (state.items.length === 0) return { ...state, items: payload }
       const newItems = payload.filter(newItem => {
         if (!state.items?.find(item => item.id === newItem.id)) return newItem
       })
-      state.items = [ ...state.items, ...newItems ]
+      state.items = [...state.items, ...newItems]
+    },
+    clearMainItems: state => {
+      state.items = []
     },
     setHasManyCollections: (state, { payload }: PayloadAction<boolean>) => {
       state.hasMoreCollections = payload
     },
     setHasManyItems: (state, { payload }: PayloadAction<boolean>) => {
       state.hasMoreItems = payload
+    },
+    setSearchTags: (state, { payload }: PayloadAction<Tag[]>) => {
+      state.searchTags = payload
     }
   }
 })
@@ -52,7 +60,9 @@ export const {
   addMainItems,
   addMainCollections,
   setHasManyItems,
-  setHasManyCollections
+  setHasManyCollections,
+  clearMainItems,
+  setSearchTags
 } = mainSlice.actions
 
 export const MainReducer = mainSlice.reducer

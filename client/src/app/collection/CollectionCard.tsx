@@ -4,14 +4,13 @@ import { ProfileUser } from "../../types/user"
 import { dateTimeFormat } from "../../utils"
 import MDEditor from "@uiw/react-md-editor"
 import { Box, Card, Grid, Typography } from "@mui/material"
-import { useCollection } from "../../hooks/collectionStateHook"
-import Chip from "@mui/material/Chip"
 import { TypographyLink } from "../../common/TypographyLink"
 import { useApp } from "../../hooks/appStateHook"
 import { Link } from "react-router-dom"
 import { TransButton } from "../../common/TransButton"
 import Image from 'mui-image'
 import { ArticleTwoToneIcon } from "../../common/icons"
+import { ThemeChip } from "../../common/ThemeChip"
 
 
 interface CollectionCardProps {
@@ -21,7 +20,6 @@ interface CollectionCardProps {
 
 export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) => {
   const appTheme = useApp().theme
-  const { getThemeName } = useCollection()
 
   return (
     <Card className="border" sx={{ px: 2, py: 1, my: 2 }}>
@@ -34,10 +32,12 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
         </Box>
         <Box display="flex" justifyContent="space-between">
 
-          <TypographyLink to={`/profile/${collection.userId}`} className="capitalize">
+          <TypographyLink to={`/profile/${collection.userId}`} alignSelf="center" mt={1} className="capitalize">
             {user?.nickname || collection.userName}
           </TypographyLink>
-          <Chip label={getThemeName(collection.themeId)} size="small" sx={{ mb: 1 }}/>
+          <Box mb={0.5}>
+            <ThemeChip themeId={collection.themeId}/>
+          </Box>
         </Box>
       </Box>
       <Grid container spacing={2}>

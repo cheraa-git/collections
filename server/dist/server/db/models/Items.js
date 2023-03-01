@@ -116,7 +116,7 @@ __decorate([
     __metadata("design:type", Collections_1.Collections)
 ], Items.prototype, "collections", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsToMany)(() => Tags_1.Tags, () => ItemsTags_1.ItemsTags),
+    (0, sequelize_typescript_1.BelongsToMany)(() => Tags_1.Tags, { through: () => ItemsTags_1.ItemsTags }),
     __metadata("design:type", Array)
 ], Items.prototype, "tags", void 0);
 __decorate([

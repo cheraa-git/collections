@@ -10,7 +10,7 @@ import { DatabaseError } from "../../common/errors/DatabaseError"
 import { GetItemResponse } from "../../common/response-types"
 import { NotFoundError } from "../../common/errors/NotFoundError"
 import { Users } from "../db/models/Users"
-import { Sequelize } from "sequelize-typescript"
+import { getItemWithTagsQuery, getRangeItemsQuery } from "./queries/itemQueries"
 
 
 const createItemTags = async (tags: Tag[], itemId: number): Promise<Either<DatabaseError, Tag[]>> => {
@@ -54,8 +54,7 @@ export const createItem: CreateItem = async (userId, collectionId, fields, tags)
 
 export const getItem = async (itemId: number): Promise<Either<DatabaseError | NotFoundError, GetItemResponse>> => {
   try {
-
-    const item = await Items.findOne({ where: { id: itemId }, include: { model: Tags, through: { attributes: [] } } })
+    const item = await getItemWithTagsQuery({itemId})
     if (!item) return left(new NotFoundError(`Item number ${itemId} not found`))
     const itemConfigs = await ItemConfigs.findAll({ where: { collectionId: item?.collectionId } })
     const user = (await Collections.findOne({ where: { id: item.collectionId }, include: Users }))?.users
@@ -103,16 +102,13 @@ export const getAllItems = async (): Promise<Either<DatabaseError, Items[]>> => 
   }
 }
 
-export const getNextItems = async (offset: number, limit: number): Promise<Either<DatabaseError, Items[]>> => {
+export const getNextItems = async (offset: number, limit: number, tagIds?: number[]): Promise<Either<DatabaseError, Items[]>> => {
   try {
-    const items = await Items.findAll({
-      offset, limit,
-      include: [{ model: Tags, through: { attributes: [] } }],
-      order: [Sequelize.literal('timestamp DESC')]
-    })
+    const items = await getRangeItemsQuery({offset, limit, tagIds})
     if (items.length === 0) return right([])
     return right(items.map(item => (filterItem(item) as Items)))
   } catch (e) {
+    console.log(e)
     return left(new DatabaseError('getNextItems: Error', e))
   }
 }

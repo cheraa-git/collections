@@ -37,7 +37,7 @@ export const SearchDialog: FC = () => {
     <BlurDialog open={searchOpen} fullWidth onClose={searchCloseHandler} disableEscapeKeyDown>
       <Box px={2} py={1} maxHeight="70vh">
         <Box display="flex" justifyContent="space-between" mb={1}>
-          <Text fontSize="x-large">Search anywhere</Text>
+          <Text fontSize="x-large">Site search</Text>
           <Typography className="esc-bth" onClick={searchCloseHandler}>esc</Typography>
         </Box>
         <InstantSearch indexName="items" searchClient={searchClient}>

@@ -14,10 +14,10 @@ const Items_1 = require("../../db/models/Items");
 const sequelize_1 = require("sequelize");
 const Collections_1 = require("../../db/models/Collections");
 const Users_1 = require("../../db/models/Users");
-const getCollectionsByItemCountQuery = (offset, limit) => __awaiter(void 0, void 0, void 0, function* () {
+const getCollectionsByItemCountQuery = (params) => __awaiter(void 0, void 0, void 0, function* () {
     return yield Items_1.Items.findAll({
-        offset,
-        limit,
+        offset: params.offset,
+        limit: params.limit,
         attributes: [[sequelize_1.Sequelize.fn('count', sequelize_1.Sequelize.col('collectionId')), 'count']],
         include: [{
                 model: Collections_1.Collections,
