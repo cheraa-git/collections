@@ -3,13 +3,14 @@ import { Sequelize } from "sequelize"
 import { Collections } from "../../db/models/Collections"
 import { Users } from "../../db/models/Users"
 
-export const getCollectionsByItemCountQuery = async (params: { offset?: number, limit?: number }) => {
-  return  await Items.findAll({
+export const getCollectionsByItemCountQuery = async (params: { offset?: number, limit?: number, themeId: number }) => {
+  return await Items.findAll({
     offset: params.offset,
     limit: params.limit,
     attributes: [[Sequelize.fn('count', Sequelize.col('collectionId')), 'count']],
     include: [{
       model: Collections,
+      where: params.themeId ? { themeId: params.themeId } : undefined,
       attributes: ['title', 'description', 'themeId', 'imageUrl', 'timestamp', 'id'],
       include: [{ model: Users, attributes: ['nickname'] }]
     }],

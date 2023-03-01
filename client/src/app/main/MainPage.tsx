@@ -13,7 +13,7 @@ export const MainPage: FC = () => {
 
   const setContentTypeHandler = (value: 'items' | 'collections') => {
     setContentType(value)
-    navigate('.', {state: {contentType: value}})
+    navigate('/', {state: {contentType: value}})
   }
 
   return (

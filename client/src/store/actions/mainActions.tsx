@@ -19,8 +19,9 @@ export const getNextItems = (offset: number, limit: number, tagIds: number[] = [
     })
 }
 
-export const getNextCollections = (offset: number, limit: number) => async (dispatch: AppDispatch) => {
-  const collectionsResponse = await axiosGet<DatabaseError, Collection[]>(`/collection/next?offset=${offset}&limit=${limit}`)
+export const getNextCollections = (offset: number, limit: number, themeId?: number) => async (dispatch: AppDispatch) => {
+  const url = `/collection/next?offset=${offset}&limit=${limit}&themeId=${themeId}`
+  const collectionsResponse = await axiosGet<DatabaseError, Collection[]>(url)
   collectionsResponse
     .mapRight(({ data: collections }) => {
       if (collections.length === 0) return dispatch(setHasManyCollections(false))

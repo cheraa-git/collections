@@ -21,6 +21,7 @@ const getCollectionsByItemCountQuery = (params) => __awaiter(void 0, void 0, voi
         attributes: [[sequelize_1.Sequelize.fn('count', sequelize_1.Sequelize.col('collectionId')), 'count']],
         include: [{
                 model: Collections_1.Collections,
+                where: params.themeId ? { themeId: params.themeId } : undefined,
                 attributes: ['title', 'description', 'themeId', 'imageUrl', 'timestamp', 'id'],
                 include: [{ model: Users_1.Users, attributes: ['nickname'] }]
             }],

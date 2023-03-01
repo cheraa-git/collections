@@ -85,9 +85,9 @@ const getAllCollections = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAllCollections = getAllCollections;
-const getNextCollections = (offset, limit) => __awaiter(void 0, void 0, void 0, function* () {
+const getNextCollections = (offset, limit, themeId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const collections = (yield (0, collectionQueries_1.getCollectionsByItemCountQuery)({ offset, limit }))
+        const collections = (yield (0, collectionQueries_1.getCollectionsByItemCountQuery)({ offset, limit, themeId }))
             .map((w) => (Object.assign(Object.assign({}, w.collections.dataValues), { userNickname: w.collections.users.nickname, countItems: w.dataValues.count, users: undefined })));
         if (collections.length === 0)
             return (0, either_1.right)([]);

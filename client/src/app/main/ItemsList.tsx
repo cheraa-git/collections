@@ -6,7 +6,7 @@ import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { getNextItems } from "../../store/actions/mainActions"
 import { Box, IconButton } from "@mui/material"
 import { TagsArea } from "../item/TagsArea"
-import { clearMainItems, setSearchTags } from "../../store/slices/mainSlice"
+import { clearMainItems, setHasManyItems, setSearchTags } from "../../store/slices/mainSlice"
 import { SearchIcon } from "../../common/icons"
 
 export const ItemsList: FC = () => {
@@ -23,7 +23,7 @@ export const ItemsList: FC = () => {
   const searchHandler = () => {
     dispatch(clearMainItems())
     dispatch(getNextItems(0, NUMBER_OF_LOADED_ITEMS, tagIds))
-    console.log('search')
+    dispatch(setHasManyItems(true))
   }
 
   useEffect(() => {

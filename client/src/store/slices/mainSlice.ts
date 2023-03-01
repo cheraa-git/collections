@@ -7,7 +7,8 @@ export interface MainState {
   items: Item[],
   hasMoreItems: boolean
   hasMoreCollections: boolean
-  searchTags: Tag[]
+  searchTags: Tag[],
+  searchThemeId?: number,
 }
 
 const initialState: MainState = {
@@ -33,6 +34,9 @@ export const mainSlice = createSlice({
       })
       state.collections = [...state.collections, ...newCollections]
     },
+    clearMainCollections: state => {
+      state.collections = []
+    },
     addMainItems: (state, { payload }: PayloadAction<Item[]>) => {
       if (state.items.length === 0) return { ...state, items: payload }
       const newItems = payload.filter(newItem => {
@@ -51,7 +55,10 @@ export const mainSlice = createSlice({
     },
     setSearchTags: (state, { payload }: PayloadAction<Tag[]>) => {
       state.searchTags = payload
-    }
+    },
+    setSearchTheme: (state, { payload }: PayloadAction<number>) => {
+      state.searchThemeId = payload
+    },
   }
 })
 
@@ -62,7 +69,9 @@ export const {
   setHasManyItems,
   setHasManyCollections,
   clearMainItems,
-  setSearchTags
+  setSearchTags,
+  setSearchTheme,
+  clearMainCollections
 } = mainSlice.actions
 
 export const MainReducer = mainSlice.reducer

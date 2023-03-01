@@ -56,9 +56,9 @@ export class CollectionController {
     }
   }
 
-  async handleGetNextCollections({ query: { offset, limit } }: Request, res: Response) {
+  async handleGetNextCollections({ query: { offset, limit, themeId } }: Request, res: Response) {
     if (!offset || !limit) return res.json([])
-    const collectionsResponse = await getNextCollections(Number(offset), Number(limit))
+    const collectionsResponse = await getNextCollections(Number(offset), Number(limit), Number(themeId))
     collectionsResponse
       .mapRight(items => res.json(items))
       .mapLeft(e => res.status(500).json(e))
