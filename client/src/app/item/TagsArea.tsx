@@ -15,18 +15,30 @@ interface TagsAreaProps {
 }
 
 export const TagsArea: FC<TagsAreaProps> = ({ value, setValue, freeSolo = true, placeholder = 'tags' }) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const { enqueueSnackbar: snackbar } = useSnackbar()
   const tags = useAppSelector((state: RootState) => state.item.tags)
   const [inputValue, setInputValue] = useState('')
   type AutocompleteProps = UseAutocompleteProps<Tag, true, false, true>
+
+  const setValueHandler = (values: (string | Tag)[]) => {
+    setValue(values.map(value => {
+      if (typeof value === 'string') {
+        const existingTag = tags.find(tag => tag.name === value)
+        if (existingTag) return existingTag
+        else return { name: value }
+      } else {
+        return value
+      }
+    }))
+  }
 
   const tagsHandler: AutocompleteProps['onChange'] = (...args) => {
     const [_, values, reason, details] = args
     if (reason !== 'removeOption' && value.find(tag => tag.name === getTagName(details?.option))) {
       return snackbar('This tag already exists')
     }
-    setValue(values.map(value => typeof value === 'string' ? { name: value } : value))
+    setValueHandler(values)
   }
 
   const inputHandler = (value: string) => {
@@ -38,7 +50,7 @@ export const TagsArea: FC<TagsAreaProps> = ({ value, setValue, freeSolo = true, 
     return typeof option === "string" ? option : option.name
   }
 
-  const filterOptions: AutocompleteProps['filterOptions'] = (options, {inputValue}) => {
+  const filterOptions: AutocompleteProps['filterOptions'] = (options, { inputValue }) => {
     return matchSorter(options, inputValue, { keys: ['name'] })
   }
 

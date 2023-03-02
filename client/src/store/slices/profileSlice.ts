@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { ProfileUser } from "../../types/user"
-import { Collection } from "../../../../common/common-types"
+import { Collection, ProfileUser } from "../../../../common/common-types"
 
 export interface ProfileState {
   profileUser: ProfileUser
@@ -32,18 +31,18 @@ export const profileSlice = createSlice({
       state.collections = payload.collections
       state.profileUser = payload.user
     },
-    setProfileErrorMessage: (state, {payload}: PayloadAction<string>) => {
+    setProfileErrorMessage: (state, { payload }: PayloadAction<string>) => {
       state.errorMessage = payload
     },
-    setProfileAvatar: (state, {payload}: PayloadAction<string>) => {
+    setProfileAvatar: (state, { payload }: PayloadAction<string>) => {
       state.profileUser.avatarUrl = payload
     },
-    setProfileLoading: (state, {payload}: PayloadAction<boolean>) => {
+    setProfileLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.loading = payload
     }
   }
 })
 
-export const {setProfileInfo, setProfileErrorMessage, setProfileAvatar, setProfileLoading} = profileSlice.actions
+export const { setProfileInfo, setProfileErrorMessage, setProfileAvatar, setProfileLoading } = profileSlice.actions
 
 export const ProfileReducer = profileSlice.reducer

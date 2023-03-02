@@ -1,6 +1,5 @@
 import { FC } from "react"
-import { Collection } from "../../../../common/common-types"
-import { ProfileUser } from "../../types/user"
+import { Collection, ProfileUser } from "../../../../common/common-types"
 import { dateTimeFormat } from "../../utils"
 import MDEditor from "@uiw/react-md-editor"
 import { Box, Card, Grid, Typography } from "@mui/material"

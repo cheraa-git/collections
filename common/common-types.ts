@@ -8,6 +8,8 @@ export interface User {
   status: UserStatus
 }
 
+export type ProfileUser = Omit<User, "token">
+
 export interface Collection {
   id: number
   userId: number
