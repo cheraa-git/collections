@@ -9,11 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCollectionsByItemCountQuery = void 0;
+exports.getFullCollectionDataQuery = exports.getCollectionsByItemCountQuery = void 0;
 const Items_1 = require("../../db/models/Items");
 const sequelize_1 = require("sequelize");
 const Collections_1 = require("../../db/models/Collections");
 const Users_1 = require("../../db/models/Users");
+const ItemConfigs_1 = require("../../db/models/ItemConfigs");
+const Tags_1 = require("../../db/models/Tags");
 const getCollectionsByItemCountQuery = (params) => __awaiter(void 0, void 0, void 0, function* () {
     return yield Items_1.Items.findAll({
         offset: params.offset,
@@ -30,3 +32,14 @@ const getCollectionsByItemCountQuery = (params) => __awaiter(void 0, void 0, voi
     });
 });
 exports.getCollectionsByItemCountQuery = getCollectionsByItemCountQuery;
+const getFullCollectionDataQuery = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield Collections_1.Collections.findOne({
+        where: { id },
+        include: [
+            { model: ItemConfigs_1.ItemConfigs },
+            { model: Users_1.Users },
+            { model: Items_1.Items, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] }
+        ]
+    });
+});
+exports.getFullCollectionDataQuery = getFullCollectionDataQuery;

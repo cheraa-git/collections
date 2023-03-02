@@ -1,7 +1,15 @@
 import { Request, Response } from "express"
 import { CreateItemBody, DeleteItemBody, EditItemBody } from "../../../common/request-types"
 import { Tags } from "../../db/models/Tags"
-import { createItem, deleteItem, editItem, getItem, getItemAuthorId, getNextItems } from "../../service/itemService"
+import {
+  createItem,
+  deleteItem,
+  editItem,
+  getItem,
+  getItemAuthorId,
+  getMostPopularTags,
+  getNextItems
+} from "../../service/itemService"
 import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../common/errors/TokenError"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
@@ -56,6 +64,13 @@ export class ItemController {
     const itemsResponse = await getNextItems(Number(offset), Number(limit), parsedTagIds)
     itemsResponse
       .mapRight(items => res.json(items))
+      .mapLeft(e => res.status(500).json(e))
+  }
+
+  async handleGetMostPopularTags(req: Request, res: Response) {
+    const response = await getMostPopularTags()
+    response
+      .mapRight(r => res.json(r))
       .mapLeft(e => res.status(500).json(e))
   }
 

@@ -68,7 +68,7 @@ export const ItemPage: FC = () => {
 
       </Box>
       <Box display="flex" flexWrap="wrap">
-        {item?.tags.map(tag => <TagChip key={tag.id} tag={tag}/>)}
+        {item?.tags.map(tag => <TagChip key={tag.id + tag.name} tag={tag}/>)}
       </Box>
       {itemConfigs.map(config => (
         <Box key={config.id}>

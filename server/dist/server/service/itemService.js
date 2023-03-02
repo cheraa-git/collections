@@ -20,7 +20,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getNextItems = exports.getAllItems = exports.deleteItem = exports.editItem = exports.getItemAuthorId = exports.getItem = exports.createItem = void 0;
+exports.getMostPopularTags = exports.getNextItems = exports.getAllItems = exports.deleteItem = exports.editItem = exports.getItemAuthorId = exports.getItem = exports.createItem = void 0;
 const Items_1 = require("../db/models/Items");
 const utils_1 = require("../utils");
 const Tags_1 = require("../db/models/Tags");
@@ -137,3 +137,17 @@ const getNextItems = (offset, limit, tagIds) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.getNextItems = getNextItems;
+const getMostPopularTags = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const countTags = (yield (0, itemQueries_1.getMostPopularTagsQuery)()).map(countTag => ({
+            tagId: countTag.tagId,
+            count: +countTag.dataValues.count,
+        }));
+        return (0, either_1.right)(countTags);
+    }
+    catch (e) {
+        console.log(e);
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('getMostPopularTags: Error', e));
+    }
+});
+exports.getMostPopularTags = getMostPopularTags;

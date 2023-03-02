@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Collection, Item, Tag } from "../../../../common/common-types"
+import { Collection, Item, Tag, TagCount } from "../../../../common/common-types"
 
 export interface MainState {
   errorMessage: string
@@ -9,6 +9,7 @@ export interface MainState {
   hasMoreCollections: boolean
   searchTags: Tag[],
   searchThemeId?: number,
+  tagCounts: TagCount[]
 }
 
 const initialState: MainState = {
@@ -17,11 +18,12 @@ const initialState: MainState = {
   items: [],
   hasMoreCollections: true,
   hasMoreItems: true,
-  searchTags: []
+  searchTags: [],
+  tagCounts: []
 }
 
 export const mainSlice = createSlice({
-  name: 'admin',
+  name: 'main',
   initialState,
   reducers: {
     setMainErrorMessage: (state, { payload }: PayloadAction<string>) => {
@@ -59,6 +61,9 @@ export const mainSlice = createSlice({
     setSearchTheme: (state, { payload }: PayloadAction<number>) => {
       state.searchThemeId = payload
     },
+    setTagCounts: (state, {payload}: PayloadAction<TagCount[]>) => {
+      state.tagCounts = payload
+    }
   }
 })
 
@@ -71,7 +76,8 @@ export const {
   clearMainItems,
   setSearchTags,
   setSearchTheme,
-  clearMainCollections
+  clearMainCollections,
+  setTagCounts
 } = mainSlice.actions
 
 export const MainReducer = mainSlice.reducer

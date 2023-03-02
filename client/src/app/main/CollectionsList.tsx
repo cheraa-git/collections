@@ -10,7 +10,7 @@ import { useCollection } from "../../hooks/collectionStateHook"
 import { clearMainCollections, setHasManyCollections, setSearchTheme } from "../../store/slices/mainSlice"
 
 export const CollectionsList: FC = () => {
-  const NUMBER_OF_LOADED_COLLECTIONS = 5
+  const NUMBER_OF_LOADED_COLLECTIONS = 10
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { themes } = useCollection()

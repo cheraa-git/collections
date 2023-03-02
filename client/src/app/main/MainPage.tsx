@@ -11,14 +11,16 @@ export const MainPage: FC = () => {
   const navigate = useNavigate()
   const [contentType, setContentType] = useState<'items' | 'collections'>(location.state?.contentType || 'items')
 
+
   const setContentTypeHandler = (value: 'items' | 'collections') => {
     setContentType(value)
-    navigate('/', {state: {contentType: value}})
+    navigate('/', { state: { contentType: value } })
   }
 
   return (
     <Box my={2}>
       <Container maxWidth="lg" className="">
+
         <Box width="max-content" ml="auto" mb={1}>
           <TransButton
             variant={contentType === 'items' ? 'outlined' : 'text'}

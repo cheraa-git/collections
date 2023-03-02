@@ -9,5 +9,6 @@ exports.itemRoutes.post('/', controller.handlerCreateItem);
 exports.itemRoutes.patch('/', controller.handleEditItem);
 exports.itemRoutes.delete('/', controller.handleDeleteItem);
 exports.itemRoutes.get('/tags', controller.getTags);
+exports.itemRoutes.get('/popular_tags', controller.handleGetMostPopularTags);
 exports.itemRoutes.get('/next', controller.handleGetNextItems);
 exports.itemRoutes.get('/:id', controller.handleGetItem);

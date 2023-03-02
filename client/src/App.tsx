@@ -42,6 +42,7 @@ function App() {
     if (!isAuth) {
       dispatch(autoLogin())
     }
+
   }, [isAuth, dispatch, tags.length, themes.length, i18n, lang, tokenError])
   return (
     <>

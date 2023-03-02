@@ -22,7 +22,7 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
   const appTheme = useApp().theme
 
   return (
-    <Card className="border" sx={{ px: 2, py: 1, my: 2 }}>
+    <Card className="border fade" sx={{ px: 2, py: 1, my: 2 }}>
       <Box mb={1} className="border-b w-full">
         <Box display="flex" justifyContent="space-between" flexWrap="wrap">
           <Link to={`/collection/${collection.id}`}>

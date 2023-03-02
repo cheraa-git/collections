@@ -8,6 +8,7 @@ import { Box, IconButton } from "@mui/material"
 import { TagsArea } from "../item/TagsArea"
 import { clearMainItems, setHasManyItems, setSearchTags } from "../../store/slices/mainSlice"
 import { SearchIcon } from "../../common/icons"
+import { PopularTagCloud } from "./PopularTagCloud"
 
 export const ItemsList: FC = () => {
   const NUMBER_OF_LOADED_ITEMS = 50
@@ -28,7 +29,7 @@ export const ItemsList: FC = () => {
 
   useEffect(() => {
     searchHandler()
-  }, [tagIds.length])
+  }, [searchTags])
 
   useEffect(() => {
     if (items.length === 0) {
@@ -37,6 +38,7 @@ export const ItemsList: FC = () => {
   }, [items.length, dispatch])
   return (
     <Box px={5}>
+      <PopularTagCloud/>
       <Box display="flex">
         <Box width="100%">
           <TagsArea value={searchTags} setValue={tags => dispatch(setSearchTags(tags))} freeSolo={false}

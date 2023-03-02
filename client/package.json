@@ -63,6 +63,7 @@
   },
   "devDependencies": {
     "@types/mui-image": "^1.0.1",
-    "@types/react-instantsearch-dom": "^6.12.3"
+    "@types/react-instantsearch-dom": "^6.12.3",
+    "@types/react-tagcloud": "^1.1.7"
   }
 }

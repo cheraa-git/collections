@@ -70,5 +70,13 @@ class ItemController {
                 .mapLeft(e => res.status(500).json(e));
         });
     }
+    handleGetMostPopularTags(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield (0, itemService_1.getMostPopularTags)();
+            response
+                .mapRight(r => res.json(r))
+                .mapLeft(e => res.status(500).json(e));
+        });
+    }
 }
 exports.ItemController = ItemController;

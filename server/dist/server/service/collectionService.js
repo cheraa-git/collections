@@ -12,9 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNextCollections = exports.getAllCollections = exports.editCollection = exports.deleteCollection = exports.getCollection = exports.createCollection = void 0;
 const Collections_1 = require("../db/models/Collections");
 const ItemConfigs_1 = require("../db/models/ItemConfigs");
-const Users_1 = require("../db/models/Users");
-const Items_1 = require("../db/models/Items");
-const Tags_1 = require("../db/models/Tags");
 const utils_1 = require("../utils");
 const either_1 = require("@sweet-monads/either");
 const DatabaseError_1 = require("../../common/errors/DatabaseError");
@@ -35,14 +32,7 @@ const createCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, 
 exports.createCollection = createCollection;
 const getCollection = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = (yield Collections_1.Collections.findOne({
-            where: { id },
-            include: [
-                { model: ItemConfigs_1.ItemConfigs },
-                { model: Users_1.Users },
-                { model: Items_1.Items, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] }
-            ]
-        }));
+        const response = yield (0, collectionQueries_1.getFullCollectionDataQuery)(id);
         if (!response)
             return (0, either_1.right)(undefined);
         const collection = Object.assign(Object.assign({}, response.dataValues), { userName: response.users.nickname, itemConfigs: undefined, users: undefined, items: undefined });

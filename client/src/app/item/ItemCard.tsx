@@ -16,7 +16,7 @@ export const ItemCard: FC<ItemCardProps> = ({ item }) => {
   const isDark = useApp().isDark
 
   return (
-    <Box className="item-card border-b">
+    <Box className="item-card border-b fade">
       <Box>
         <Typography fontWeight="bold" width="max-content">{item.name}</Typography>
         <Typography fontSize="small">{dateTimeFormat(item.timestamp)}</Typography>

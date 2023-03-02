@@ -1,14 +1,11 @@
 import { Collections } from "../db/models/Collections"
 import { Collection, Item, ItemConfigType } from "../../common/common-types"
 import { ItemConfigs } from "../db/models/ItemConfigs"
-import { Users } from "../db/models/Users"
-import { Items } from "../db/models/Items"
-import { Tags } from "../db/models/Tags"
 import { filterItem } from "../utils"
 import { Either, left, right } from "@sweet-monads/either"
 import { DatabaseError } from "../../common/errors/DatabaseError"
 import { EditCollectionResponse, GetCollectionResponse } from "../../common/response-types"
-import { getCollectionsByItemCountQuery } from "./queries/collectionQueries"
+import { getCollectionsByItemCountQuery, getFullCollectionDataQuery } from "./queries/collectionQueries"
 
 
 interface CreateCollection {
@@ -30,14 +27,7 @@ export const createCollection: CreateCollection = async (collection, itemConfigs
 
 export const getCollection = async (id: number): Promise<Either<DatabaseError, GetCollectionResponse | undefined>> => {
   try {
-    const response = (await Collections.findOne({
-      where: { id },
-      include: [
-        { model: ItemConfigs },
-        { model: Users },
-        { model: Items, include: [{ model: Tags, through: { attributes: [] } }] }
-      ]
-    }))
+    const response = await getFullCollectionDataQuery(id)
     if (!response) return right(undefined)
     const collection = {
       ...response.dataValues,

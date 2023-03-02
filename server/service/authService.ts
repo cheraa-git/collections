@@ -25,8 +25,11 @@ export const registerUser: RegisterUser = async (nickname, email, password, avat
   }
 }
 
+interface CheckLoginData {
+  (email: string, password: string): Promise<Either<AuthorizationError | DatabaseError, Users>>
+}
 
-export const checkLoginData = async (email: string, password: string): Promise<Either<AuthorizationError | DatabaseError, Users>> => {
+export const checkLoginData: CheckLoginData = async (email, password) => {
   try {
     const user = await Users.findOne({ where: { email } })
     if (!user) return left(new AuthorizationError('No user with this email was found'))

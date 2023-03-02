@@ -36,6 +36,10 @@ export type Tag = {
   name: string
 }
 
+export interface TagCount {
+  tagId: number
+  count: number
+}
 
 export interface Comment {
   id: number
