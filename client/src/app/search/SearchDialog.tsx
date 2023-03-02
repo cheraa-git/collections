@@ -17,7 +17,7 @@ import { SearchCollectionList } from "./collection/SearchCollectionList"
 export const SearchDialog: FC = () => {
   const dispatch = useAppDispatch()
   const { searchOpen } = useApp()
-  const searchClient = instantMeiliSearch('http://localhost:7700')
+  const searchClient = instantMeiliSearch(process.env.REACT_APP_MEILISEARCH_HOST || 'http://localhost:7700')
 
   const searchCloseHandler = () => {
     dispatch(setSearchOpen(false))
