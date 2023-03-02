@@ -23,7 +23,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getMostPopularTags = exports.getNextItems = exports.getAllItems = exports.deleteItem = exports.editItem = exports.getItemAuthorId = exports.getItem = exports.createItem = void 0;
 const Items_1 = require("../db/models/Items");
 const utils_1 = require("../utils");
-const Tags_1 = require("../db/models/Tags");
 const ItemsTags_1 = require("../db/models/ItemsTags");
 const ItemConfigs_1 = require("../db/models/ItemConfigs");
 const Collections_1 = require("../db/models/Collections");
@@ -35,7 +34,7 @@ const itemQueries_1 = require("./queries/itemQueries");
 const createItemTags = (tags, itemId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const addedTags = tags.filter(tag => tag.id);
-        const createdTags = (yield Tags_1.Tags.bulkCreate(tags.filter(tag => !tag.id))).map(tag => tag.dataValues);
+        const createdTags = yield (0, itemQueries_1.createTagsQuery)(tags.filter(tag => !tag.id));
         const itemTags = [...addedTags, ...createdTags].map(tag => ({ itemId, tagId: tag.id }));
         yield ItemsTags_1.ItemsTags.bulkCreate(itemTags);
         return (0, either_1.right)([...addedTags, ...createdTags]);

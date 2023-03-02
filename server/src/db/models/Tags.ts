@@ -13,7 +13,7 @@ export class Tags extends Model {
   })
   id!: number
 
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
   name!: string
 
   @BelongsToMany(() => Items, () => ItemsTags)

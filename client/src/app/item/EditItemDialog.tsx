@@ -23,7 +23,7 @@ interface EditItemDialogProps {
 export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collectionId, item }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<FieldValues>({})
+  const { register, handleSubmit, formState: { errors }, control, setValue, reset } = useForm<FieldValues>({})
   const itemConfigs = useCollection().itemConfigs
   const [addedTags, setAddedTags] = useState<Tag[]>([])
 
@@ -32,7 +32,13 @@ export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collect
       Object.entries(item).forEach(([key, value]) => setValue(key, value))
       setAddedTags(item.tags)
     }
-  }, [item])
+  }, [item, setValue])
+
+  const closeHandler = () => {
+    reset()
+    setAddedTags([])
+    onClose()
+  }
 
   const submitHandler: SubmitHandler<FieldValues> = (data) => {
     if (item) {
@@ -40,12 +46,12 @@ export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collect
     } else {
       dispatch(createItem({ collectionId, fields: { ...data } as Fields, tags: addedTags }))
     }
-    onClose()
+    closeHandler()
   }
 
 
   return (
-    <BlurDialog open={open} fullWidth onClose={onClose}>
+    <BlurDialog open={open} fullWidth onClose={closeHandler}>
       <Box component="form" px={3} py={1} onSubmit={handleSubmit(submitHandler)} minHeight={400}
            display="flex" flexDirection="column" justifyContent="space-between">
         <Box>
@@ -69,7 +75,7 @@ export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collect
           )}
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <TransButton onClick={onClose} color="inherit">Cancel</TransButton>
+          <TransButton onClick={closeHandler} color="inherit">Cancel</TransButton>
           <TransButton type="submit">Save</TransButton>
         </Box>
       </Box>

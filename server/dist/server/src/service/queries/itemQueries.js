@@ -9,12 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMostPopularTagsQuery = exports._getCollectionsByItemCountQuery = exports.getItemWithTagsQuery = exports.getRangeItemsQuery = void 0;
+exports.createTagsQuery = exports.getMostPopularTagsQuery = exports.getItemWithTagsQuery = exports.getRangeItemsQuery = void 0;
 const Items_1 = require("../../db/models/Items");
 const Tags_1 = require("../../db/models/Tags");
 const sequelize_typescript_1 = require("sequelize-typescript");
-const Collections_1 = require("../../db/models/Collections");
-const Users_1 = require("../../db/models/Users");
 const ItemsTags_1 = require("../../db/models/ItemsTags");
 const getRangeItemsQuery = (params) => __awaiter(void 0, void 0, void 0, function* () {
     return yield Items_1.Items.findAll({
@@ -41,22 +39,6 @@ const getItemWithTagsQuery = (params) => __awaiter(void 0, void 0, void 0, funct
     });
 });
 exports.getItemWithTagsQuery = getItemWithTagsQuery;
-const _getCollectionsByItemCountQuery = (params) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Items_1.Items.findAll({
-        offset: params.offset,
-        limit: params.limit,
-        attributes: [[sequelize_typescript_1.Sequelize.fn('count', sequelize_typescript_1.Sequelize.col('collectionId')), 'count']],
-        include: [{
-                model: Collections_1.Collections,
-                where: params.themeId ? { themeId: params.themeId } : undefined,
-                attributes: ['title', 'description', 'themeId', 'imageUrl', 'timestamp', 'id'],
-                include: [{ model: Users_1.Users, attributes: ['nickname'] }]
-            }],
-        group: ['Items.collectionId', 'collections.id', 'collections.users.id'],
-        order: sequelize_typescript_1.Sequelize.literal('count DESC'),
-    });
-});
-exports._getCollectionsByItemCountQuery = _getCollectionsByItemCountQuery;
 const getMostPopularTagsQuery = () => __awaiter(void 0, void 0, void 0, function* () {
     return ItemsTags_1.ItemsTags.findAll({
         limit: 30,
@@ -69,3 +51,20 @@ const getMostPopularTagsQuery = () => __awaiter(void 0, void 0, void 0, function
     });
 });
 exports.getMostPopularTagsQuery = getMostPopularTagsQuery;
+const createTagsQuery = (tags) => __awaiter(void 0, void 0, void 0, function* () {
+    if (tags.length === 0)
+        return [];
+    try {
+        return yield Tags_1.Tags.bulkCreate(tags);
+    }
+    catch (e) {
+        if ((e === null || e === void 0 ? void 0 : e.name) === 'SequelizeUniqueConstraintError') {
+            const existTags = yield Tags_1.Tags.findAll({ where: { name: tags.map(tag => tag.name) } });
+            const uniqueTags = tags.filter(tag => !existTags.find(existTag => existTag.name === tag.name));
+            const createdTags = yield Tags_1.Tags.bulkCreate(uniqueTags);
+            return [...createdTags, ...existTags];
+        }
+        return [];
+    }
+});
+exports.createTagsQuery = createTagsQuery;

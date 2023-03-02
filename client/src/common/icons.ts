@@ -21,6 +21,8 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import ReplyIcon from '@mui/icons-material/Reply'
 import ArticleTwoToneIcon from '@mui/icons-material/ArticleTwoTone'
 import CheckIcon from '@mui/icons-material/Check'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 
 export {
   LoginIcon,
@@ -45,5 +47,7 @@ export {
   CheckCircleOutlineIcon,
   ReplyIcon,
   ArticleTwoToneIcon,
-  CheckIcon
+  CheckIcon,
+  ArrowBackIosIcon,
+  ArrowForwardIosIcon
 }

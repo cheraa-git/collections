@@ -1,7 +1,6 @@
 import { Items } from "../db/models/Items"
 import { filterItem } from "../utils"
 import { Fields, Item, Tag, TagCount } from "../../../common/common-types"
-import { Tags } from "../db/models/Tags"
 import { ItemsTags } from "../db/models/ItemsTags"
 import { ItemConfigs } from "../db/models/ItemConfigs"
 import { Collections } from "../db/models/Collections"
@@ -10,13 +9,18 @@ import { DatabaseError } from "../../../common/errors/DatabaseError"
 import { GetItemResponse } from "../../../common/response-types"
 import { NotFoundError } from "../../../common/errors/NotFoundError"
 import { Users } from "../db/models/Users"
-import { getItemWithTagsQuery, getMostPopularTagsQuery, getRangeItemsQuery } from "./queries/itemQueries"
+import {
+  createTagsQuery,
+  getItemWithTagsQuery,
+  getMostPopularTagsQuery,
+  getRangeItemsQuery
+} from "./queries/itemQueries"
 
 
 const createItemTags = async (tags: Tag[], itemId: number): Promise<Either<DatabaseError, Tag[]>> => {
   try {
     const addedTags = tags.filter(tag => tag.id)
-    const createdTags = (await Tags.bulkCreate(tags.filter(tag => !tag.id))).map(tag => tag.dataValues)
+    const createdTags = await createTagsQuery(tags.filter(tag => !tag.id))
     const itemTags = [...addedTags, ...createdTags].map(tag => ({ itemId, tagId: tag.id }))
     await ItemsTags.bulkCreate(itemTags)
     return right([...addedTags, ...createdTags])

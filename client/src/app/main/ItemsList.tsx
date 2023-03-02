@@ -9,6 +9,7 @@ import { TagsArea } from "../item/TagsArea"
 import { clearMainItems, setHasManyItems, setSearchTags } from "../../store/slices/mainSlice"
 import { SearchIcon } from "../../common/icons"
 import { PopularTagCloud } from "./PopularTagCloud"
+import { Text } from "../../common/Text"
 
 export const ItemsList: FC = () => {
   const NUMBER_OF_LOADED_ITEMS = 50
@@ -51,6 +52,7 @@ export const ItemsList: FC = () => {
         next={loadItemsHandler}
         hasMore={hasMoreItems}
         loader={<Box mx="auto" width="min-content" mt={2}><Spinner/></Box>}
+        endMessage={<Text textAlign="center" fontSize="x-large">The end</Text>}
       >
         {items?.map(item => <ItemCard key={item.id} item={item}/>)}
       </InfiniteScroll>

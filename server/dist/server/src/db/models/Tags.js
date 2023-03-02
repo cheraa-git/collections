@@ -26,7 +26,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Tags.prototype, "id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false, unique: true }),
     __metadata("design:type", String)
 ], Tags.prototype, "name", void 0);
 __decorate([
