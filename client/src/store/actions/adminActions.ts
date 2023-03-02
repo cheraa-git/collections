@@ -1,12 +1,11 @@
 import { axiosGet, axiosPost } from "../../apis/axios/axios-app"
 import { setAdmin, setStatus, setUsers } from "../slices/adminSlice"
 import { setLoading, setUnknownError } from "../slices/appSlice"
-import { AppDispatch, GetState, RootState } from "../store"
+import { AppDispatch, RootState } from "../store"
 import { User, UserStatus } from "../../../../common/common-types"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { onTokenError } from "../slices/userSlice"
-import { IndexingError } from "../../../../common/errors/IndexingError"
 
 
 export const getUsers = () => async (dispatch: AppDispatch) => {
@@ -58,14 +57,4 @@ export const setAdminStatus = (ids: number[], status: boolean) => {
   }
 }
 
-export const indexing = (type: 'items' | 'collections' | 'comments') => {
-  return async (dispatch: AppDispatch, getState: GetState) => {
-    const token = getState().user.currentUser.token
-    const response = await axiosPost<TokenError | IndexingError, { status: string }>(`/admin/indexing/${type}`, { token })
-    response
-      .mapRight(r => console.log(r.data))
-      .mapLeft(e => e.response?.data.name === 'TokenError' ? dispatch(onTokenError()) : console.log(e.response?.data))
-      //TODO: отработать IndexingError
-  }
-}
 

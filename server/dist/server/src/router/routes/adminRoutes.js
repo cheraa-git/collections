@@ -11,6 +11,3 @@ exports.adminRouter = (0, express_1.Router)();
 exports.adminRouter.get('/users', controller.handleGetUsers);
 exports.adminRouter.post('/users/status', controller.handleSetUsersStatus);
 exports.adminRouter.post('/users/admin_status', controller.handleSetAdminStatus);
-exports.adminRouter.post('/indexing/items', controller.indexingItemsHandler);
-exports.adminRouter.post('/indexing/comments', controller.indexingCommentsHandler);
-exports.adminRouter.post('/indexing/collections', controller.indexingCollectionsHandler);
