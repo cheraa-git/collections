@@ -99,6 +99,9 @@
     "No tags found": "Тэги не найдены",
     "tags search": "поиск по тэгам",
     "The most popular tags": "Самые популярные тэги",
-    "The end": "Конец"
+    "The end": "Конец",
+    "Check your email": "Проверьте ваш email",
+    "There are no collections yet": "Коллекций пока нет",
+    "It will be impossible to restore the collection.": "Восстановить коллекцию будет невозможно"
   }
 }

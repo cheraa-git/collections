@@ -18,7 +18,7 @@ export const EditCollectionMenu: FC = () => {
 
   const deleteHandler = () => {
     setMenuAnchorEl(null)
-    showConfirm('It will be impossible to restore the collection.', () => {
+    showConfirm(t('It will be impossible to restore the collection.'), () => {
       dispatch(deleteCollection(collection, navigate))
     })
   }

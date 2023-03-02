@@ -3,9 +3,9 @@ import { setLoading, setUnknownError } from "../slices/appSlice"
 import { CreateItemBody } from "../../../../common/request-types"
 import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
 import { Item, Tag } from "../../../../common/common-types"
-import { setItemConfigs } from "../slices/collectionSlice"
+import { setCollectionLoading, setItemConfigs } from "../slices/collectionSlice"
 import { NavigateFunction } from "react-router-dom"
-import { addItem, setItem, setItemErrorMessage, setTags } from "../slices/itemSlice"
+import { addItem, setItem, setItemErrorMessage, setItemLoading, setTags } from "../slices/itemSlice"
 import { AppDispatch, GetState } from "../store"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { GetItemResponse } from "../../../../common/response-types"
@@ -14,7 +14,7 @@ import { onTokenError } from "../slices/userSlice"
 import { NotFoundError } from "../../../../common/errors/NotFoundError"
 
 export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispatch, getState: GetState) => {
-  dispatch(setLoading(true))
+  dispatch(setCollectionLoading(true))
   const { id: userId, token } = getState().user.currentUser
   const sendData: CreateItemBody = { userId, token, ...data }
   const itemResponse = await axiosPost<DatabaseError | TokenError, Item>('/item', sendData)
@@ -27,31 +27,30 @@ export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispa
         dispatch(setUnknownError(true))
       }
     })
-  dispatch(setLoading(false))
+  dispatch(setCollectionLoading(false))
 }
 
 export const getItem = (id: number) => async (dispatch: AppDispatch) => {
-  dispatch(setLoading(true))
+  dispatch(setItemLoading(true))
   const itemResponse = await axiosGet<DatabaseError | NotFoundError, GetItemResponse>(`/item/${id}`)
   itemResponse
     .mapRight(({ data }) => {
       dispatch(addItem(data.item))
       dispatch(setItemConfigs(data.itemConfigs))
-      dispatch(setLoading(false))
     })
     .mapLeft(e => {
       if (e.response?.data.name === 'NotFoundError') dispatch(setItemErrorMessage('Item not found'))
       if (e.response?.data.name === 'DatabaseError') {
         console.log(e.response?.data)
         dispatch(setUnknownError(true))
-        dispatch(setLoading(false))
       }
     })
+  dispatch(setItemLoading(false))
 }
 
 
 export const editItem = (item: Item) => async (dispatch: AppDispatch, getState: GetState) => {
-  dispatch(setLoading(true))
+  dispatch(setItemLoading(true))
   const token = getState().user.currentUser.token
   const itemResponse = await axiosPatch<TokenError | DatabaseError, Item>('/item', { item, token })
   itemResponse
@@ -63,7 +62,7 @@ export const editItem = (item: Item) => async (dispatch: AppDispatch, getState: 
         dispatch(setUnknownError(true))
       }
     })
-  dispatch(setLoading(false))
+  dispatch(setItemLoading(false))
 }
 
 export const deleteItem = (item: Item, navigate: NavigateFunction) => {

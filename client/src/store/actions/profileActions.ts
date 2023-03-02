@@ -1,6 +1,6 @@
 import { axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
-import { setProfileAvatar, setProfileErrorMessage, setProfileInfo } from "../slices/profileSlice"
-import { setLoading, setUnknownError } from "../slices/appSlice"
+import { setProfileAvatar, setProfileErrorMessage, setProfileInfo, setProfileLoading } from "../slices/profileSlice"
+import { setUnknownError } from "../slices/appSlice"
 import { AppDispatch, GetState } from "../store"
 import { GetProfileResponse } from "../../../../common/response-types"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
@@ -14,13 +14,13 @@ import { TokenError } from "../../../../common/errors/TokenError"
 import { onTokenError } from "../slices/userSlice"
 
 export const getProfile = (userId: string) => async (dispatch: AppDispatch) => {
-  dispatch(setLoading(true))
+  dispatch(setProfileLoading(true))
   const response = await axiosGet<DatabaseError, GetProfileResponse>(`/profile/${userId}`)
   response
     .mapRight(({ data }) => dispatch(setProfileInfo({ ...data })))
     .mapLeft(e => console.log(e))
 
-  dispatch(setLoading(false))
+  dispatch(setProfileLoading(false))
 }
 
 export const sendConfirmProfileChange = (data: EditProfileBody) => async (dispatch: AppDispatch) => {
@@ -45,9 +45,9 @@ export const editProfileInfo = async (editToken?: string): Promise<Either<any, A
 
 export const editProfileImage = (userId: number, image?: File) => async (dispatch: AppDispatch, getState: GetState) => {
   const token = getState().user.currentUser.token
+  dispatch(setProfileLoading(true))
   let avatarUrl = await saveImageToCloud(image)
-  dispatch(setLoading(true))
-  const response = await axiosPatch<TokenError | DatabaseError, {avatarUrl: string}>('/profile/edit_avatar', {
+  const response = await axiosPatch<TokenError | DatabaseError, { avatarUrl: string }>('/profile/edit_avatar', {
     avatarUrl, token, userId
   })
   response
@@ -59,6 +59,6 @@ export const editProfileImage = (userId: number, image?: File) => async (dispatc
         dispatch(setUnknownError(true))
       }
     })
-  dispatch(setLoading(false))
+  dispatch(setProfileLoading(false))
 
 }

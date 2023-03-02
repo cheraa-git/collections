@@ -6,6 +6,7 @@ export interface ProfileState {
   profileUser: ProfileUser
   collections: Collection[]
   errorMessage: string
+  loading: boolean
 }
 
 const initialState: ProfileState = {
@@ -16,7 +17,8 @@ const initialState: ProfileState = {
     status: 'active'
   },
   collections: [],
-  errorMessage: ''
+  errorMessage: '',
+  loading: false
 
 }
 
@@ -33,10 +35,13 @@ export const profileSlice = createSlice({
     },
     setProfileAvatar: (state, {payload}: PayloadAction<string>) => {
       state.profileUser.avatarUrl = payload
+    },
+    setProfileLoading: (state, {payload}: PayloadAction<boolean>) => {
+      state.loading = payload
     }
   }
 })
 
-export const {setProfileInfo, setProfileErrorMessage, setProfileAvatar} = profileSlice.actions
+export const {setProfileInfo, setProfileErrorMessage, setProfileAvatar, setProfileLoading} = profileSlice.actions
 
 export const ProfileReducer = profileSlice.reducer

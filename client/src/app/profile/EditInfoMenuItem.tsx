@@ -49,6 +49,7 @@ export const EditInfoMenuItem: FC = () => {
     if (newPassword) sendData.password = newPassword
     dispatch(sendConfirmProfileChange(sendData))
     onClose()
+    snackbar(t('Check your email'))
   }
 
   return (

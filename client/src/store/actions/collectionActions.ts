@@ -2,7 +2,12 @@ import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/a
 import { CreateCollectionPayload, EditCollectionPayload } from "../../types/collections"
 import { saveImageToCloud } from "../../apis/firebase/firebaseActions"
 import { CreateCollectionBody, EditCollectionBody } from "../../../../common/request-types"
-import { setCollectionData, setCollectionErrorMessage, setThemes } from "../slices/collectionSlice"
+import {
+  setCollectionData,
+  setCollectionErrorMessage,
+  setCollectionLoading,
+  setThemes
+} from "../slices/collectionSlice"
 import { setLoading, setUnknownError } from "../slices/appSlice"
 import { Collection, Theme } from "../../../../common/common-types"
 import { NavigateFunction } from "react-router-dom"
@@ -18,7 +23,7 @@ export const createCollection = (data: CreateCollectionPayload, navigate: Naviga
   return async (dispatch: AppDispatch, getState: GetState) => {
     const { image, themeId, title, itemConfigs, description, userId } = data
     const token = getState().user.currentUser.token
-    dispatch(setLoading(true))
+    dispatch(setCollectionLoading(true))
     const response = await axiosPost<TokenError | DatabaseError, Collection, CreateCollectionBody>('/collection', {
       userId, token, imageUrl: await saveImageToCloud(image), themeId, title, description, itemConfigs
     })
@@ -31,7 +36,7 @@ export const createCollection = (data: CreateCollectionPayload, navigate: Naviga
           dispatch(setUnknownError(true))
         }
       })
-    dispatch(setLoading(false))
+    dispatch(setCollectionLoading(false))
   }
 }
 
@@ -41,7 +46,7 @@ export const editCollection = (data: EditCollectionPayload, navigate: NavigateFu
     const { image, existingImage, id, title, userId, itemConfigs, themeId, description } = data
     const token = getState().user.currentUser.token
     let imageUrl = existingImage || await saveImageToCloud(image)
-    dispatch(setLoading(true))
+    dispatch(setCollectionLoading(true))
     const response = await axiosPatch<TokenError | DatabaseError, Collection, EditCollectionBody>('/collection', {
       itemConfigs, collection: { id, userId, imageUrl, title, themeId, description }, token
     })
@@ -54,13 +59,13 @@ export const editCollection = (data: EditCollectionPayload, navigate: NavigateFu
           dispatch(setUnknownError(true))
         }
       })
-    dispatch(setLoading(false))
+    dispatch(setCollectionLoading(false))
   }
 }
 
 
 export const getCollection = (id: string) => async (dispatch: AppDispatch) => {
-  dispatch(setLoading(true))
+  dispatch(setCollectionLoading(true))
   const response = await axiosGet<DatabaseError, GetCollectionResponse | undefined>(`/collection/${id}`)
   response
     .mapRight(({ data }) => {
@@ -69,14 +74,14 @@ export const getCollection = (id: string) => async (dispatch: AppDispatch) => {
       dispatch(setItems(data.items))
     })
     .mapLeft(e => console.log(e.response?.data))
-  dispatch(setLoading(false))
+  dispatch(setCollectionLoading(false))
 }
 
 
 export const deleteCollection = (collection: Collection, navigate: NavigateFunction) => {
   return async (dispatch: AppDispatch, getState: GetState) => {
     //TODO: удалить картинку из firebase
-    dispatch(setLoading(true))
+    dispatch(setCollectionLoading(true))
     const token = getState().user.currentUser.token
     const response = await axiosDelete<TokenError | DatabaseError>('/collection', { data: { collection, token } })
     response
@@ -88,7 +93,7 @@ export const deleteCollection = (collection: Collection, navigate: NavigateFunct
           dispatch(setUnknownError(true))
         }
       })
-    dispatch(setLoading(false))
+    dispatch(setCollectionLoading(false))
   }
 }
 

@@ -39,7 +39,7 @@ const getFullCollectionDataQuery = (id) => __awaiter(void 0, void 0, void 0, fun
             { model: ItemConfigs_1.ItemConfigs },
             { model: Users_1.Users },
             { model: Items_1.Items, include: [{ model: Tags_1.Tags, through: { attributes: [] } }] }
-        ]
+        ],
     });
 });
 exports.getFullCollectionDataQuery = getFullCollectionDataQuery;

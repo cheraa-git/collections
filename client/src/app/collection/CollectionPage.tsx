@@ -16,12 +16,13 @@ import { useTranslation } from "react-i18next"
 import { Text } from "../../common/Text"
 import { TypographyLink } from "../../common/TypographyLink"
 import Image from "mui-image"
+import { Spinner } from "../../common/Loader/Spinner"
 
 export const CollectionPage: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { id } = useParams()
-  const { collection, getTheme, isAuthor } = useCollection()
+  const { collection, getTheme, isAuthor, loading } = useCollection()
   const theme = useApp().theme
   const items = useAppSelector((state: RootState) => state.item.items)
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
@@ -37,7 +38,7 @@ export const CollectionPage: FC = () => {
   }, [dispatch, id])
 
 
-  if (!collection.id) return <></>
+  if (!collection.id) return <Box width="min-content" mx="auto" mt={5}><Spinner/></Box>
   return (
     <Box maxWidth="64rem" mx="auto" my={3} borderRadius=".25rem" p={2}>
       <Grid container spacing={5}>
@@ -47,7 +48,10 @@ export const CollectionPage: FC = () => {
           </Box>
         </Grid>
         <Grid item md={8} xs={12}>
-          <Typography variant="h4" className="capitalize">{collection.title}</Typography>
+          <Box display="flex">
+            <Typography variant="h4" className="capitalize">{collection.title}</Typography>
+            {loading && <Box ml="auto"><Spinner/></Box>}
+          </Box>
           <Box data-color-mode={theme} mb={2}>
             <MDEditor.Markdown source={collection.description}/>
           </Box>
@@ -68,14 +72,21 @@ export const CollectionPage: FC = () => {
           </Box>
           <EditCollectionMenu/>
         </Box>
-        <Box my="auto" height="min-content" width="100%" display="flex" justifyContent="end" hidden={!isAuthor}>
-          <Button onClick={() => setEditItemDialogOpen(true)} hidden={!collection}>
-            <AddIcon/>
-            {t('add item')}
-          </Button>
-        </Box>
-        <EditItemDialog open={editItemDialogOpen} onClose={() => setEditItemDialogOpen(false)}
-                        collectionId={collection.id}/>
+        {
+          isAuthor
+            ? <>
+              <Box my="auto" height="min-content" width="100%" display="flex" justifyContent="end">
+                <Button onClick={() => setEditItemDialogOpen(true)}>
+                  <AddIcon/>
+                  {t('add item')}
+                </Button>
+              </Box>
+              <EditItemDialog open={editItemDialogOpen} onClose={() => setEditItemDialogOpen(false)}
+                              collectionId={collection.id}/>
+            </>
+            : <></>
+        }
+
       </Box>
 
       {items.map(item => <ItemCard item={item} key={item.id}/>)}

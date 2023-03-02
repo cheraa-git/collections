@@ -61,9 +61,11 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
           </Box>
         }
 
-        <Link to={`/collection/${collection.id}`}>
-          <TransButton>Open</TransButton>
-        </Link>
+        <Box width="min-content" ml="auto">
+          <Link to={`/collection/${collection.id}`}>
+            <TransButton>Open</TransButton>
+          </Link>
+        </Box>
       </Box>
     </Card>
   )

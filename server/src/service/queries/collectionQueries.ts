@@ -28,6 +28,6 @@ export const getFullCollectionDataQuery = async (id: number) => {
       { model: ItemConfigs },
       { model: Users },
       { model: Items, include: [{ model: Tags, through: { attributes: [] } }] }
-    ]
+    ],
   })
 }

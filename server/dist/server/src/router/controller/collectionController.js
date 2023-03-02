@@ -26,6 +26,7 @@ const collectionService_1 = require("../../service/collectionService");
 const tokenService_1 = require("../../service/tokenService");
 const TokenError_1 = require("../../../../common/errors/TokenError");
 const DatabaseError_1 = require("../../../../common/errors/DatabaseError");
+const sequelize_1 = require("sequelize");
 class CollectionController {
     constructor() {
         this.handleCreateCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -61,7 +62,7 @@ class CollectionController {
         });
         this.getThemes = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                res.json(yield Themes_1.Themes.findAll());
+                res.json(yield Themes_1.Themes.findAll({ order: sequelize_1.Sequelize.literal('name') }));
             }
             catch (e) {
                 res.status(500).json(new DatabaseError_1.DatabaseError('Get themes', e));

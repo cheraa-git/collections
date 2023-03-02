@@ -12,6 +12,7 @@ import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { Theme } from "../../../../common/common-types"
+import { Sequelize } from "sequelize"
 
 
 export class CollectionController {
@@ -50,7 +51,7 @@ export class CollectionController {
 
   getThemes = async (req: Request, res: Response<Theme[] | DatabaseError>) => {
     try {
-      res.json(await Themes.findAll())
+      res.json(await Themes.findAll({order: Sequelize.literal('name')}))
     } catch (e) {
       res.status(500).json(new DatabaseError('Get themes', e))
     }

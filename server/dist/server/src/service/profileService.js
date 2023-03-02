@@ -15,9 +15,10 @@ const Users_1 = require("../db/models/Users");
 const either_1 = require("@sweet-monads/either");
 const DatabaseError_1 = require("../../../common/errors/DatabaseError");
 const tokenService_1 = require("./tokenService");
+const sequelize_1 = require("sequelize");
 const getProfile = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const collections = yield Collections_1.Collections.findAll({ where: { userId } });
+        const collections = yield Collections_1.Collections.findAll({ where: { userId }, order: sequelize_1.Sequelize.literal('timestamp DESC') });
         const user = yield Users_1.Users.findOne({
             where: { id: userId },
             attributes: ['id', 'nickname', 'avatarUrl']

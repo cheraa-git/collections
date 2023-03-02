@@ -6,6 +6,7 @@ export interface CollectionState {
   itemConfigs: ItemConfigType[]
   themes: Theme[]
   errorMessage: string
+  loading: boolean
 }
 
 const initialState: CollectionState = {
@@ -20,7 +21,8 @@ const initialState: CollectionState = {
   },
   itemConfigs: [],
   themes: [],
-  errorMessage: ''
+  errorMessage: '',
+  loading: false
 }
 
 export const userSlice = createSlice({
@@ -45,6 +47,9 @@ export const userSlice = createSlice({
     },
     setCollectionErrorMessage: (state, { payload }: PayloadAction<string>) => {
       state.errorMessage = payload
+    },
+    setCollectionLoading: (state, {payload}: PayloadAction<boolean>) => {
+      state.loading = payload
     }
 
   }
@@ -55,7 +60,8 @@ export const {
   setItemConfigs,
   clearCollectionData,
   setThemes,
-  setCollectionErrorMessage
+  setCollectionErrorMessage,
+  setCollectionLoading
 } = userSlice.actions
 
 export const CollectionReducer = userSlice.reducer

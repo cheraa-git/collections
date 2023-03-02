@@ -57,7 +57,7 @@ export const TagsArea: FC<TagsAreaProps> = ({ value, setValue, freeSolo = true, 
       inputValue={inputValue}
       onInputChange={(_, newInputValue) => inputHandler(newInputValue)}
       getOptionLabel={getTagName}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      // isOptionEqualToValue={(option, value) => option.id === value.id}
       filterOptions={filterOptions}
       filterSelectedOptions
       renderInput={params => <TextField {...params} size="small" label={t(placeholder)}/>}

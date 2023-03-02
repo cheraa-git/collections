@@ -9,6 +9,7 @@ export interface ItemState {
   likes: Like[]
   tags: Tag[]
   errorMessage: string
+  loading: boolean
 }
 
 const initialState: ItemState = {
@@ -17,7 +18,8 @@ const initialState: ItemState = {
   comments: [],
   likes: [],
   tags: [],
-  errorMessage: ''
+  errorMessage: '',
+  loading: false
 }
 
 export const itemSlice = createSlice({
@@ -66,6 +68,9 @@ export const itemSlice = createSlice({
     },
     setItemErrorMessage: (state, {payload}: PayloadAction<string>) => {
       state.errorMessage = payload
+    },
+    setItemLoading: (state, {payload}: PayloadAction<boolean>) => {
+      state.loading = payload
     }
 
   }
@@ -83,7 +88,8 @@ export const {
   setLikes,
   removeLike,
   setTags,
-  setItemErrorMessage
+  setItemErrorMessage,
+  setItemLoading
 } = itemSlice.actions
 
 export const ItemReducer = itemSlice.reducer

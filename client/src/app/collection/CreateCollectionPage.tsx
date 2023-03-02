@@ -3,14 +3,11 @@ import { Box, IconButton, MenuItem, TextField } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useAppDispatch, } from "../../store/store"
 import { createCollection, editCollection } from "../../store/actions/collectionActions"
-import AddIcon from '@mui/icons-material/Add'
-import RemoveIcon from '@mui/icons-material/Remove'
 import { useSnackbar } from "notistack"
 import { MarkdownFormControl } from "../../common/Markdown/MarkdownFormControl"
 import { ImageDrop } from "../../common/ImageDrop/ImageDrop"
 import { MAX_IMAGE_SIZE } from "../../constants/_other"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useApp } from "../../hooks/appStateHook"
 import { Spinner } from "../../common/Loader/Spinner"
 import { Collection, ItemConfigType } from "../../../../common/common-types"
 import { useCollection } from "../../hooks/collectionStateHook"
@@ -18,6 +15,9 @@ import { Text } from "../../common/Text"
 import { useTranslation } from "react-i18next"
 import { TransButton } from "../../common/TransButton"
 import { useAuth } from "../../hooks/authHook"
+import { ConfigInputs } from "./ConfigInputs"
+import { FixedConfigInputs } from "./FixedConfigInputs"
+import { AddIcon } from "../../common/icons"
 
 
 interface Inputs {
@@ -31,7 +31,6 @@ interface Inputs {
 export const CreateCollectionPage: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { loading } = useApp()
   const { enqueueSnackbar: snackbar } = useSnackbar()
   const navigate = useNavigate()
   const location = useLocation()
@@ -40,10 +39,9 @@ export const CreateCollectionPage: FC = () => {
     { register, handleSubmit, formState: { errors }, watch, setValue, reset, getValues, control } = useForm<Inputs>()
   const [configInputs, setConfigInputs] = useState<ItemConfigType[]>([{ type: '', label: '' }])
   const imageFile = watch('image') && watch('image').length > 0 ? watch('image')[0] : undefined
-  const fixedConfigInputs = [['string', 'title'], ['tags', 'tags']]
   const editable: { collection: Collection, itemConfigs: ItemConfigType[] } | undefined = location.state?.editable
   const userId = location.state?.userId || currentUser.id
-  const themes = useCollection().themes
+  const { themes, loading } = useCollection()
 
 
   useEffect(() => {
@@ -72,29 +70,8 @@ export const CreateCollectionPage: FC = () => {
     }
   }
 
-  const configTypeHandler = (index: number, type: string) => {
-    const newConfig = [...configInputs]
-    const count = newConfig.filter(config => config.type.includes(type)).length + 1
-    if (count > 3) {
-      return snackbar('You have reached the maximum number of fields with this type')
-    }
-    newConfig[index].type = type + count
-    if (editable) newConfig[index].collectionId = editable.collection.id
-    setConfigInputs(newConfig)
-  }
-
-  const configLabelHandler = (index: number, label: string) => {
-    const newConfig = [...configInputs]
-    newConfig[index].label = label
-    setConfigInputs(newConfig)
-  }
-
   const addConfigInput = () => {
     setConfigInputs(prev => [...prev, { type: '', label: '' }])
-  }
-
-  const removeConfigInput = (index: number) => {
-    setConfigInputs(prev => prev.filter((_, i) => i !== index))
   }
 
   const clearImage = () => {
@@ -128,34 +105,10 @@ export const CreateCollectionPage: FC = () => {
           <MarkdownFormControl control={control} controlName="description" label="Enter a description"/>
         </Box>
 
-        {fixedConfigInputs.map((config, index) => (
-          <Box my={1} display="flex" mr={5} key={index}>
-            <TextField size="small" sx={{ mr: 2 }} label={t("type")} disabled value={t(config[0])} fullWidth/>
-            <TextField size="small" label={t("label")} disabled value={t(config[1])} fullWidth/>
-          </Box>
-        ))}
+        <FixedConfigInputs/>
 
-        {configInputs.map((config, index) => (
-          <Box display="flex" my={1} key={index}>
-            <TextField sx={{ mr: 2 }} select size="small" label={t("type")} fullWidth
-                       value={config.type.slice(0, -1)}
-                       onChange={(e) => configTypeHandler(index, e.target.value)}
-            >
-              <MenuItem value="str">{t('string')}</MenuItem>
-              <MenuItem value="txt">markdown</MenuItem>
-              <MenuItem value="numb">{t('number')}</MenuItem>
-              <MenuItem value="bool">{t('checkbox')}</MenuItem>
-              <MenuItem value="date">{t('date')}</MenuItem>
-            </TextField>
-            <TextField size="small" label={t("label")} fullWidth
-                       value={config.label}
-                       onChange={e => configLabelHandler(index, e.target.value)}
-            />
-            <IconButton color="error" onClick={() => removeConfigInput(index)}>
-              <RemoveIcon className="red"/>
-            </IconButton>
-          </Box>
-        ))}
+        <ConfigInputs configInputs={configInputs} setConfigInputs={setConfigInputs} editable={editable}/>
+
         <IconButton className="w-min animate-pulse" onClick={addConfigInput}>
           <AddIcon className="blue"/>
         </IconButton>

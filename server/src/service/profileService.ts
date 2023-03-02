@@ -5,11 +5,12 @@ import { DatabaseError } from "../../../common/errors/DatabaseError"
 import { GetProfileResponse } from "../../../common/response-types"
 import { parseEditProfileToken } from "./tokenService"
 import { TokenError } from "../../../common/errors/TokenError"
+import { Sequelize } from "sequelize"
 
 
 export const getProfile = async (userId: number): Promise<Either<DatabaseError, GetProfileResponse>> => {
   try {
-    const collections = await Collections.findAll({ where: { userId } })
+    const collections = await Collections.findAll({ where: { userId }, order: Sequelize.literal('timestamp DESC') })
     const user = await Users.findOne({
       where: { id: userId },
       attributes: ['id', 'nickname', 'avatarUrl']
