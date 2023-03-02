@@ -76,6 +76,11 @@ img {
     display: flex;
 }
 
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .h-min {
     height: min-content;
 }

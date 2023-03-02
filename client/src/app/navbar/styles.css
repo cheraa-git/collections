@@ -33,6 +33,10 @@
     transition: background-color .3s;
 }
 
+.search-btn-title {
+    margin-right: 3rem !important;
+}
+
 .search-btn:hover {
     border: 1px solid rgba(129, 129, 129, 0.2);
     background: rgba(140, 140, 140, 0.2);
@@ -43,4 +47,13 @@
     font-size: .75rem;
     font-weight: bold;
     align-self: center;
+}
+
+@media (max-width: 600px) {
+    .search-btn-title {
+        display: none;
+    }
+    .shortcut {
+        display: none !important;
+    }
 }

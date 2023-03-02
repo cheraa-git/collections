@@ -9,8 +9,8 @@ export const SearchButton: FC<{ onClick: () => void }> = ({ onClick }) => {
 
   return (
     <div className="search-btn" onClick={onClick}>
-      <SearchIcon className="blue" sx={{ mr: 2 }} fontSize="small"/>
-      <Text mr={5}>Search...</Text>
+      <SearchIcon className="blue" sx={{ mx: 1 }} fontSize="small"/>
+      <Text className="search-btn-title">Search...</Text>
       <div className="shortcut">
         {
           isMacOs

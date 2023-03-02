@@ -42,7 +42,7 @@ export const CollectionPage: FC = () => {
     <Box maxWidth="64rem" mx="auto" my={3} borderRadius=".25rem" p={2}>
       <Grid container spacing={5}>
         <Grid item md={4} xs={12} hidden={!collection.imageUrl}>
-          <Box maxWidth="400px" >
+          <Box maxWidth="400px">
             <Image src={collection.imageUrl || ''} alt="collection" showLoading/>
           </Box>
         </Grid>
@@ -54,23 +54,25 @@ export const CollectionPage: FC = () => {
         </Grid>
       </Grid>
 
-      <Box p={2} mt={2} justifyContent="space-between" className="border flex rounded">
-        <Box>
-          <Typography variant="h6">{t('Theme')}: {getTheme()?.name}</Typography>
-          <i className="flex">
-            <Text>Created by</Text>
-            <TypographyLink to={`/profile/${collection.userId}`} mx={1} className="link">
-              @{collection.userName}
-            </TypographyLink>
-            <Typography>{t('on')} {dateFormat(collection.timestamp)}</Typography>
-          </i>
+      <Box p={2} mt={2} className="border rounded">
+        <Box display="flex" justifyContent="space-between">
+          <Box>
+            <Typography variant="h6">{t('Theme')}: {getTheme()?.name}</Typography>
+            <i className="flex-wrap">
+              <Text>Created by</Text>
+              <TypographyLink to={`/profile/${collection.userId}`} mx={1} className="link">
+                @{collection.userName}
+              </TypographyLink>
+              <Typography>{t('on')} {dateFormat(collection.timestamp)}</Typography>
+            </i>
+          </Box>
+          <EditCollectionMenu/>
         </Box>
-        <Box my="auto" height="min-content" hidden={!isAuthor}>
+        <Box my="auto" height="min-content" width="100%" display="flex" justifyContent="end" hidden={!isAuthor}>
           <Button onClick={() => setEditItemDialogOpen(true)} hidden={!collection}>
             <AddIcon/>
             {t('add item')}
           </Button>
-          <EditCollectionMenu/>
         </Box>
         <EditItemDialog open={editItemDialogOpen} onClose={() => setEditItemDialogOpen(false)}
                         collectionId={collection.id}/>

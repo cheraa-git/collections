@@ -37,7 +37,7 @@ export const ItemsList: FC = () => {
     }
   }, [items.length, dispatch])
   return (
-    <Box px={5}>
+    <Box>
       <PopularTagCloud/>
       <Box display="flex">
         <Box width="100%">

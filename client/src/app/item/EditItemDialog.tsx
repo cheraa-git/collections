@@ -46,25 +46,29 @@ export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collect
 
   return (
     <BlurDialog open={open} fullWidth onClose={onClose}>
-      <Box component="form" px={3} py={1} onSubmit={handleSubmit(submitHandler)}>
-        <Text variant="h5">{item ? 'Edit' : 'Create'} item</Text>
-        <TextField label={t("title")} size="small" margin="dense" fullWidth
-                   {...register('name', { required: true })}
-                   error={!!errors.name}/>
-        <Box my={1}>
-          <TagsArea value={addedTags} setValue={setAddedTags}/>
-        </Box>
+      <Box component="form" px={3} py={1} onSubmit={handleSubmit(submitHandler)} minHeight={400}
+           display="flex" flexDirection="column" justifyContent="space-between">
+        <Box>
 
-        {itemConfigs.map(config => {
-            const required = config.type.slice(0, -1) !== 'bool'
-            return (
-              <div key={config.id}>
-                <ItemField type={config.type} label={config.label} control={control} required={required}/>
-              </div>
-            )
-          }
-        )}
-        <Box display="flex" justifyContent="space-between" mt={1}>
+          <Text variant="h5">{item ? 'Edit' : 'Create'} item</Text>
+          <TextField label={t("title")} size="small" margin="dense" fullWidth
+                     {...register('name', { required: true })}
+                     error={!!errors.name}/>
+          <Box my={1}>
+            <TagsArea value={addedTags} setValue={setAddedTags}/>
+          </Box>
+
+          {itemConfigs.map(config => {
+              const required = config.type.slice(0, -1) !== 'bool'
+              return (
+                <div key={config.id}>
+                  <ItemField type={config.type} label={config.label} control={control} required={required}/>
+                </div>
+              )
+            }
+          )}
+        </Box>
+        <Box display="flex" justifyContent="space-between">
           <TransButton onClick={onClose} color="inherit">Cancel</TransButton>
           <TransButton type="submit">Save</TransButton>
         </Box>

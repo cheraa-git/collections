@@ -48,7 +48,7 @@ export const ItemPage: FC = () => {
   return (
     <Box py={1} px={3} my={3} mx="auto" maxWidth="42rem" className="border">
       <Box display="flex">
-        <Text fontSize="medium" color="gray" mr={1}>author</Text>
+        <Text fontSize="medium" color="gray" mr={1} hidden={!item?.userNickname}>author</Text>
         <Link to={`/profile/${item?.userId}`} className="link capitalize">{item?.userNickname}</Link>
       </Box>
       <Box p={1} className="flex border-b">
