@@ -4,6 +4,7 @@ import { collectionRouter } from "./routes/collectionRoutes"
 import { itemRoutes } from "./routes/itemRoutes"
 import { profileRouter } from "./routes/profileRoutes"
 import { adminRouter } from "./routes/adminRoutes"
+import { devRouter } from "./routes/devRoutes"
 
 export class MainRouter {
   constructor(private app: Express) {
@@ -15,5 +16,6 @@ export class MainRouter {
     this.app.use('/item', itemRoutes)
     this.app.use('/profile', profileRouter)
     this.app.use('/admin', adminRouter)
+    this.app.use('/dev', devRouter)
   }
 }
