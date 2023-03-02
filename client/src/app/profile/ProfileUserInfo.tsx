@@ -30,7 +30,7 @@ export const ProfileUserInfo: FC = () => {
         </Box>
         <Box ml={1} hidden={!isAuthor}>
           <Text color="gray">Email</Text>
-          <Typography fontSize="x-large" ml={2} mr={1}>{currentUser.email}</Typography>
+          <Typography fontSize="x-large" ml={2} mr={1}>{profileUser.email}</Typography>
         </Box>
       </Box>
       {

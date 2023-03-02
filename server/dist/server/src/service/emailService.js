@@ -26,7 +26,7 @@ const sendConfirmProfileChange = (data) => __awaiter(void 0, void 0, void 0, fun
         });
         const mailOptions = {
             from: process.env.VERIFY_GMAIL_LOGIN,
-            to: data.oldEmail,
+            to: data.adminEmail || data.oldEmail,
             subject: 'Follow the link to change your account details',
             text: `${process.env.CLIENT_URL}/confirmation/edit/${token}`
         };

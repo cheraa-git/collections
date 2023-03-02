@@ -13,7 +13,7 @@ export const getProfile = async (userId: number): Promise<Either<DatabaseError, 
     const collections = await Collections.findAll({ where: { userId }, order: Sequelize.literal('timestamp DESC') })
     const user = await Users.findOne({
       where: { id: userId },
-      attributes: ['id', 'nickname', 'avatarUrl']
+      attributes: { exclude: ['password'] }
     })
     return right({ collections, user: user?.dataValues })
   } catch (e) {
@@ -24,8 +24,9 @@ export const getProfile = async (userId: number): Promise<Either<DatabaseError, 
 export const editProfile = async (token: string): Promise<Either<DatabaseError | TokenError, number>> => {
   try {
     return parseEditProfileToken(token)
-      .asyncMap(async (userData) => {
-        const user = await Users.update(userData, { where: { email: userData.oldEmail }, returning: ['*'] })
+      .asyncMap(async (tokenData) => {
+        const userData = { ...tokenData, adminEmail: undefined, oldEmail: undefined }
+        const user = await Users.update(userData, { where: { email: tokenData.oldEmail }, returning: ['*'] })
         return user[1][0].id
       })
   } catch (e) {

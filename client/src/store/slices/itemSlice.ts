@@ -10,6 +10,8 @@ export interface ItemState {
   tags: Tag[]
   errorMessage: string
   loading: boolean
+  commentLoading: boolean
+  likesLoading: boolean
 }
 
 const initialState: ItemState = {
@@ -19,7 +21,9 @@ const initialState: ItemState = {
   likes: [],
   tags: [],
   errorMessage: '',
-  loading: false
+  loading: false,
+  commentLoading: false,
+  likesLoading: false
 }
 
 export const itemSlice = createSlice({
@@ -29,7 +33,8 @@ export const itemSlice = createSlice({
     addItem: (state, { payload }: PayloadAction<Item>) => {
       if (!state.items.find(item => item.id === payload.id)) {
         state.items.push(payload)
-        console.log(payload)
+      } else {
+        state.items = state.items.map(item => item.id === payload.id ? payload : item)
       }
     },
     setItem: (state, { payload }: PayloadAction<Item>) => {
@@ -71,6 +76,12 @@ export const itemSlice = createSlice({
     },
     setItemLoading: (state, {payload}: PayloadAction<boolean>) => {
       state.loading = payload
+    },
+    setCommentLoading: (state, {payload}: PayloadAction<boolean>) => {
+      state.commentLoading = payload
+    },
+    setLikesLoading: (state, {payload}: PayloadAction<boolean>) => {
+      state.likesLoading = payload
     }
 
   }
@@ -89,7 +100,9 @@ export const {
   removeLike,
   setTags,
   setItemErrorMessage,
-  setItemLoading
+  setItemLoading,
+  setLikesLoading,
+  setCommentLoading
 } = itemSlice.actions
 
 export const ItemReducer = itemSlice.reducer

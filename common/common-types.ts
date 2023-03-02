@@ -101,5 +101,6 @@ export interface EditProfileTokenData {
   nickname?: string,
   password?: string
   oldEmail: string
+  adminEmail?: string
 }
 

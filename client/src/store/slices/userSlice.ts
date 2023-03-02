@@ -44,10 +44,20 @@ export const userSlice = createSlice({
       localStorage.removeItem('token')
       state.currentUser = initialState.currentUser
       state.tokenError = 'Authorization error'
+    },
+    clearTokenError: state => {
+      state.tokenError = ''
     }
   }
 })
 
-export const { toggleAuthLoading, setAuthErrorMessage, setUser, logoutUser, onTokenError } = userSlice.actions
+export const {
+  toggleAuthLoading,
+  setAuthErrorMessage,
+  setUser,
+  logoutUser,
+  onTokenError,
+  clearTokenError
+} = userSlice.actions
 
 export const UserReducer = userSlice.reducer

@@ -63,7 +63,12 @@ export const parseEditProfileToken = (token?: string): Either<TokenError, EditPr
   try {
     const payload = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload
     return right(
-      { email: payload?.email, password: payload?.password, nickname: payload?.nickname, oldEmail: payload.oldEmail }
+      { email: payload?.email,
+        password: payload?.password,
+        nickname: payload?.nickname,
+        oldEmail: payload.oldEmail ,
+        adminEmail: payload.adminEmail
+      }
     )
   } catch (e) {
     return left(new TokenError('parseEditProfileToken: Error'))

@@ -14,7 +14,9 @@ const initialState: ProfileState = {
     id: NaN,
     nickname: '',
     avatarUrl: '',
-    status: 'active'
+    status: 'active',
+    isAdmin: false,
+    email: ''
   },
   collections: [],
   errorMessage: '',

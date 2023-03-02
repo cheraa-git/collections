@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { useAppDispatch } from "../../store/store"
+import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { deleteItem, getItem } from "../../store/actions/itemActions"
 import { ItemFieldView } from "./ItemFieldView"
 import { Box, Typography } from "@mui/material"
@@ -12,10 +12,10 @@ import { TagChip } from "../../common/TagChip"
 import { useConfirm } from "../../hooks/confirmHook"
 import { TransButton } from "../../common/TransButton"
 import { useTranslation } from "react-i18next"
-import { useItem } from "../../hooks/itemStateHook"
 import { useAuth } from "../../hooks/authHook"
 import { dateTimeFormat } from "../../utils"
 import { Text } from "../../common/Text"
+import { Spinner } from "../../common/Loader/Spinner"
 
 export const ItemPage: FC = () => {
   const { t } = useTranslation()
@@ -23,18 +23,19 @@ export const ItemPage: FC = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { showConfirm } = useConfirm()
+  const { items, loading } = useAppSelector((state: RootState) => state.item)
   const { itemConfigs } = useCollection()
   const { id: currentUserId, isAdmin } = useAuth().currentUser
   const [editDialogOpen, setEditDialogOpen] = useState(false)
-  const item = useItem().items.find(item => item.id === Number(id))
+  const item = items.find(item => item.id === Number(id))
   const isAuthor = currentUserId && (item?.userId === currentUserId || isAdmin)
 
 
   useEffect(() => {
-    if (!item && id) {
+    if (id) {
       dispatch(getItem(+id))
     }
-  }, [item, id, dispatch])
+  }, [id, dispatch])
 
   const deleteHandler = () => {
     if (item) {
@@ -56,10 +57,15 @@ export const ItemPage: FC = () => {
           <Typography variant="h5">{item?.name}</Typography>
           <Typography fontSize="small" color="gray">{dateTimeFormat(item?.timestamp)}</Typography>
         </Box>
-        <Box hidden={!isAuthor}>
-          <TransButton onClick={() => setEditDialogOpen(true)} hidden={true}>Edit</TransButton>
-          <TransButton color="error" onClick={deleteHandler} hidden={!isAuthor}>Delete</TransButton>
-        </Box>
+        {
+          loading
+            ? <Spinner/>
+            : <Box hidden={!isAuthor}>
+              <TransButton onClick={() => setEditDialogOpen(true)} hidden={true}>Edit</TransButton>
+              <TransButton color="error" onClick={deleteHandler} hidden={!isAuthor}>Delete</TransButton>
+            </Box>
+        }
+
         {item &&
           <EditItemDialog collectionId={item?.collectionId} open={editDialogOpen}
                           onClose={() => setEditDialogOpen(false)}

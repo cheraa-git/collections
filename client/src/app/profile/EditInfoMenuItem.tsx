@@ -25,13 +25,13 @@ export const EditInfoMenuItem: FC = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<Inputs>({})
   const [open, setOpen] = useState(false)
   const profileUser = useAppSelector((state: RootState) => state.profile.profileUser)
-  const currentUser = useAuth().currentUser
+  const { currentUser } = useAuth()
 
   useEffect(() => {
-    if (open && profileUser.nickname === profileUser.nickname && currentUser.email) {
+    if (open && (profileUser.nickname === currentUser.nickname || currentUser.isAdmin)) {
       reset({
-        email: currentUser.email,
-        nickname: currentUser.nickname,
+        email: profileUser.email,
+        nickname: profileUser.nickname,
       })
     } else setOpen(false)
   }, [open, profileUser, currentUser, reset])
@@ -41,11 +41,12 @@ export const EditInfoMenuItem: FC = () => {
   }
 
   const submitHandler: SubmitHandler<Inputs> = ({ email, nickname, oldPassword, newPassword }) => {
-    const sendData: EditProfileBody = { oldPassword, oldEmail: currentUser.email }
+    const sendData: EditProfileBody = { oldPassword, oldEmail: profileUser.email }
     if (!email && !nickname && !newPassword) return
     if (!email.includes('@')) return snackbar('Email is invalid')
-    if (email && email !== currentUser.email) sendData.email = email
-    if (nickname && nickname !== currentUser.nickname) sendData.nickname = nickname
+    if (email && email !== profileUser.email) sendData.email = email
+    if (currentUser.isAdmin) sendData.adminEmail = currentUser.email
+    if (nickname && nickname !== profileUser.nickname) sendData.nickname = nickname
     if (newPassword) sendData.password = newPassword
     dispatch(sendConfirmProfileChange(sendData))
     onClose()
@@ -64,7 +65,11 @@ export const EditInfoMenuItem: FC = () => {
           <TextField type="password" autoComplete="new-password" label={t("New password")} size="small" margin="dense"
                      fullWidth{...register('newPassword')}/>
 
-          <Text mt={2}>To change the profile, enter the old password</Text>
+          {currentUser.isAdmin
+            ? <Text mt={2}>To change the profile, enter the password from the admin account</Text>
+            : <Text mt={2}>To change the profile, enter the old password</Text>
+
+          }
           <TextField label={t("Password")} type="password" size="small" margin="dense" autoComplete="new-password"
                      fullWidth{...register('oldPassword', { required: true })}
                      error={!!errors.oldPassword}/>

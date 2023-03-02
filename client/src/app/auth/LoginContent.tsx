@@ -7,7 +7,7 @@ import { Text } from "../../common/Text"
 import { TransButton } from "../../common/TransButton"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { setAuthErrorMessage } from "../../store/slices/userSlice"
+import { clearTokenError, setAuthErrorMessage } from "../../store/slices/userSlice"
 
 
 interface Inputs {
@@ -22,6 +22,7 @@ export const LoginContent: FC = () => {
 
   const onSubmit: SubmitHandler<Inputs> = ({ email, password }) => {
     dispatch(setAuthErrorMessage(''))
+    dispatch(clearTokenError())
     dispatch(authUser('login', { email, password }))
   }
 

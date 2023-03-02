@@ -4,11 +4,12 @@ import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { IconButton, Typography } from "@mui/material"
 import { toggleLike } from "../../store/socket/item/itemSocketAcions"
 import { FavoriteBorderIcon, FavoriteIcon } from "../../common/icons"
+import { Spinner } from "../../common/Loader/Spinner"
 
 export const Likes: FC<{ itemId: number }> = ({ itemId }) => {
   const dispatch = useAppDispatch()
   const { currentUser, isAuth } = useAuth()
-  const { likes } = useAppSelector((state: RootState) => state.item)
+  const { likes, likesLoading } = useAppSelector((state: RootState) => state.item)
   const isLiked = !!likes.find(like => like.userId === currentUser.id)
 
 
@@ -18,9 +19,13 @@ export const Likes: FC<{ itemId: number }> = ({ itemId }) => {
 
   return (
     <>
-      <IconButton onClick={likeHandler} disabled={!isAuth}>
+      <IconButton onClick={likeHandler} disabled={!isAuth || likesLoading}>
         {isLiked ? <FavoriteIcon className="red"/> : <FavoriteBorderIcon/>}
-        <Typography >{likes.length}</Typography>
+        {
+          likesLoading
+            ? <Spinner variant="small" className="self-center"/>
+            : <Typography>{likes.length}</Typography>
+        }
       </IconButton>
     </>
   )

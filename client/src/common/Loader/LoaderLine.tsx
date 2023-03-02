@@ -1,5 +1,5 @@
 import { FC } from "react"
-import './Loader.css'
+import './styles.css'
 
 export const LoaderLine: FC<{ hidden?: boolean }> = ({ hidden }) => {
   return (

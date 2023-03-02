@@ -97,7 +97,11 @@ const parseEditProfileToken = (token) => {
         return (0, either_1.left)(new TokenError_1.TokenError('parseEditProfileToken: Token not found'));
     try {
         const payload = jwt.verify(token, TOKEN_SECRET_KEY);
-        return (0, either_1.right)({ email: payload === null || payload === void 0 ? void 0 : payload.email, password: payload === null || payload === void 0 ? void 0 : payload.password, nickname: payload === null || payload === void 0 ? void 0 : payload.nickname, oldEmail: payload.oldEmail });
+        return (0, either_1.right)({ email: payload === null || payload === void 0 ? void 0 : payload.email,
+            password: payload === null || payload === void 0 ? void 0 : payload.password,
+            nickname: payload === null || payload === void 0 ? void 0 : payload.nickname,
+            oldEmail: payload.oldEmail,
+            adminEmail: payload.adminEmail });
     }
     catch (e) {
         return (0, either_1.left)(new TokenError_1.TokenError('parseEditProfileToken: Error'));

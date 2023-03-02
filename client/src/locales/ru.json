@@ -102,6 +102,7 @@
     "The end": "Конец",
     "Check your email": "Проверьте ваш email",
     "There are no collections yet": "Коллекций пока нет",
-    "It will be impossible to restore the collection.": "Восстановить коллекцию будет невозможно"
+    "It will be impossible to restore the collection.": "Восстановить коллекцию будет невозможно",
+    "To change the profile, enter the password from the admin account": "Чтобы изменить профиль, введите пароль от аккаунта администратора "
   }
 }

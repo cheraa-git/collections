@@ -45,6 +45,7 @@ export interface EditProfileBody {
   nickname?: string
   oldPassword: string
   oldEmail: string
+  adminEmail?: string
 }
 
 

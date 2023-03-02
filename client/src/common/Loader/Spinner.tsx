@@ -1,6 +1,11 @@
 import { FC } from "react"
-import './Loader.css'
+import './styles.css'
 
-export const Spinner: FC<{ className?: string }> = ({ className }) => {
-  return <span className={`loader ${className}`}></span>
+interface SpinnerProps {
+  className?: string
+  variant?: 'normal' | 'small'
+}
+
+export const Spinner: FC<SpinnerProps> = ({ className, variant = 'normal' }) => {
+  return <span className={`${variant === 'normal' ? 'spinner' : 'mini-spinner'} ${className}`}></span>
 }

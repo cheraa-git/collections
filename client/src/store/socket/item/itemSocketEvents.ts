@@ -1,14 +1,24 @@
 import { AppSocket } from "../../../types/socket"
 import { AppDispatch } from "../../store"
-import { addComment, addLike, removeLike, setComments, setLikes, setSocket } from "../../slices/itemSlice"
+import {
+  addComment,
+  addLike,
+  removeLike,
+  setCommentLoading,
+  setComments,
+  setLikes,
+  setLikesLoading,
+  setSocket
+} from "../../slices/itemSlice"
 import { onTokenError } from "../../slices/userSlice"
-import { setLoading } from "../../slices/appSlice"
 
 export const socketEvents = (socket: AppSocket, itemId: number) => (dispatch: AppDispatch) => {
   socket.on('connect', () => {
     dispatch(setSocket(socket))
     socket.emit('get:comments', itemId)
     socket.emit('get:likes', itemId)
+    dispatch(setCommentLoading(true))
+    dispatch(setLikesLoading(true))
   })
 
   socket.on('token_error', () => {
@@ -29,28 +39,28 @@ export const socketEvents = (socket: AppSocket, itemId: number) => (dispatch: Ap
 export const commentSocketEvents = (socket: AppSocket) => (dispatch: AppDispatch) => {
   socket.on('comments', (comments) => {
     dispatch(setComments(comments))
-    dispatch(setLoading(false))
+    dispatch(setCommentLoading(false))
   })
 
   socket.on('new_comment', (comment) => {
     dispatch(addComment(comment))
-    dispatch(setLoading(false))
+    dispatch(setCommentLoading(false))
   })
 }
 
 export const likeSocketEvents = (socket: AppSocket) => (dispatch: AppDispatch) => {
   socket.on('likes', (likes) => {
     dispatch(setLikes(likes))
-    dispatch(setLoading(false))
+    dispatch(setLikesLoading(false))
   })
 
   socket.on('like', (like) => {
     dispatch(addLike(like))
-    dispatch(setLoading(false))
+    dispatch(setLikesLoading(false))
   })
 
   socket.on('cancel_like', (userId) => {
     dispatch(removeLike({ userId }))
-    dispatch(setLoading(false))
+    dispatch(setLikesLoading(false))
   })
 }

@@ -21,7 +21,7 @@ const getProfile = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         const collections = yield Collections_1.Collections.findAll({ where: { userId }, order: sequelize_1.Sequelize.literal('timestamp DESC') });
         const user = yield Users_1.Users.findOne({
             where: { id: userId },
-            attributes: ['id', 'nickname', 'avatarUrl']
+            attributes: { exclude: ['password'] }
         });
         return (0, either_1.right)({ collections, user: user === null || user === void 0 ? void 0 : user.dataValues });
     }
@@ -33,8 +33,9 @@ exports.getProfile = getProfile;
 const editProfile = (token) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return (0, tokenService_1.parseEditProfileToken)(token)
-            .asyncMap((userData) => __awaiter(void 0, void 0, void 0, function* () {
-            const user = yield Users_1.Users.update(userData, { where: { email: userData.oldEmail }, returning: ['*'] });
+            .asyncMap((tokenData) => __awaiter(void 0, void 0, void 0, function* () {
+            const userData = Object.assign(Object.assign({}, tokenData), { adminEmail: undefined, oldEmail: undefined });
+            const user = yield Users_1.Users.update(userData, { where: { email: tokenData.oldEmail }, returning: ['*'] });
             return user[1][0].id;
         }));
     }

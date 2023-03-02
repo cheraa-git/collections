@@ -10,13 +10,14 @@ import { TypographyLink } from "../../common/TypographyLink"
 import { Text } from "../../common/Text"
 import { useTranslation } from "react-i18next"
 import { useAuth } from "../../hooks/authHook"
+import { Spinner } from "../../common/Loader/Spinner"
 
 
 export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { enqueueSnackbar: snackbar } = useSnackbar()
-  const { comments, socket } = useAppSelector((state: RootState) => state.item)
+  const { comments, socket, commentLoading } = useAppSelector((state: RootState) => state.item)
   const { isAuth } = useAuth()
   const [commentValue, setCommentValue] = useState('')
 
@@ -51,15 +52,22 @@ export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
           </Box>
         ))}
       </Box>
-      {comments.length === 0 && <Text color="gray" textAlign="center" mb={3}>There are no comments yet</Text>}
+      {
+        comments.length === 0 && !commentLoading &&
+        <Text color="gray" textAlign="center" mb={3}>There are no comments yet</Text>}
       {
         isAuth &&
-        <TextField size="small" multiline fullWidth placeholder={t("Enter comment...") || ''}
-                   value={commentValue}
-                   onChange={e => setCommentValue(e.target.value)}
-                   InputProps={{
-                     endAdornment: <IconButton sx={{ mt: 'auto' }} onClick={addCommentHandler}><SendIcon/></IconButton>
-                   }}
+        <TextField
+          size="small" multiline fullWidth placeholder={t("Enter comment...") || ''}
+          value={commentValue}
+          onChange={e => setCommentValue(e.target.value)}
+          InputProps={{
+            endAdornment: commentLoading
+              ? <Spinner/>
+              : <IconButton sx={{ mt: 'auto' }} onClick={addCommentHandler}><SendIcon/></IconButton>
+
+
+          }}
         />
       }
     </>
