@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react"
 import { dateTimeFormat } from "../../utils"
 import { Box, Divider, IconButton, TextField, Typography } from "@mui/material"
-import { connectSocket, postNewComment } from "../../store/actions/itemActions"
+import { connectItemSocket, postNewComment } from "../../store/socket/item/itemSocketAcions"
 import { useSnackbar } from "notistack"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { clearComments } from "../../store/slices/itemSlice"
@@ -22,7 +22,7 @@ export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
 
   useEffect(() => {
     if (!socket) {
-      dispatch(connectSocket(itemId))
+      dispatch(connectItemSocket(itemId))
     }
     return () => {
       socket?.close()

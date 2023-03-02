@@ -2,7 +2,7 @@ import { FC } from "react"
 import { useAuth } from "../../hooks/authHook"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { IconButton, Typography } from "@mui/material"
-import { toggleLike } from "../../store/actions/itemActions"
+import { toggleLike } from "../../store/socket/item/itemSocketAcions"
 import { FavoriteBorderIcon, FavoriteIcon } from "../../common/icons"
 
 export const Likes: FC<{ itemId: number }> = ({ itemId }) => {

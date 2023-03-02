@@ -8,6 +8,7 @@ import { getNextCollections } from "../../store/actions/mainActions"
 import { useTranslation } from "react-i18next"
 import { useCollection } from "../../hooks/collectionStateHook"
 import { clearMainCollections, setHasManyCollections, setSearchTheme } from "../../store/slices/mainSlice"
+import { Text } from "../../common/Text"
 
 export const CollectionsList: FC = () => {
   const NUMBER_OF_LOADED_COLLECTIONS = 10
@@ -52,7 +53,7 @@ export const CollectionsList: FC = () => {
         next={loadCollectionsHandler}
         hasMore={hasMoreCollections}
         loader={<Box mx="auto" width="min-content" mt={2}><Spinner/></Box>}
-        endMessage={<p>asdf</p>}
+        endMessage={<Text textAlign="center" fontSize="x-large">The end</Text>}
       >
         {collections?.map(collection => <CollectionCard key={collection.id} collection={collection}/>)}
       </InfiniteScroll>

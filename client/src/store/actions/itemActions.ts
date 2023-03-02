@@ -5,20 +5,7 @@ import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/a
 import { Item, Tag } from "../../../../common/common-types"
 import { setItemConfigs } from "../slices/collectionSlice"
 import { NavigateFunction } from "react-router-dom"
-import { AppSocket } from "../../types/socket"
-import { io } from "socket.io-client"
-import {
-  addComment,
-  addItem,
-  addLike,
-  removeLike,
-  setComments,
-  setItem,
-  setItemErrorMessage,
-  setLikes,
-  setSocket,
-  setTags
-} from "../slices/itemSlice"
+import { addItem, setItem, setItemErrorMessage, setTags } from "../slices/itemSlice"
 import { AppDispatch, GetState } from "../store"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { GetItemResponse } from "../../../../common/response-types"
@@ -97,69 +84,6 @@ export const deleteItem = (item: Item, navigate: NavigateFunction) => {
   }
 }
 
-export const postNewComment = (itemId: number, text: string) => async (dispatch: AppDispatch, getState: GetState) => {
-  const { user: { currentUser: { id, token, nickname } }, item: { socket } } = getState()
-  socket?.emit('add:comment', { token, userId: id, itemId, text, nickname })
-  dispatch(setLoading(true))
-}
-
-export const toggleLike = (itemId: number) => async (dispatch: AppDispatch, getState: GetState) => {
-  const { user: { currentUser: { id, token, nickname } }, item: { socket } } = getState()
-  socket?.emit('set:like', { token, userId: id, itemId, nickname })
-  dispatch(setLoading(true))
-}
-
-export const connectSocket = (itemId: number) => async (dispatch: AppDispatch) => {
-  const socket: AppSocket = io(process.env.REACT_APP_SOCKET_URL + '', { transports: ['websocket'] })
-  socket.on('connect', () => {
-    dispatch(setSocket(socket))
-    socket.emit('get:comments', itemId)
-    socket.emit('get:likes', itemId)
-    console.log('connected', socket.id)
-  })
-
-  socket.on('comments', (comments) => {
-    dispatch(setComments(comments))
-    dispatch(setLoading(false))
-  })
-
-  socket.on('new_comment', (comment) => {
-    dispatch(addComment(comment))
-    dispatch(setLoading(false))
-  })
-
-
-  socket.on('likes', (likes) => {
-    dispatch(setLikes(likes))
-    dispatch(setLoading(false))
-  })
-
-  socket.on('like', (like) => {
-    dispatch(addLike(like))
-    dispatch(setLoading(false))
-  })
-
-  socket.on('cancel_like', (userId) => {
-    dispatch(removeLike({ userId }))
-    dispatch(setLoading(false))
-  })
-
-  socket.on('token_error', () => {
-    socket.close()
-    dispatch(setSocket(null))
-    console.log("TOKEN ERROR")
-  })
-
-  socket.on('disconnect', () => {
-    dispatch(setSocket(null))
-    console.log('disconnect')
-  })
-  socket.on('connect_error', () => {
-    dispatch(setSocket(null))
-    socket.close()
-    console.log('connect_error')
-  })
-}
 
 export const getTags = () => async (dispatch: AppDispatch) => {
   (await axiosGet<DatabaseError, Tag[]>('/item/tags'))
