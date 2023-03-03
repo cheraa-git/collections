@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { RootState, useAppSelector } from "../../store/store"
 import { useAuth } from "../../hooks/authHook"
-import { Box, Button, Typography } from "@mui/material"
+import { Alert, Box, Button, Typography } from "@mui/material"
 import Image from "mui-image"
 import { AccountCircleIcon, AddIcon } from "../../common/icons"
 import { useNavigate } from "react-router-dom"
@@ -24,6 +24,7 @@ export const ProfileUserInfo: FC = () => {
         errorIcon={<Box fontSize="100px" height={120}><AccountCircleIcon color="disabled" fontSize="inherit"/></Box>}
         showLoading width={200} height={200} fit="cover" className="rounded" duration={500}/>
       <Box>
+        {profileUser.status === 'blocked' && <Alert sx={{ ml: 1 }} severity="warning">{t('Blocked')}</Alert>}
         <Box ml={1} mb={1}>
           <Text color="gray">Nickname</Text>
           <Typography fontSize="x-large" className="capitalize" ml={2} mr={1}>{profileUser.nickname}</Typography>

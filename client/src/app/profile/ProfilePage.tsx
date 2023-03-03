@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react"
-import { Box, Container } from "@mui/material"
+import { Alert, Box, Container } from "@mui/material"
 import { CollectionCard } from "../collection/CollectionCard"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { useParams } from "react-router-dom"
@@ -17,6 +17,10 @@ export const ProfilePage: FC = () => {
       dispatch(getProfile(userId))
     }
   }, [userId, dispatch])
+
+  if (profileUser.status === 'deleted') return (
+      <Alert sx={{ mx: 'auto', maxWidth: 400, mt: 5 }} severity="error">The user is deleted</Alert>
+  )
 
   return (
     <Container maxWidth="lg">
