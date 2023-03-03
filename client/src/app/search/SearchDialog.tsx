@@ -43,7 +43,7 @@ export const SearchDialog: FC = () => {
           <Text fontSize="x-large">Site search</Text>
           <Typography className="esc-bth" onClick={searchCloseHandler}>esc</Typography>
         </Box>
-        <InstantSearch indexName="items" searchClient={searchClient}>
+        <InstantSearch indexName="collections" searchClient={searchClient}>
           <SearchInput/>
           <Box px={1} mt={1}>
             <Index indexName="items">

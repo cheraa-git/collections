@@ -4,7 +4,7 @@ import { Box, Divider, IconButton, TextField, Typography } from "@mui/material"
 import { connectItemSocket, postNewComment } from "../../store/socket/item/itemSocketAcions"
 import { useSnackbar } from "notistack"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
-import { clearComments } from "../../store/slices/itemSlice"
+import { clearComments, setComments } from "../../store/slices/itemSlice"
 import SendIcon from '@mui/icons-material/Send'
 import { TypographyLink } from "../../common/TypographyLink"
 import { Text } from "../../common/Text"
@@ -20,6 +20,13 @@ export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
   const { comments, socket, commentLoading } = useAppSelector((state: RootState) => state.item)
   const { isAuth } = useAuth()
   const [commentValue, setCommentValue] = useState('')
+
+  useEffect(() => {
+    if (comments.length > 0 && comments[0].itemId !== itemId) {
+      dispatch(setComments([]))
+      console.log('clear comment')
+    }
+  }, [comments])
 
   useEffect(() => {
     if (!socket) {
