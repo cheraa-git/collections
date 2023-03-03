@@ -94,12 +94,13 @@ const getItemAuthorId = (collectionId) => __awaiter(void 0, void 0, void 0, func
 });
 exports.getItemAuthorId = getItemAuthorId;
 const editItem = (item) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     try {
         const { tags } = item, editingItem = __rest(item, ["tags"]);
         const updatedItem = yield Items_1.Items.update(editingItem, { where: { id: editingItem.id }, returning: ['*'] });
+        const user = (_b = (yield Collections_1.Collections.findOne({ where: { id: item.collectionId }, include: Users_1.Users }))) === null || _b === void 0 ? void 0 : _b.users;
         const updatedTagsResponse = (yield editItemTags(tags, editingItem.id));
-        return updatedTagsResponse
-            .map(updatedTags => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(updatedItem[1][0])), { tags: updatedTags })));
+        return updatedTagsResponse.map(updatedTags => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(updatedItem[1][0])), { tags: updatedTags, userId: user === null || user === void 0 ? void 0 : user.id, userNickname: user === null || user === void 0 ? void 0 : user.nickname })));
     }
     catch (e) {
         return (0, either_1.left)(new DatabaseError_1.DatabaseError('Edit item error', e));

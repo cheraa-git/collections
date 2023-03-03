@@ -61,7 +61,7 @@ export const ItemPage: FC = () => {
           loading
             ? <Spinner/>
             : <Box hidden={!isAuthor}>
-              <TransButton onClick={() => setEditDialogOpen(true)} hidden={true}>Edit</TransButton>
+              <TransButton onClick={() => setEditDialogOpen(true)} hidden={!isAuthor}>Edit</TransButton>
               <TransButton color="error" onClick={deleteHandler} hidden={!isAuthor}>Delete</TransButton>
             </Box>
         }

@@ -83,9 +83,11 @@ export const editItem = async (item: Item): Promise<Either<DatabaseError, Item>>
   try {
     const { tags, ...editingItem } = item
     const updatedItem = await Items.update(editingItem, { where: { id: editingItem.id }, returning: ['*'] })
+    const user = (await Collections.findOne({ where: { id: item.collectionId }, include: Users }))?.users
     const updatedTagsResponse = (await editItemTags(tags, editingItem.id))
-    return updatedTagsResponse
-      .map(updatedTags => ({ ...filterItem(updatedItem[1][0]), tags: updatedTags } as Item))
+    return updatedTagsResponse.map(updatedTags => ({
+      ...filterItem(updatedItem[1][0]), tags: updatedTags, userId: user?.id, userNickname: user?.nickname
+    } as Item))
   } catch (e) {
     return left(new DatabaseError('Edit item error', e))
   }
