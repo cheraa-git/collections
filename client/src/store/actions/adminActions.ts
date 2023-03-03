@@ -2,10 +2,10 @@ import { axiosGet, axiosPost } from "../../apis/axios/axios-app"
 import { setAdmin, setStatus, setUsers } from "../slices/adminSlice"
 import { setLoading, setUnknownError } from "../slices/appSlice"
 import { AppDispatch, RootState } from "../store"
-import { User, UserStatus } from "../../../../common/common-types"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { onTokenError } from "../slices/userSlice"
+import { User, UserStatus } from "../../../../common/types/user"
 
 
 export const getUsers = () => async (dispatch: AppDispatch) => {

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Comment, Item, Like, Tag } from "../../../../common/common-types"
 import { AppSocket } from "../../types/socket"
+import { Comment, Item, Like, Tag } from "../../../../common/types/item"
 
 export interface ItemState {
   items: Item[]

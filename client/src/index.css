@@ -62,10 +62,6 @@ img {
     border-top: 1px solid var(--border-color);
 }
 
-.border-y {
-    border-bottom: 1px solid var(--border-color);
-    border-top: 1px solid var(--border-color);
-}
 
 .border-x {
     border-left: 1px solid var(--border-color);
@@ -85,9 +81,6 @@ img {
     height: min-content;
 }
 
-.h-max {
-    height: max-content;
-}
 
 .w-full {
     width: 100%;
@@ -97,9 +90,6 @@ img {
     width: min-content;
 }
 
-.w-max {
-    width: max-content;
-}
 
 .red {
     color: rgb(248 113 113);
@@ -113,13 +103,6 @@ img {
     border-radius: 0.25rem;
 }
 
-.relative {
-    position: relative;
-}
-
-.bold {
-    font-weight: bold;
-}
 
 @keyframes pulse {
     50% {

@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { CreateItemBody, DeleteItemBody, EditItemBody } from "../../../../common/request-types"
+import { CreateItemBody, DeleteItemBody, EditItemBody } from "../../../../common/types/request-types"
 import { Tags } from "../../db/models/Tags"
 import {
   createItem,

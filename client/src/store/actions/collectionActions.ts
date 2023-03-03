@@ -1,7 +1,7 @@
 import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
-import { CreateCollectionPayload, EditCollectionPayload } from "../../types/collections"
+import { CreateCollectionPayload, EditCollectionPayload } from "../../types/collection"
 import { saveImageToCloud } from "../../apis/firebase/firebaseActions"
-import { CreateCollectionBody, EditCollectionBody } from "../../../../common/request-types"
+import { CreateCollectionBody, EditCollectionBody } from "../../../../common/types/request-types"
 import {
   setCollectionData,
   setCollectionErrorMessage,
@@ -9,14 +9,14 @@ import {
   setThemes
 } from "../slices/collectionSlice"
 import { setLoading, setUnknownError } from "../slices/appSlice"
-import { Collection, Theme } from "../../../../common/common-types"
 import { NavigateFunction } from "react-router-dom"
 import { setItems } from "../slices/itemSlice"
 import { AppDispatch, GetState } from "../store"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { onTokenError } from "../slices/userSlice"
-import { GetCollectionResponse } from "../../../../common/response-types"
+import { GetCollectionResponse } from "../../../../common/types/response-types"
+import { Collection, Theme } from "../../../../common/types/collection"
 
 
 export const createCollection = (data: CreateCollectionPayload, navigate: NavigateFunction) => {

@@ -5,7 +5,7 @@ import { Text } from "../../common/Text"
 import { Box, Button, Menu } from "@mui/material"
 import { useAppDispatch } from "../../store/store"
 import { setAdminStatus, setUsersStatus } from "../../store/actions/adminActions"
-import { UserStatus } from "../../../../common/common-types"
+import { UserStatus } from "../../../../common/types/user"
 
 export const MultipleActionsMenu: FC<{ selectionModel: number[] }> = ({ selectionModel }) => {
   const dispatch = useAppDispatch()

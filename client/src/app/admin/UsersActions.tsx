@@ -3,7 +3,7 @@ import { AdminPanelSettingsIcon, BlockIcon, CheckCircleOutlineIcon, DeleteIcon }
 import { setAdminStatus, setUsersStatus } from "../../store/actions/adminActions"
 import { IconButton } from "@mui/material"
 import { GridRenderCellParams } from "@mui/x-data-grid"
-import { UserStatus } from "../../../../common/common-types"
+import { UserStatus } from "../../../../common/types/user"
 
 export const UserActions = (params: GridRenderCellParams) => {
   const dispatch = useAppDispatch()

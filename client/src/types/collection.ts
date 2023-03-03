@@ -1,4 +1,5 @@
-import { Fields, ItemConfigType, Tag } from "../../../common/common-types"
+import { ItemConfigType } from "../../../common/types/collection"
+import { Fields, Tag } from "../../../common/types/item"
 
 export interface CreateCollectionPayload {
   userId: number

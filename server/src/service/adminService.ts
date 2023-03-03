@@ -1,8 +1,8 @@
 import { Users } from "../db/models/Users"
 import { Sequelize } from "sequelize-typescript"
-import { UserStatus } from "../../../common/common-types"
 import { Either, left, right } from "@sweet-monads/either"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
+import { UserStatus } from "../../../common/types/user"
 
 
 export const getUsers = async (): Promise<Either<DatabaseError, Users[]>> => {

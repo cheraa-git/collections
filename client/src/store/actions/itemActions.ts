@@ -1,17 +1,17 @@
-import { CreateItemPayload } from "../../types/collections"
+import { CreateItemPayload } from "../../types/collection"
 import { setLoading, setUnknownError } from "../slices/appSlice"
-import { CreateItemBody } from "../../../../common/request-types"
+import { CreateItemBody } from "../../../../common/types/request-types"
 import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
-import { Item, Tag } from "../../../../common/common-types"
 import { setCollectionLoading, setItemConfigs } from "../slices/collectionSlice"
 import { NavigateFunction } from "react-router-dom"
 import { addItem, setItem, setItemErrorMessage, setItemLoading, setTags } from "../slices/itemSlice"
 import { AppDispatch, GetState } from "../store"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
-import { GetItemResponse } from "../../../../common/response-types"
+import { GetItemResponse } from "../../../../common/types/response-types"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { onTokenError } from "../slices/userSlice"
 import { NotFoundError } from "../../../../common/errors/NotFoundError"
+import { Item, Tag } from "../../../../common/types/item"
 
 export const createItem = (data: CreateItemPayload) => async (dispatch: AppDispatch, getState: GetState) => {
   dispatch(setCollectionLoading(true))

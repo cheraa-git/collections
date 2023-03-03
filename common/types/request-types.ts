@@ -1,4 +1,5 @@
-import { Collection, Fields, Item, ItemConfigType, Tag } from "./common-types"
+import { Collection, ItemConfigType } from "./collection"
+import { Fields, Item, Tag } from "./item"
 
 export interface CreateCollectionBody {
   userId: number

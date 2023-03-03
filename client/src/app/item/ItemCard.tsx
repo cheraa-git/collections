@@ -1,12 +1,12 @@
 import './styles.css'
 import { FC } from "react"
 import { Box, Typography } from "@mui/material"
-import { Item } from "../../../../common/common-types"
 import { Link } from "react-router-dom"
 import { TagChip } from "../../common/TagChip"
 import { useApp } from "../../hooks/appStateHook"
 import { TransButton } from "../../common/TransButton"
 import { dateTimeFormat } from "../../utils"
+import { Item } from "../../../../common/types/item"
 
 interface ItemCardProps {
   item: Item

@@ -7,7 +7,7 @@ import { TransButton } from "../../common/TransButton"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useAuth } from "../../hooks/authHook"
-import { EditProfileBody } from "../../../../common/request-types"
+import { EditProfileBody } from "../../../../common/types/request-types"
 import { useSnackbar } from "notistack"
 import { sendConfirmProfileChange } from "../../store/actions/profileActions"
 

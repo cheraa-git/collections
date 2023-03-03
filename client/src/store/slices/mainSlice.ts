@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Collection, Item, Tag, TagCount } from "../../../../common/common-types"
+import { Collection } from "../../../../common/types/collection"
+import { Item, Tag, TagCount } from "../../../../common/types/item"
 
 export interface MainState {
-  errorMessage: string
   collections: Collection[]
   items: Item[],
   hasMoreItems: boolean
@@ -13,7 +13,6 @@ export interface MainState {
 }
 
 const initialState: MainState = {
-  errorMessage: '',
   collections: [],
   items: [],
   hasMoreCollections: true,
@@ -26,9 +25,6 @@ export const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
-    setMainErrorMessage: (state, { payload }: PayloadAction<string>) => {
-      state.errorMessage = payload
-    },
     addMainCollections: (state, { payload }: PayloadAction<Collection[]>) => {
       if (state.collections.length === 0) return { ...state, collections: payload }
       const newCollections = payload.filter(newCollection => {
@@ -61,14 +57,13 @@ export const mainSlice = createSlice({
     setSearchTheme: (state, { payload }: PayloadAction<number>) => {
       state.searchThemeId = payload
     },
-    setTagCounts: (state, {payload}: PayloadAction<TagCount[]>) => {
+    setTagCounts: (state, { payload }: PayloadAction<TagCount[]>) => {
       state.tagCounts = payload
     }
   }
 })
 
 export const {
-  setMainErrorMessage,
   addMainItems,
   addMainCollections,
   setHasManyItems,

@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer'
 import { Either, left, right } from "@sweet-monads/either"
 import { GmailError } from "../../../common/errors/GmailError"
 import { createEditProfileToken, createRegisterToken } from "./tokenService"
-import { AuthData, EditProfileTokenData } from "../../../common/common-types"
+import { AuthData, EditProfileTokenData } from "../../../common/types/user"
 
 
 const sendEmail = async ({ to, text, subject }: { to: string, subject: string, text: string }) => {

@@ -1,7 +1,6 @@
 import { AppDispatch } from "../store"
 import { axiosGet } from "../../apis/axios/axios-app"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
-import { Collection, Item, TagCount } from "../../../../common/common-types"
 import { setLoading, setUnknownError } from "../slices/appSlice"
 import {
   addMainCollections,
@@ -10,6 +9,8 @@ import {
   setHasManyItems,
   setTagCounts
 } from "../slices/mainSlice"
+import { Item, TagCount } from "../../../../common/types/item"
+import { Collection } from "../../../../common/types/collection"
 
 export const getNextItems = (offset: number, limit: number, tagIds: number[] = []) => async (dispatch: AppDispatch) => {
   const url = `/item/next?offset=${offset}&limit=${limit}&tagIds=${JSON.stringify(tagIds)}`

@@ -1,4 +1,6 @@
-import { Collection, Item, ItemConfigType, ProfileUser } from "./common-types"
+import { Collection, ItemConfigType } from "./collection"
+import { ProfileUser } from "./user"
+import { Item } from "./item"
 
 export interface GetProfileResponse {
   collections: Collection[]

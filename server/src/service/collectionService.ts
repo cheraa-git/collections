@@ -1,12 +1,13 @@
 import { Collections } from "../db/models/Collections"
-import { Collection, Item, ItemConfigType } from "../../../common/common-types"
 import { ItemConfigs } from "../db/models/ItemConfigs"
 import { filterItem } from "../utils"
 import { Either, left, right } from "@sweet-monads/either"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
-import { EditCollectionResponse, GetCollectionResponse } from "../../../common/response-types"
+import { EditCollectionResponse, GetCollectionResponse } from "../../../common/types/response-types"
 import { getCollectionsByItemCountQuery, getFullCollectionDataQuery } from "./queries/collectionQueries"
 import { removeCollectionRelationshipIndexes } from "./searchService"
+import { Collection, ItemConfigType } from "../../../common/types/collection"
+import { Item } from "../../../common/types/item"
 
 
 interface CreateCollection {

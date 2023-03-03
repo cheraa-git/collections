@@ -9,7 +9,6 @@ import { ImageDrop } from "../../common/ImageDrop/ImageDrop"
 import { MAX_IMAGE_SIZE } from "../../constants/image-drop"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Spinner } from "../../common/Loader/Spinner"
-import { Collection, ItemConfigType } from "../../../../common/common-types"
 import { useCollection } from "../../hooks/collectionStateHook"
 import { Text } from "../../common/Text"
 import { useTranslation } from "react-i18next"
@@ -18,6 +17,7 @@ import { useAuth } from "../../hooks/authHook"
 import { ConfigInputs } from "./ConfigInputs"
 import { FixedConfigInputs } from "./FixedConfigInputs"
 import { AddIcon } from "../../common/icons"
+import { Collection, ItemConfigType } from "../../../../common/types/collection"
 
 
 interface Inputs {

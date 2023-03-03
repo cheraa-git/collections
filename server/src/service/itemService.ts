@@ -1,12 +1,11 @@
 import { Items } from "../db/models/Items"
 import { filterItem } from "../utils"
-import { Fields, Item, Tag, TagCount } from "../../../common/common-types"
 import { ItemsTags } from "../db/models/ItemsTags"
 import { ItemConfigs } from "../db/models/ItemConfigs"
 import { Collections } from "../db/models/Collections"
 import { Either, left, right } from "@sweet-monads/either"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
-import { GetItemResponse } from "../../../common/response-types"
+import { GetItemResponse } from "../../../common/types/response-types"
 import { NotFoundError } from "../../../common/errors/NotFoundError"
 import { Users } from "../db/models/Users"
 import {
@@ -16,6 +15,7 @@ import {
   getRangeItemsQuery
 } from "./queries/itemQueries"
 import { removeItemCommentsIndexes } from "./searchService"
+import { Fields, Item, Tag, TagCount } from "../../../common/types/item"
 
 
 const createItemTags = async (tags: Tag[], itemId: number): Promise<Either<DatabaseError, Tag[]>> => {

@@ -1,5 +1,4 @@
 import { FC } from "react"
-import { Collection, ProfileUser } from "../../../../common/common-types"
 import { dateTimeFormat } from "../../utils"
 import MDEditor from "@uiw/react-md-editor"
 import { Box, Card, Grid, Typography } from "@mui/material"
@@ -10,6 +9,8 @@ import { TransButton } from "../../common/TransButton"
 import Image from 'mui-image'
 import { ArticleTwoToneIcon } from "../../common/icons"
 import { ThemeChip } from "../../common/ThemeChip"
+import { ProfileUser } from "../../../../common/types/user"
+import { Collection } from "../../../../common/types/collection"
 
 
 interface CollectionCardProps {

@@ -4,13 +4,13 @@ import { Box, TextField } from "@mui/material"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { useAppDispatch } from "../../store/store"
 import { createItem, editItem } from "../../store/actions/itemActions"
-import { Fields, Item, Tag } from "../../../../common/common-types"
 import { useCollection } from "../../hooks/collectionStateHook"
 import { TagsArea } from "./TagsArea"
 import { Text } from "../../common/Text"
 import { TransButton } from "../../common/TransButton"
 import { useTranslation } from "react-i18next"
 import { BlurDialog } from "../../common/BlurDialog"
+import { Fields, Item, Tag } from "../../../../common/types/item"
 
 
 interface EditItemDialogProps {

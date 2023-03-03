@@ -1,4 +1,4 @@
-import { AppServer, SocketController } from "../types"
+import { AppServer, SocketController } from "./socket-types"
 import { CommentSocket } from "./sockets/commentSocket"
 import http from "http"
 import { Server } from "socket.io"

@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { editAvatar, editProfile, getProfile } from "../../service/profileService"
-import { EditProfileBody } from "../../../../common/request-types"
+import { EditProfileBody } from "../../../../common/types/request-types"
 import { checkLoginData } from "../../service/authService"
 import { sendProfileChangeConfirm } from "../../service/emailService"
 import { checkToken } from "../../service/tokenService"

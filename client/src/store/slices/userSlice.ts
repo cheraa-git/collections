@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { User } from "../../../../common/common-types"
+import { User } from "../../../../common/types/user"
 
 export interface UserState {
   currentUser: User

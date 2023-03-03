@@ -2,7 +2,7 @@ import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript"
 import { Collections } from "./Collections"
 import { Comments } from "./Comments"
 import { Likes } from "./Likes"
-import { UserStatus } from "../../../../common/common-types"
+import { UserStatus } from "../../../../common/types/user"
 
 
 @Table({ timestamps: false, tableName: 'users' })

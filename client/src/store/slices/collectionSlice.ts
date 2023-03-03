@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Collection, ItemConfigType, Theme } from "../../../../common/common-types"
+import { Collection, ItemConfigType, Theme } from "../../../../common/types/collection"
 
 export interface CollectionState {
   collection: Collection

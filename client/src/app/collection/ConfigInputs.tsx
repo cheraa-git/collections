@@ -1,9 +1,9 @@
 import { FC } from "react"
-import { Collection, ItemConfigType } from "../../../../common/common-types"
 import { Box, IconButton, MenuItem, TextField } from "@mui/material"
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useTranslation } from "react-i18next"
 import { useSnackbar } from "notistack"
+import { Collection, ItemConfigType } from "../../../../common/types/collection"
 
 
 interface ConfigInputsProps {

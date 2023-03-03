@@ -1,12 +1,12 @@
 import { axiosPost } from "../../apis/axios/axios-app"
 import { logoutUser, setAuthErrorMessage, setAuthInfoMessage, setUser, toggleAuthLoading } from "../slices/userSlice"
 import { AppDispatch } from "../store"
-import { AuthData, User } from "../../../../common/common-types"
 import { AuthorizationError } from "../../../../common/errors/AuthorizationError"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { AutoLoginError } from "../../../../common/errors/AutoLoginError"
 import { Either, left } from "@sweet-monads/either"
 import { AxiosResponse } from "axios"
+import { AuthData, User } from "../../../../common/types/user"
 
 
 export const sendRegisterConfirm = (data: AuthData) => {

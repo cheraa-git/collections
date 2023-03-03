@@ -1,10 +1,10 @@
 import * as bcrypt from "bcrypt"
 import { Users } from "../db/models/Users"
 import { Either, left, right } from "@sweet-monads/either"
-import { User } from "../../../common/common-types"
 import { AuthorizationError } from "../../../common/errors/AuthorizationError"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
 import { createToken } from "./tokenService"
+import { User } from "../../../common/types/user"
 
 
 interface RegisterUser {

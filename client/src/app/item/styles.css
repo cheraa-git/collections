@@ -6,22 +6,6 @@
     height: 60px;
 }
 
-.item-card > .card-header {
-    margin-right: .5rem;
-}
-
-.card-title {
-    font-weight: bold;
-    align-self: center;
-}
-
-.card-date {
-    font-weight: bold;
-    align-self: center;
-}
-
-
-
 .item-card > .card-tags {
     display: flex;
     overflow-x: scroll;

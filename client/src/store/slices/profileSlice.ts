@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Collection, ProfileUser } from "../../../../common/common-types"
+import { ProfileUser } from "../../../../common/types/user"
+import { Collection } from "../../../../common/types/collection"
 
 export interface ProfileState {
   profileUser: ProfileUser

@@ -2,9 +2,9 @@ import * as jwt from "jsonwebtoken"
 import { JwtPayload } from "jsonwebtoken"
 import { Users } from "../db/models/Users"
 import * as bcrypt from "bcrypt"
-import { AuthData, EditProfileTokenData } from "../../../common/common-types"
 import { Either, left, right } from "@sweet-monads/either"
 import { TokenError } from "../../../common/errors/TokenError"
+import { AuthData, EditProfileTokenData } from "../../../common/types/user"
 
 
 const TOKEN_SECRET_KEY = String(process.env.TOKEN_SECTET_KEY)

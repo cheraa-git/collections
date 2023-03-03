@@ -1,10 +1,11 @@
 import { FC } from "react"
-import { Item, ItemConfigType } from "../../../../common/common-types"
 import MDEditor from "@uiw/react-md-editor"
 import { Box, Typography } from "@mui/material"
 import dayjs from "dayjs"
 import { useApp } from "../../hooks/appStateHook"
 import { CheckIcon, CloseIcon } from "../../common/icons"
+import { Item } from "../../../../common/types/item"
+import { ItemConfigType } from "../../../../common/types/collection"
 
 interface ItemFieldViewProps {
   item?: Item

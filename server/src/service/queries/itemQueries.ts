@@ -2,7 +2,7 @@ import { Items } from "../../db/models/Items"
 import { Tags } from "../../db/models/Tags"
 import { Sequelize } from "sequelize-typescript"
 import { ItemsTags } from "../../db/models/ItemsTags"
-import { Tag } from "../../../../common/common-types"
+import { Tag } from "../../../../common/types/item"
 
 export const getRangeItemsQuery = async (params: { offset: number, limit: number, tagIds?: number[] }) => {
   return await Items.findAll({

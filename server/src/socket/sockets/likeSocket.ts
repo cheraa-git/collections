@@ -1,10 +1,11 @@
-import { AppServer, AppSocket, SocketController } from "../../types"
+import { AppServer, AppSocket, SocketController } from "../socket-types"
 import { Likes } from "../../db/models/Likes"
 import { Users } from "../../db/models/Users"
 import { flatJoinedModel } from "../../utils"
-import { ClientToServerEvents, Like } from "../../../../common/common-types"
 import { EmptyResultError } from "sequelize"
 import { checkToken } from "../../service/tokenService"
+import { ClientToServerEvents } from "../../../../common/types/socket"
+import { Like } from "../../../../common/types/item"
 
 export class LikeSocket implements SocketController {
 

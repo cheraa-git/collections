@@ -3,8 +3,8 @@ import { RootState, useAppSelector } from "../../store/store"
 import { Autocomplete, TextField, UseAutocompleteProps } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { matchSorter } from "match-sorter"
-import { Tag } from "../../../../common/common-types"
 import { useTranslation } from "react-i18next"
+import { Tag } from "../../../../common/types/item"
 
 
 interface TagsAreaProps {

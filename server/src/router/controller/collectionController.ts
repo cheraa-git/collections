@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { CreateCollectionBody, DeleteCollectionBody, EditCollectionBody, } from "../../../../common/request-types"
+import { CreateCollectionBody, DeleteCollectionBody, EditCollectionBody, } from "../../../../common/types/request-types"
 import { Themes } from "../../db/models/Themes"
 import {
   createCollection,
@@ -11,8 +11,8 @@ import {
 import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
-import { Theme } from "../../../../common/common-types"
 import { Sequelize } from "sequelize"
+import { Theme } from "../../../../common/types/collection"
 
 
 export class CollectionController {
