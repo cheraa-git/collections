@@ -80,7 +80,6 @@ export const getCollection = (id: string) => async (dispatch: AppDispatch) => {
 
 export const deleteCollection = (collection: Collection, navigate: NavigateFunction) => {
   return async (dispatch: AppDispatch, getState: GetState) => {
-    //TODO: удалить картинку из firebase
     dispatch(setCollectionLoading(true))
     const token = getState().user.currentUser.token
     const response = await axiosDelete<TokenError | DatabaseError>('/collection', { data: { collection, token } })
