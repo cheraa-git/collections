@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseEditProfileToken = exports.createEditProfileToken = exports.createToken = exports.checkAdminToken = exports.checkAutoLoginToken = exports.checkToken = void 0;
+exports.parseRegisterToken = exports.createRegisterToken = exports.parseEditProfileToken = exports.createEditProfileToken = exports.createToken = exports.checkAdminToken = exports.checkAutoLoginToken = exports.checkToken = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
 const bcrypt = __importStar(require("bcrypt"));
 const either_1 = require("@sweet-monads/either");
@@ -97,14 +97,32 @@ const parseEditProfileToken = (token) => {
         return (0, either_1.left)(new TokenError_1.TokenError('parseEditProfileToken: Token not found'));
     try {
         const payload = jwt.verify(token, TOKEN_SECRET_KEY);
-        return (0, either_1.right)({ email: payload === null || payload === void 0 ? void 0 : payload.email,
+        return (0, either_1.right)({
+            email: payload === null || payload === void 0 ? void 0 : payload.email,
             password: payload === null || payload === void 0 ? void 0 : payload.password,
             nickname: payload === null || payload === void 0 ? void 0 : payload.nickname,
             oldEmail: payload.oldEmail,
-            adminEmail: payload.adminEmail });
+            adminEmail: payload.adminEmail
+        });
     }
     catch (e) {
         return (0, either_1.left)(new TokenError_1.TokenError('parseEditProfileToken: Error'));
     }
 };
 exports.parseEditProfileToken = parseEditProfileToken;
+const createRegisterToken = (data) => {
+    return jwt.sign(data, TOKEN_SECRET_KEY);
+};
+exports.createRegisterToken = createRegisterToken;
+const parseRegisterToken = (token) => {
+    if (!token)
+        return (0, either_1.left)(new TokenError_1.TokenError('parseEditProfileToken: Token not found'));
+    try {
+        const payload = jwt.verify(token, TOKEN_SECRET_KEY);
+        return (0, either_1.right)({ email: payload === null || payload === void 0 ? void 0 : payload.email, password: payload === null || payload === void 0 ? void 0 : payload.password, nickname: payload === null || payload === void 0 ? void 0 : payload.nickname, });
+    }
+    catch (e) {
+        return (0, either_1.left)(new TokenError_1.TokenError('parseEditProfileToken: Error'));
+    }
+};
+exports.parseRegisterToken = parseRegisterToken;

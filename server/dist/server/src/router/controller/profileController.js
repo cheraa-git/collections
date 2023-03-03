@@ -38,12 +38,12 @@ class ProfileController {
     }
     handleSendConfirmationEmail(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const _a = req.body, { oldEmail, oldPassword } = _a, newUserData = __rest(_a, ["oldEmail", "oldPassword"]);
+            const _a = req.body, { oldEmail, oldPassword } = _a, newDataOfUser = __rest(_a, ["oldEmail", "oldPassword"]);
             const authResponse = yield (0, authService_1.checkLoginData)(oldEmail, oldPassword);
             authResponse
                 .mapLeft(e => res.status(401).json(e))
                 .mapRight(() => __awaiter(this, void 0, void 0, function* () {
-                (yield (0, emailService_1.sendConfirmProfileChange)(Object.assign(Object.assign({}, newUserData), { oldEmail })))
+                (yield (0, emailService_1.sendProfileChangeConfirm)(Object.assign(Object.assign({}, newDataOfUser), { oldEmail })))
                     .mapLeft(e => res.status(500).json(e));
             }));
         });

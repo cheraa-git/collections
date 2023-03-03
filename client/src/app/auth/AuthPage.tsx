@@ -2,20 +2,32 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { Spinner } from "../../common/Loader/Spinner"
-import { setAuthErrorMessage } from "../../store/slices/userSlice"
+import { setAuthErrorMessage, setAuthInfoMessage } from "../../store/slices/userSlice"
 import { RegisterContent } from "./RegisterContent"
 import { LoginContent } from "./LoginContent"
 import { useAuth } from "../../hooks/authHook"
 import { LoginIcon, PersonAddIcon } from "../../common/icons"
 import { Box } from "@mui/material"
 import { Text } from "../../common/Text"
+import { useTranslation } from "react-i18next"
+import { useSnackbar } from "notistack"
 
 export function AuthPage() {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const { enqueueSnackbar: snackbar } = useSnackbar()
   const navigate = useNavigate()
   const { mode } = useParams()
-  const { errorMessage, tokenError, loading } = useAppSelector((state: RootState) => state.user)
+  const { errorMessage, tokenError, loading, infoMessage } = useAppSelector((state: RootState) => state.user)
   const { isAuth } = useAuth()
+
+
+  useEffect(() => {
+    if (infoMessage) {
+      snackbar(t(infoMessage))
+      dispatch(setAuthInfoMessage(''))
+    }
+  }, [infoMessage])
 
   useEffect(() => {
     dispatch(setAuthErrorMessage(''))

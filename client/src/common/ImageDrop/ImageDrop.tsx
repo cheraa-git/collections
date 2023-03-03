@@ -1,7 +1,7 @@
 import './styles.css'
 import { FC, InputHTMLAttributes } from "react"
 import { formatFileSize } from "../../utils"
-import { MAX_IMAGE_SIZE } from "../../constants/_other"
+import { MAX_IMAGE_SIZE } from "../../constants/image-drop"
 import { Box } from "@mui/material"
 import { CloseIcon } from "../icons"
 import { useTranslation } from "react-i18next"

@@ -14,20 +14,19 @@ const authService_1 = require("../../service/authService");
 const AuthorizationError_1 = require("../../../../common/errors/AuthorizationError");
 const AutoLoginError_1 = require("../../../../common/errors/AutoLoginError");
 const tokenService_1 = require("../../service/tokenService");
+const emailService_1 = require("../../service/emailService");
+const DatabaseError_1 = require("../../../../common/errors/DatabaseError");
 class AuthController {
     constructor() {
         this.handleRegisterUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const nickname = req.body.nickname.trim().toLowerCase();
-            const email = req.body.email.trim().toLowerCase();
-            const avatarUrl = req.body.avatarUrl;
-            const password = req.body.password.trim();
-            if (!nickname || !email || !password) {
-                return res.status(401).json(new AuthorizationError_1.AuthorizationError('Registration data invalid'));
-            }
-            const response = yield (0, authService_1.registerUser)(nickname, email, password, avatarUrl);
-            response
-                .mapRight(user => res.json(user))
-                .mapLeft(e => res.status(401).json(e));
+            const token = req.body.token;
+            (0, tokenService_1.parseRegisterToken)(token)
+                .mapRight(({ email, password, nickname }) => __awaiter(this, void 0, void 0, function* () {
+                const response = yield (0, authService_1.registerUser)(nickname || '', email, password);
+                response
+                    .mapRight(user => res.json(user))
+                    .mapLeft(e => res.status(401).json(e));
+            }));
         });
         this.handleLoginUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             var _a, _b;
@@ -48,6 +47,22 @@ class AuthController {
                 return res.status(500).json(new AutoLoginError_1.AutoLoginError());
             }
             res.json(Object.assign(Object.assign({}, user.dataValues), { token, password: undefined }));
+        });
+        this.handleSendConfirmationEmail = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const nickname = req.body.nickname.trim().toLowerCase();
+            const email = req.body.email.trim().toLowerCase();
+            const password = req.body.password.trim();
+            if (!nickname || !email || !password) {
+                return res.status(401).json(new AuthorizationError_1.AuthorizationError('Registration data invalid'));
+            }
+            const checkRegisterDataResponse = yield (0, authService_1.checkRegisterData)(email, nickname);
+            checkRegisterDataResponse
+                .mapLeft(e => res.status(401).json(e))
+                .mapRight(() => __awaiter(this, void 0, void 0, function* () {
+                (yield (0, emailService_1.sendRegisterConfirm)({ email, nickname, password }))
+                    .mapRight(() => res.json({ status: 200 }))
+                    .mapLeft(e => res.status(401).json(new DatabaseError_1.DatabaseError('sendRegisterConfirm: Error', e)));
+            }));
         });
     }
 }

@@ -6,19 +6,32 @@ import { Text } from "../../common/Text"
 import { editProfileInfo } from "../../store/actions/profileActions"
 import { useAppDispatch } from "../../store/store"
 import { setUnknownError } from "../../store/slices/appSlice"
+import { registerUser } from "../../store/actions/userActions"
+import { setUser } from "../../store/slices/userSlice"
 
 export const ConfirmationPage: FC = () => {
-  const { mode, token } = useParams<{ mode: 'edit' | 'create', token: string }>()
+  const { mode, token } = useParams<{ mode: 'edit' | 'register', token: string }>()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
 
   useEffect(() => {
     (async function () {
-      const response = await editProfileInfo(token)
-      response
-        .mapRight(({ data: userId }) => navigate(`/profile/${userId}`))
-        .mapLeft(() => dispatch(setUnknownError(true)))
+      if (mode === 'edit') {
+        const response = await editProfileInfo(token)
+        response
+          .mapRight(({ data: userId }) => navigate(`/profile/${userId}`))
+          .mapLeft(() => dispatch(setUnknownError(true)))
+      }
+      if (mode === 'register') {
+        const response = await registerUser(token)
+        response
+          .mapRight(({ data: user }) => {
+            dispatch(setUser(user))
+            navigate(`/profile/${user.id}`)
+          })
+          .mapLeft(() => dispatch(setUnknownError(true)))
+      }
     }())
   }, [])
 

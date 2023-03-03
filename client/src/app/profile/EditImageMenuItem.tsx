@@ -7,10 +7,13 @@ import { ImageDrop } from "../../common/ImageDrop/ImageDrop"
 import { TransButton } from "../../common/TransButton"
 import { Text } from "../../common/Text"
 import { editProfileImage } from "../../store/actions/profileActions"
+import { useSnackbar } from "notistack"
+import { MAX_IMAGE_SIZE } from "../../constants/image-drop"
 
 export const EditImageMenuItem: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const { enqueueSnackbar: snackbar } = useSnackbar()
   const profileUser = useAppSelector((state: RootState) => state.profile.profileUser)
   const [open, setOpen] = useState(false)
   const [image, setImage] = useState<FileList | null>(null)
@@ -34,6 +37,7 @@ export const EditImageMenuItem: FC = () => {
 
   const editImageHandler = () => {
     if (existingImageUrl) return onClose()
+    if (imageFile && imageFile?.size > MAX_IMAGE_SIZE) return snackbar('The maximum photo size is 10MB')
     dispatch(editProfileImage(profileUser.id, imageFile))
     onClose()
   }

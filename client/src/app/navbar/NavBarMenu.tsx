@@ -1,7 +1,6 @@
 import { FC, MouseEvent, useState } from "react"
 import { Box, Divider, IconButton, Menu, MenuItem, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
-import { clientRoutes as routes } from "../../constants/routes"
 import { useAuth } from "../../hooks/authHook"
 import { MenuSettings } from "./MenuSettings"
 import {
@@ -62,7 +61,7 @@ export const NavBarMenu: FC = () => {
             </MenuItem>
           </Link>
 
-          <Link to={routes.CREATE_COLLECTION} onClick={handleClose}>
+          <Link to="/create_collection" onClick={handleClose}>
             <MenuItem>
               <AddIcon color="primary"/>
               <Text ml={2}>Create collection</Text>
@@ -75,13 +74,13 @@ export const NavBarMenu: FC = () => {
         </Box>
 
         <Box hidden={isAuth}>
-          <Link to={routes.AUTH.LOGIN}>
+          <Link to="/auth/login">
             <MenuItem onClick={handleClose}>
               <Text>Login</Text>
               <LoginIcon sx={{ ml: 4 }} color="primary" fontSize="small"/>
             </MenuItem>
           </Link>
-          <Link to={routes.AUTH.REGISTER}>
+          <Link to="/auth/signup">
             <MenuItem onClick={handleClose}>
               <Text>Sign up</Text>
               <PersonAddIcon sx={{ ml: 2 }} color="primary" fontSize="small"/>

@@ -6,6 +6,7 @@ export interface UserState {
   errorMessage: string
   tokenError: string
   loading: boolean
+  infoMessage: string
 }
 
 const initialState: UserState = {
@@ -20,6 +21,7 @@ const initialState: UserState = {
   errorMessage: '',
   tokenError: '',
   loading: false,
+  infoMessage: ''
 }
 
 export const userSlice = createSlice({
@@ -47,6 +49,9 @@ export const userSlice = createSlice({
     },
     clearTokenError: state => {
       state.tokenError = ''
+    },
+    setAuthInfoMessage: (state, {payload}: PayloadAction<string>) => {
+      state.infoMessage = payload
     }
   }
 })
@@ -57,7 +62,8 @@ export const {
   setUser,
   logoutUser,
   onTokenError,
-  clearTokenError
+  clearTokenError,
+  setAuthInfoMessage
 } = userSlice.actions
 
 export const UserReducer = userSlice.reducer

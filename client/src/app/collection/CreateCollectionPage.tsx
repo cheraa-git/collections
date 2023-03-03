@@ -6,7 +6,7 @@ import { createCollection, editCollection } from "../../store/actions/collection
 import { useSnackbar } from "notistack"
 import { MarkdownFormControl } from "../../common/Markdown/MarkdownFormControl"
 import { ImageDrop } from "../../common/ImageDrop/ImageDrop"
-import { MAX_IMAGE_SIZE } from "../../constants/_other"
+import { MAX_IMAGE_SIZE } from "../../constants/image-drop"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Spinner } from "../../common/Loader/Spinner"
 import { Collection, ItemConfigType } from "../../../../common/common-types"

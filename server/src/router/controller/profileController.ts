@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import { editAvatar, editProfile, getProfile } from "../../service/profileService"
 import { EditProfileBody } from "../../../../common/request-types"
 import { checkLoginData } from "../../service/authService"
-import { sendConfirmProfileChange } from "../../service/emailService"
+import { sendProfileChangeConfirm } from "../../service/emailService"
 import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../../common/errors/TokenError"
 
@@ -18,12 +18,12 @@ export class ProfileController {
   }
 
   async handleSendConfirmationEmail(req: Request<any, any, EditProfileBody>, res: Response) {
-    const { oldEmail, oldPassword, ...newUserData } = req.body
+    const { oldEmail, oldPassword, ...newDataOfUser } = req.body
     const authResponse = await checkLoginData(oldEmail, oldPassword)
     authResponse
       .mapLeft(e => res.status(401).json(e))
       .mapRight(async () => {
-        (await sendConfirmProfileChange({ ...newUserData, oldEmail }))
+        (await sendProfileChangeConfirm({ ...newDataOfUser, oldEmail }))
           .mapLeft(e => res.status(500).json(e))
       })
   }

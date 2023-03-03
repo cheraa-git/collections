@@ -3,7 +3,7 @@ import { Box, TextField } from "@mui/material"
 import { useAppDispatch } from "../../store/store"
 import { useSnackbar } from "notistack"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { authUser } from "../../store/actions/userActions"
+import { sendRegisterConfirm } from "../../store/actions/userActions"
 import { useTranslation } from "react-i18next"
 import { Text } from "../../common/Text"
 import { Link } from "react-router-dom"
@@ -27,7 +27,7 @@ export const RegisterContent: FC = () => {
     if (!email.includes('@')) return snackbar('Email is invalid')
     if (confirmPassword !== password) return snackbar('The password is not equal to the confirm password')
     dispatch(setAuthErrorMessage(''))
-    dispatch(authUser('create', { nickname, email, password }))
+    dispatch(sendRegisterConfirm({ nickname, email, password }))
   }
 
   return (

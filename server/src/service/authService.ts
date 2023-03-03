@@ -8,13 +8,13 @@ import { createToken } from "./tokenService"
 
 
 interface RegisterUser {
-  (nickname: string, email: string, password: string, avatarUrl: string,): Promise<Either<AuthorizationError | DatabaseError, User>>
+  (nickname: string, email: string, password: string): Promise<Either<AuthorizationError | DatabaseError, User>>
 }
 
-export const registerUser: RegisterUser = async (nickname, email, password, avatarUrl) => {
+export const registerUser: RegisterUser = async (nickname, email, password) => {
   try {
     const hashPassword = await bcrypt.hash(password, 10)
-    const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' }
+    const newUserData = { nickname, email, password: hashPassword, isAdmin: false, status: 'active' }
     const newUser = await Users.create(newUserData)
     const token = createToken(newUser)
     return right({ ...newUser.dataValues, password: undefined, token })
@@ -22,6 +22,22 @@ export const registerUser: RegisterUser = async (nickname, email, password, avat
     if (e.name === 'SequelizeUniqueConstraintError') {
       return left(new AuthorizationError(`${e.errors[0].path} already exists`))
     } else return left(new DatabaseError('Register user error', e))
+  }
+}
+
+interface CheckRegisterData {
+  (email: string, nickname: string): Promise<Either<AuthorizationError | DatabaseError, any>>
+}
+
+export const checkRegisterData: CheckRegisterData = async (email, nickname) => {
+  try {
+    const emailMach = await Users.findOne({ where: { email } })
+    const nicknameMach = await Users.findOne({ where: { nickname } })
+    if (emailMach) return left(new AuthorizationError(`email already exists`))
+    if (nicknameMach) return left(new AuthorizationError(`nickname already exists`))
+    return right('')
+  } catch (e) {
+    return left(new DatabaseError('checkRegisterData: Error', e))
   }
 }
 

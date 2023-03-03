@@ -32,17 +32,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkLoginData = exports.registerUser = void 0;
+exports.checkLoginData = exports.checkRegisterData = exports.registerUser = void 0;
 const bcrypt = __importStar(require("bcrypt"));
 const Users_1 = require("../db/models/Users");
 const either_1 = require("@sweet-monads/either");
 const AuthorizationError_1 = require("../../../common/errors/AuthorizationError");
 const DatabaseError_1 = require("../../../common/errors/DatabaseError");
 const tokenService_1 = require("./tokenService");
-const registerUser = (nickname, email, password, avatarUrl) => __awaiter(void 0, void 0, void 0, function* () {
+const registerUser = (nickname, email, password) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const hashPassword = yield bcrypt.hash(password, 10);
-        const newUserData = { nickname, email, password: hashPassword, avatarUrl, isAdmin: false, status: 'active' };
+        const newUserData = { nickname, email, password: hashPassword, isAdmin: false, status: 'active' };
         const newUser = yield Users_1.Users.create(newUserData);
         const token = (0, tokenService_1.createToken)(newUser);
         return (0, either_1.right)(Object.assign(Object.assign({}, newUser.dataValues), { password: undefined, token }));
@@ -56,6 +56,21 @@ const registerUser = (nickname, email, password, avatarUrl) => __awaiter(void 0,
     }
 });
 exports.registerUser = registerUser;
+const checkRegisterData = (email, nickname) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const emailMach = yield Users_1.Users.findOne({ where: { email } });
+        const nicknameMach = yield Users_1.Users.findOne({ where: { nickname } });
+        if (emailMach)
+            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError(`email already exists`));
+        if (nicknameMach)
+            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError(`nickname already exists`));
+        return (0, either_1.right)('');
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('checkRegisterData: Error', e));
+    }
+});
+exports.checkRegisterData = checkRegisterData;
 const checkLoginData = (email, password) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield Users_1.Users.findOne({ where: { email } });

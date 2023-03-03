@@ -2,7 +2,7 @@ import { FC } from "react"
 import { Box, TextField } from "@mui/material"
 import { useAppDispatch } from "../../store/store"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { authUser } from "../../store/actions/userActions"
+import { loginUser } from "../../store/actions/userActions"
 import { Text } from "../../common/Text"
 import { TransButton } from "../../common/TransButton"
 import { Link } from "react-router-dom"
@@ -23,7 +23,7 @@ export const LoginContent: FC = () => {
   const onSubmit: SubmitHandler<Inputs> = ({ email, password }) => {
     dispatch(setAuthErrorMessage(''))
     dispatch(clearTokenError())
-    dispatch(authUser('login', { email, password }))
+    dispatch(loginUser({ email, password }))
   }
 
   return (

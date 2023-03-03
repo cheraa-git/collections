@@ -2,7 +2,7 @@ import * as jwt from "jsonwebtoken"
 import { JwtPayload } from "jsonwebtoken"
 import { Users } from "../db/models/Users"
 import * as bcrypt from "bcrypt"
-import { EditProfileTokenData } from "../../../common/common-types"
+import { AuthData, EditProfileTokenData } from "../../../common/common-types"
 import { Either, left, right } from "@sweet-monads/either"
 import { TokenError } from "../../../common/errors/TokenError"
 
@@ -63,12 +63,28 @@ export const parseEditProfileToken = (token?: string): Either<TokenError, EditPr
   try {
     const payload = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload
     return right(
-      { email: payload?.email,
+      {
+        email: payload?.email,
         password: payload?.password,
         nickname: payload?.nickname,
-        oldEmail: payload.oldEmail ,
+        oldEmail: payload.oldEmail,
         adminEmail: payload.adminEmail
       }
+    )
+  } catch (e) {
+    return left(new TokenError('parseEditProfileToken: Error'))
+  }
+}
+
+export const createRegisterToken = (data: AuthData) => {
+  return jwt.sign(data, TOKEN_SECRET_KEY)
+}
+
+export const parseRegisterToken = (token?: string): Either<TokenError, AuthData> => {
+  if (!token) return left(new TokenError('parseEditProfileToken: Token not found'))
+  try {
+    const payload = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload
+    return right({ email: payload?.email, password: payload?.password, nickname: payload?.nickname, }
     )
   } catch (e) {
     return left(new TokenError('parseEditProfileToken: Error'))

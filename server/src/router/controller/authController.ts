@@ -1,25 +1,24 @@
 import { Request, Response } from "express"
 import { Users } from "../../db/models/Users"
-import { checkLoginData, registerUser } from "../../service/authService"
+import { checkLoginData, checkRegisterData, registerUser } from "../../service/authService"
 import { AuthorizationError } from "../../../../common/errors/AuthorizationError"
 import { AutoLoginError } from "../../../../common/errors/AutoLoginError"
-import { checkAutoLoginToken, createToken } from "../../service/tokenService"
+import { checkAutoLoginToken, createToken, parseRegisterToken } from "../../service/tokenService"
+import { sendRegisterConfirm } from "../../service/emailService"
+import { DatabaseError } from "../../../../common/errors/DatabaseError"
 
 
 class AuthController {
 
   handleRegisterUser = async (req: Request, res: Response) => {
-    const nickname = req.body.nickname.trim().toLowerCase()
-    const email = req.body.email.trim().toLowerCase()
-    const avatarUrl = req.body.avatarUrl
-    const password = req.body.password.trim()
-    if (!nickname || !email || !password) {
-      return res.status(401).json(new AuthorizationError('Registration data invalid'))
-    }
-    const response = await registerUser(nickname, email, password, avatarUrl)
-    response
-      .mapRight(user => res.json(user))
-      .mapLeft(e => res.status(401).json(e))
+    const token = req.body.token
+    parseRegisterToken(token)
+      .mapRight(async ({ email, password, nickname }) => {
+        const response = await registerUser(nickname || '', email, password)
+        response
+          .mapRight(user => res.json(user))
+          .mapLeft(e => res.status(401).json(e))
+      })
   }
 
   handleLoginUser = async (req: Request, res: Response) => {
@@ -43,6 +42,22 @@ class AuthController {
     res.json({ ...user.dataValues, token, password: undefined })
   }
 
+  handleSendConfirmationEmail = async (req: Request, res: Response) => {
+    const nickname = req.body.nickname.trim().toLowerCase()
+    const email = req.body.email.trim().toLowerCase()
+    const password = req.body.password.trim()
+    if (!nickname || !email || !password) {
+      return res.status(401).json(new AuthorizationError('Registration data invalid'))
+    }
+    const checkRegisterDataResponse = await checkRegisterData(email, nickname)
+    checkRegisterDataResponse
+      .mapLeft(e => res.status(401).json(e))
+      .mapRight(async () => {
+        (await sendRegisterConfirm({ email, nickname, password }))
+          .mapRight(() => res.json({status: 200}))
+          .mapLeft(e => res.status(401).json(new DatabaseError('sendRegisterConfirm: Error', e)))
+      })
+  }
 }
 
 export default AuthController

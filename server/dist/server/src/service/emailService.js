@@ -12,29 +12,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendConfirmProfileChange = void 0;
+exports.sendRegisterConfirm = exports.sendProfileChangeConfirm = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const either_1 = require("@sweet-monads/either");
 const GmailError_1 = require("../../../common/errors/GmailError");
 const tokenService_1 = require("./tokenService");
-const sendConfirmProfileChange = (data) => __awaiter(void 0, void 0, void 0, function* () {
+const sendEmail = ({ to, text, subject }) => __awaiter(void 0, void 0, void 0, function* () {
+    const transporter = nodemailer_1.default.createTransport({
+        service: 'gmail',
+        auth: { user: process.env.VERIFY_GMAIL_LOGIN, pass: process.env.VERIFY_GMAIL_PASSWORD }
+    });
+    const mailOptions = { from: process.env.VERIFY_GMAIL_LOGIN, to, subject, text };
+    return yield transporter.sendMail(mailOptions);
+});
+const sendProfileChangeConfirm = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = yield (0, tokenService_1.createEditProfileToken)(data);
-        const transporter = nodemailer_1.default.createTransport({
-            service: 'gmail',
-            auth: { user: process.env.VERIFY_GMAIL_LOGIN, pass: process.env.VERIFY_GMAIL_PASSWORD }
-        });
-        const mailOptions = {
-            from: process.env.VERIFY_GMAIL_LOGIN,
+        const url = `${process.env.CLIENT_URL}/confirmation/edit/${token}`;
+        return (0, either_1.right)(yield sendEmail({
             to: data.adminEmail || data.oldEmail,
             subject: 'Follow the link to change your account details',
-            text: `${process.env.CLIENT_URL}/confirmation/edit/${token}`
-        };
-        return (0, either_1.right)(yield transporter.sendMail(mailOptions));
+            text: url
+        }));
     }
     catch (e) {
         console.log(e);
         return (0, either_1.left)(new GmailError_1.GmailError('sendConfirmProfileChange Error', e));
     }
 });
-exports.sendConfirmProfileChange = sendConfirmProfileChange;
+exports.sendProfileChangeConfirm = sendProfileChangeConfirm;
+const sendRegisterConfirm = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const token = (0, tokenService_1.createRegisterToken)(data);
+        const url = `${process.env.CLIENT_URL}/confirmation/register/${token}`;
+        return (0, either_1.right)(yield sendEmail({
+            to: data.email,
+            subject: 'Follow the link to create an account',
+            text: url
+        }));
+    }
+    catch (e) {
+        console.log(e);
+        return (0, either_1.left)(new GmailError_1.GmailError('sendConfirmProfileChange Error', e));
+    }
+});
+exports.sendRegisterConfirm = sendRegisterConfirm;
