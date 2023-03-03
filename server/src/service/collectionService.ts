@@ -6,6 +6,7 @@ import { Either, left, right } from "@sweet-monads/either"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
 import { EditCollectionResponse, GetCollectionResponse } from "../../../common/response-types"
 import { getCollectionsByItemCountQuery, getFullCollectionDataQuery } from "./queries/collectionQueries"
+import { removeCollectionRelationshipIndexes } from "./searchService"
 
 
 interface CreateCollection {
@@ -43,6 +44,7 @@ export const getCollection = async (id: number): Promise<Either<DatabaseError, G
 
 export const deleteCollection = async (id: number): Promise<Either<DatabaseError, number>> => {
   try {
+    await removeCollectionRelationshipIndexes(id)
     return right(await Collections.destroy({ where: { id }, force: true }))
   } catch (e) {
     return left(new DatabaseError('Delete collection error'))

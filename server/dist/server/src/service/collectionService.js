@@ -16,6 +16,7 @@ const utils_1 = require("../utils");
 const either_1 = require("@sweet-monads/either");
 const DatabaseError_1 = require("../../../common/errors/DatabaseError");
 const collectionQueries_1 = require("./queries/collectionQueries");
+const searchService_1 = require("./searchService");
 const createCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newCollection = yield Collections_1.Collections.create(collection);
@@ -46,6 +47,7 @@ const getCollection = (id) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getCollection = getCollection;
 const deleteCollection = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        yield (0, searchService_1.removeCollectionRelationshipIndexes)(id);
         return (0, either_1.right)(yield Collections_1.Collections.destroy({ where: { id }, force: true }));
     }
     catch (e) {

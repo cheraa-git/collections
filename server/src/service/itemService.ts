@@ -15,6 +15,7 @@ import {
   getMostPopularTagsQuery,
   getRangeItemsQuery
 } from "./queries/itemQueries"
+import { removeItemCommentsIndexes } from "./searchService"
 
 
 const createItemTags = async (tags: Tag[], itemId: number): Promise<Either<DatabaseError, Tag[]>> => {
@@ -92,6 +93,7 @@ export const editItem = async (item: Item): Promise<Either<DatabaseError, Item>>
 
 export const deleteItem = async (id: number): Promise<Either<DatabaseError, number>> => {
   try {
+    await removeItemCommentsIndexes(id)
     return right(await Items.destroy({ where: { id }, force: true }))
   } catch (e) {
     return left(new DatabaseError('Delete item error', e))

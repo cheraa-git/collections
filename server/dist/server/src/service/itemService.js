@@ -31,6 +31,7 @@ const DatabaseError_1 = require("../../../common/errors/DatabaseError");
 const NotFoundError_1 = require("../../../common/errors/NotFoundError");
 const Users_1 = require("../db/models/Users");
 const itemQueries_1 = require("./queries/itemQueries");
+const searchService_1 = require("./searchService");
 const createItemTags = (tags, itemId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const addedTags = tags.filter(tag => tag.id);
@@ -107,6 +108,7 @@ const editItem = (item) => __awaiter(void 0, void 0, void 0, function* () {
 exports.editItem = editItem;
 const deleteItem = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        yield (0, searchService_1.removeItemCommentsIndexes)(id);
         return (0, either_1.right)(yield Items_1.Items.destroy({ where: { id }, force: true }));
     }
     catch (e) {

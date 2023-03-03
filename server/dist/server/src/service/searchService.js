@@ -9,10 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.indexingAllCollections = exports.indexingAllComments = exports.indexingAllItems = exports.removeCollectionIndex = exports.uploadCollectionIndex = exports.addCollectionIndex = exports.removeCommentIndex = exports.addCommentIndex = exports.removeItemIndex = exports.uploadItemIndex = exports.addItemIndex = void 0;
+exports.indexingAllCollections = exports.indexingAllComments = exports.indexingAllItems = exports.removeCollectionRelationshipIndexes = exports.removeCollectionIndex = exports.uploadCollectionIndex = exports.addCollectionIndex = exports.removeItemCommentsIndexes = exports.removeCommentIndex = exports.addCommentIndex = exports.removeItemIndex = exports.uploadItemIndex = exports.addItemIndex = void 0;
 const meilisearch_1 = require("../apis/meilisearch");
+const Items_1 = require("../db/models/Items");
 const utils_1 = require("../utils");
 const itemService_1 = require("./itemService");
+const Comments_1 = require("../db/models/Comments");
 const commentService_1 = require("./commentService");
 const collectionService_1 = require("./collectionService");
 const either_1 = require("@sweet-monads/either");
@@ -42,11 +44,18 @@ const addCommentIndex = (comment) => {
 };
 exports.addCommentIndex = addCommentIndex;
 const removeCommentIndex = (commentId) => {
-    const index = new meilisearch_1.SearchClient().index('items');
+    const index = new meilisearch_1.SearchClient().index('comments');
     index.deleteDocument(commentId)
         .catch(e => console.log('DELETE_INDEX_ERROR', e));
 };
 exports.removeCommentIndex = removeCommentIndex;
+const removeItemCommentsIndexes = (itemId) => __awaiter(void 0, void 0, void 0, function* () {
+    const index = new meilisearch_1.SearchClient().index('comments');
+    const itemCommentIds = (yield Comments_1.Comments.findAll({ where: { itemId } })).map(comment => comment.id);
+    index.deleteDocuments(itemCommentIds)
+        .catch(e => console.log('DELETE_INDEXES_ERROR', e));
+});
+exports.removeItemCommentsIndexes = removeItemCommentsIndexes;
 const addCollectionIndex = (collection) => {
     const index = new meilisearch_1.SearchClient().index('collections');
     index.addDocuments([collection.dataValues])
@@ -65,6 +74,18 @@ const removeCollectionIndex = (collectionId) => {
         .catch(e => console.log('DELETE_INDEX_ERROR', e));
 };
 exports.removeCollectionIndex = removeCollectionIndex;
+const removeCollectionRelationshipIndexes = (collectionId) => __awaiter(void 0, void 0, void 0, function* () {
+    const client = new meilisearch_1.SearchClient();
+    const itemIndex = client.index('items');
+    const commentIndex = client.index('comments');
+    const itemIds = (yield Items_1.Items.findAll({ where: { collectionId } })).map(item => item.id);
+    const commentIds = (yield Comments_1.Comments.findAll({ where: { itemId: itemIds } })).map(comment => comment.id);
+    itemIndex.deleteDocuments(itemIds)
+        .catch(e => console.log('DELETE_INDEXES_ERROR', e));
+    commentIndex.deleteDocuments(commentIds)
+        .catch(e => console.log('DELETE_INDEXES_ERROR', e));
+});
+exports.removeCollectionRelationshipIndexes = removeCollectionRelationshipIndexes;
 const indexingAllItems = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const index = new meilisearch_1.SearchClient().index('items');

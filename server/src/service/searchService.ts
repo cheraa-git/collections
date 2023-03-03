@@ -36,9 +36,16 @@ export const addCommentIndex = (comment: Comments) => {
 }
 
 export const removeCommentIndex = (commentId: number) => {
-  const index = new SearchClient().index('items')
+  const index = new SearchClient().index('comments')
   index.deleteDocument(commentId)
     .catch(e => console.log('DELETE_INDEX_ERROR', e))
+}
+
+export const removeItemCommentsIndexes = async (itemId: number) => {
+  const index = new SearchClient().index('comments')
+  const itemCommentIds = (await Comments.findAll({ where: { itemId } })).map(comment => comment.id)
+  index.deleteDocuments(itemCommentIds)
+    .catch(e => console.log('DELETE_INDEXES_ERROR', e))
 }
 
 
@@ -58,6 +65,18 @@ export const removeCollectionIndex = (collectionId: number) => {
   const index = new SearchClient().index('collections')
   index.deleteDocument(collectionId)
     .catch(e => console.log('DELETE_INDEX_ERROR', e))
+}
+
+export const removeCollectionRelationshipIndexes = async (collectionId: number) => {
+  const client = new SearchClient()
+  const itemIndex = client.index('items')
+  const commentIndex = client.index('comments')
+  const itemIds = (await Items.findAll({ where: { collectionId } })).map(item => item.id)
+  const commentIds = (await Comments.findAll({ where: { itemId: itemIds } })).map(comment => comment.id)
+  itemIndex.deleteDocuments(itemIds)
+    .catch(e => console.log('DELETE_INDEXES_ERROR', e))
+  commentIndex.deleteDocuments(commentIds)
+    .catch(e => console.log('DELETE_INDEXES_ERROR', e))
 }
 
 export const indexingAllItems = async (): Promise<Either<IndexingError, { status: TaskStatus }>> => {
