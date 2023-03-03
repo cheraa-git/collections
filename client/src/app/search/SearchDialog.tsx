@@ -20,7 +20,7 @@ export const SearchDialog: FC = () => {
   const searchClient = instantMeiliSearch(
     process.env.REACT_APP_MEILISEARCH_HOST || 'http://localhost:7700',
     process.env.REACT_APP_MEILISEARCH_API_KEY
-    )
+  )
 
   const searchCloseHandler = () => {
     dispatch(setSearchOpen(false))
@@ -43,7 +43,7 @@ export const SearchDialog: FC = () => {
           <Text fontSize="x-large">Site search</Text>
           <Typography className="esc-bth" onClick={searchCloseHandler}>esc</Typography>
         </Box>
-        <InstantSearch indexName="collections" searchClient={searchClient}>
+        <InstantSearch indexName="comments" searchClient={searchClient}>
           <SearchInput/>
           <Box px={1} mt={1}>
             <Index indexName="items">
