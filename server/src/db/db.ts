@@ -22,15 +22,13 @@ const connection = new Sequelize({
   logging: false,
   models: [Users, Collections, Items, ItemConfigs, Tags, ItemsTags, Themes, Comments, Likes],
   dialectOptions: {
-    ssl: true,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    },
     native: true,
+
   },
-  // pool: {
-  //   min: 0,
-  //   max: 10,
-  //   idle: 8000,
-  //   acquire: 8000,
-  // }
 })
 
 export default connection

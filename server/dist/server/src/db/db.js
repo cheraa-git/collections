@@ -24,14 +24,11 @@ const connection = new sequelize_typescript_1.Sequelize({
     logging: false,
     models: [Users_1.Users, Collections_1.Collections, Items_1.Items, ItemConfigs_1.ItemConfigs, Tags_1.Tags, ItemsTags_1.ItemsTags, Themes_1.Themes, Comments_1.Comments, Likes_1.Likes],
     dialectOptions: {
-        ssl: true,
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        },
         native: true,
     },
-    // pool: {
-    //   min: 0,
-    //   max: 10,
-    //   idle: 8000,
-    //   acquire: 8000,
-    // }
 });
 exports.default = connection;
