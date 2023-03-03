@@ -12,6 +12,7 @@ export const AdminPage: FC = () => {
   useEffect(() => {
     if (!currentUser.isAdmin) navigate('/')
   }, [])
+
   return (
     <Container maxWidth="lg">
       <Box bgcolor="#8F8F8F32" py={0.5} px={2} className="rounded" display="flex" justifyContent="space-between">

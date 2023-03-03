@@ -19,7 +19,6 @@ export const UserActions = (params: GridRenderCellParams) => {
     dispatch(setAdminStatus([params.row.id], !params.row.isAdmin))
   }
 
-
   return (
     <>
       <IconButton onClick={setAdminStatusHandler}>

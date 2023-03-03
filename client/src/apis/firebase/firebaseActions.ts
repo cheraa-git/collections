@@ -1,4 +1,4 @@
-import { storage } from './firebaseConfig'
+import { storage } from "./firebaseConfig"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 

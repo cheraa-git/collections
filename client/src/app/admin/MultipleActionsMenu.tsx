@@ -14,6 +14,7 @@ export const MultipleActionsMenu: FC<{ selectionModel: number[] }> = ({ selectio
   const openActionsMenu = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorMenu(event.currentTarget)
   }
+
   const closeActionsMenu = () => {
     setAnchorMenu(null)
   }
@@ -25,7 +26,6 @@ export const MultipleActionsMenu: FC<{ selectionModel: number[] }> = ({ selectio
   const adminHandler = (status: boolean) => {
     dispatch(setAdminStatus(selectionModel, status))
   }
-
 
   return (
     <>
