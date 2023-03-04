@@ -1,11 +1,11 @@
-import './styles.css'
+import '../styles/image-drop-styles.css'
 import { FC, InputHTMLAttributes } from "react"
-import { formatFileSize } from "../../utils"
-import { MAX_IMAGE_SIZE } from "../../constants/image-drop"
+import { formatFileSize } from "../utils"
+import { MAX_IMAGE_SIZE } from "../constants/image-drop"
 import { Box } from "@mui/material"
-import { CloseIcon } from "../icons"
+import { CloseIcon } from "./icons"
 import { useTranslation } from "react-i18next"
-import { Text } from "../Text"
+import { Text } from "./Text"
 
 interface ImageDropProps {
   inputProps?: InputHTMLAttributes<HTMLInputElement>

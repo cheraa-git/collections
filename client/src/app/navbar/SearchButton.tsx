@@ -1,4 +1,4 @@
-import './styles.css'
+import '../../styles/navbar-styles.css'
 import { FC } from "react"
 import { KeyboardCommandKeyIcon, SearchIcon } from "../../common/icons"
 import { Text } from "../../common/Text"

@@ -2,6 +2,9 @@
     animation: scale 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 
+.pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 
 .fade {
     animation: fade 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
@@ -24,4 +27,11 @@
         opacity: 1;
     }
 }
+
+@keyframes pulse {
+    50% {
+        opacity: .5;
+    }
+}
+
 

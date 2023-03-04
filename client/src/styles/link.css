@@ -1,0 +1,25 @@
+.link {
+    position: relative;
+    text-decoration: none;
+    color: #3874CB;
+}
+
+.link:hover {
+    color: #50a8ff;
+    transition: .3s;
+}
+
+.link:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background-color: #50a8ff;
+    transition: 0.35s
+}
+
+.link:hover:before {
+    width: 100%;
+}

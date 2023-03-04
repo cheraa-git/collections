@@ -1,4 +1,4 @@
-import './styles.css'
+import '../../styles/search-styles.css'
 import { FC } from "react"
 import { BlurDialog } from "../../common/BlurDialog"
 import { Box, Typography } from "@mui/material"

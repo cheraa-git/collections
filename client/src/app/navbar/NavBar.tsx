@@ -1,4 +1,4 @@
-import './styles.css'
+import '../../styles/navbar-styles.css'
 import { FC } from "react"
 import { NavBarMenu } from "./NavBarMenu"
 import { Link, useNavigate } from "react-router-dom"

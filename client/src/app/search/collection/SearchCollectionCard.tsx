@@ -1,4 +1,4 @@
-import '../styles.css'
+import '../../../styles/search-styles.css'
 import { connectHighlight } from "react-instantsearch-dom"
 import { Box } from "@mui/material"
 import { HighlightText } from "../HighlightText"

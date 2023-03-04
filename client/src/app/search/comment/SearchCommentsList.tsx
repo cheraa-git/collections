@@ -1,4 +1,4 @@
-import '../styles.css'
+import '../../../styles/search-styles.css'
 import { connectHits } from "react-instantsearch-dom"
 import { SearchCommentCard } from "./SearchCommentCard"
 import { Box } from "@mui/material"

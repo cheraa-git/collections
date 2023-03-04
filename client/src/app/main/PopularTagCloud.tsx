@@ -1,3 +1,4 @@
+import '../../styles/cloud-tag-styles.css'
 import { FC, useEffect } from "react"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { TagCloud } from 'react-tagcloud'

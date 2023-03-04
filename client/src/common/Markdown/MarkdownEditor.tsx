@@ -1,4 +1,4 @@
-import './styles.css'
+import '../../styles/markdown-styles.css'
 import { FC } from "react"
 import MDEditor, { commands } from "@uiw/react-md-editor"
 import rehypeSanitize from "rehype-sanitize"

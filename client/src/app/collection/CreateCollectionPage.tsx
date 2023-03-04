@@ -5,7 +5,7 @@ import { useAppDispatch, } from "../../store/store"
 import { createCollection, editCollection } from "../../store/actions/collectionActions"
 import { useSnackbar } from "notistack"
 import { MarkdownFormControl } from "../../common/Markdown/MarkdownFormControl"
-import { ImageDrop } from "../../common/ImageDrop/ImageDrop"
+import { ImageDrop } from "../../common/ImageDrop"
 import { MAX_IMAGE_SIZE } from "../../constants/image-drop"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Spinner } from "../../common/Loader/Spinner"
@@ -109,7 +109,7 @@ export const CreateCollectionPage: FC = () => {
 
         <ConfigInputs configInputs={configInputs} setConfigInputs={setConfigInputs} editable={editable}/>
 
-        <IconButton className="w-min animate-pulse" onClick={addConfigInput}>
+        <IconButton className="w-min pulse" onClick={addConfigInput}>
           <AddIcon className="blue"/>
         </IconButton>
 
