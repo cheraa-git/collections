@@ -14,7 +14,9 @@ export const sendRegisterConfirm = (data: AuthData) => {
     dispatch(toggleAuthLoading())
     const response = await axiosPost<AuthorizationError | DatabaseError>('/auth/confirm_register', data)
     response
-      .mapRight(() => dispatch(setAuthInfoMessage('Check your email')))
+      .mapRight(() => dispatch(setAuthInfoMessage(
+        'An email has been sent to your email. Follow the link from the email to complete the registration'
+      )))
       .mapLeft(e => {
         if (e.response?.data.name === 'AuthorizationError') {
           dispatch(setAuthErrorMessage(e.response?.data.message))

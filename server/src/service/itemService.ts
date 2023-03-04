@@ -110,11 +110,12 @@ export const getAllItems = async (): Promise<Either<DatabaseError, Items[]>> => 
   }
 }
 
-export const getNextItems = async (offset: number, limit: number, tagIds?: number[]): Promise<Either<DatabaseError, Items[]>> => {
+export const getNextItems = async (offset: number, limit: number, tagIds?: number[]): Promise<Either<DatabaseError, Item[]>> => {
   try {
-    const items = await getRangeItemsQuery({ offset, limit, tagIds })
+    const items = (await getRangeItemsQuery({ offset, limit, tagIds }))
+      .map(item => ({ ...item.dataValues, collections: undefined, collectionTitle: item.collections.title }))
     if (items.length === 0) return right([])
-    return right(items.map(item => (filterItem(item) as Items)))
+    return right(items.map(item => (filterItem(item) as Item)))
   } catch (e) {
     console.log(e)
     return left(new DatabaseError('getNextItems: Error', e))

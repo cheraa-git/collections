@@ -40,6 +40,7 @@ export const ItemsList: FC = () => {
   return (
     <Box>
       <PopularTagCloud/>
+      <Text variant="h4">Item feed</Text>
       <Box display="flex">
         <Box width="100%">
           <TagsArea value={searchTags} setValue={tags => dispatch(setSearchTags(tags))} freeSolo={false}

@@ -2,6 +2,7 @@
 export type Item = {
   id: number
   collectionId: number
+  collectionTitle?: string
   userId?: number
   userNickname?: string
   name: string

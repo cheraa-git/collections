@@ -23,6 +23,12 @@ const connection = new sequelize_typescript_1.Sequelize({
     database: process.env.PGDATABASE,
     logging: false,
     models: [Users_1.Users, Collections_1.Collections, Items_1.Items, ItemConfigs_1.ItemConfigs, Tags_1.Tags, ItemsTags_1.ItemsTags, Themes_1.Themes, Comments_1.Comments, Likes_1.Likes],
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 300000,
+        acquire: 300000
+    },
     dialectOptions: {
         ssl: {
             require: true,

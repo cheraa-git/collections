@@ -8,9 +8,7 @@ export const SearchCollectionList = connectHits(({ hits }) => {
   console.log('collections', hits)
   return (
     <Box>
-      <Text className="search-title"
-            // hidden={hits.length === 0}
-      >collections</Text>
+      <Text className="search-title" hidden={hits.length === 0}>collections</Text>
       <Box px={1}>
         {hits.map(hit => (
           <SearchCollectionCard key={hit.id} hit={hit} attribute="name"/>

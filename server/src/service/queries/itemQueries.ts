@@ -3,6 +3,7 @@ import { Tags } from "../../db/models/Tags"
 import { Sequelize } from "sequelize-typescript"
 import { ItemsTags } from "../../db/models/ItemsTags"
 import { Tag } from "../../../../common/types/item"
+import { Collections } from "../../db/models/Collections"
 
 export const getRangeItemsQuery = async (params: { offset: number, limit: number, tagIds?: number[] }) => {
   return await Items.findAll({
@@ -14,6 +15,10 @@ export const getRangeItemsQuery = async (params: { offset: number, limit: number
         through: { attributes: [] },
         where: (params.tagIds && params.tagIds.length > 0) ? { id: params.tagIds } : undefined,
       },
+      {
+        model: Collections,
+        attributes: ['title']
+      }
     ],
     order: [Sequelize.literal('timestamp DESC')]
   })

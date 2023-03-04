@@ -8,7 +8,7 @@ interface TypographyLinkProps extends TypographyProps {
 
 export const TypographyLink: FC<TypographyLinkProps> = ({ to, children, ...props }) => {
   return (
-    <Link to={to} className="link h-min">
+    <Link to={to} className="link h-min flex">
       <Typography {...props}>
         {children}
       </Typography>

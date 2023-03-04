@@ -106,6 +106,9 @@
     "To change the profile, enter the password from the admin account": "Чтобы изменить профиль, введите пароль от аккаунта администратора",
     "Blocked": "Заблокирован",
     "You have reached the maximum number of fields with this type": "Вы достигли максимального количества полей с этим типом",
-    "Publication date": "Дата публикации"
+    "Publication date": "Дата публикации",
+    "Item feed": "Лента элементов",
+    "Collection feed": "Лента коллекций",
+    "An email has been sent to your email. Follow the link from the email to complete the registration": "На ваш email было отправлено письмо. Перейдите по ссылке из письма для завершения регистрации"
   }
 }

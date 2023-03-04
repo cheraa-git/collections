@@ -24,10 +24,10 @@ export function AuthPage() {
 
   useEffect(() => {
     if (infoMessage) {
-      snackbar(t(infoMessage))
+      snackbar(t(infoMessage), {autoHideDuration: 10000})
       dispatch(setAuthInfoMessage(''))
     }
-  }, [infoMessage])
+  }, [infoMessage, dispatch, t, snackbar])
 
   useEffect(() => {
     dispatch(setAuthErrorMessage(''))

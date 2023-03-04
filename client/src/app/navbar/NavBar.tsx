@@ -20,10 +20,10 @@ export const NavBar: FC = () => {
     <>
       <div className={`navbar ${isDark && 'navbar_dark'} border-b`}>
         <div>
-          <Box minWidth={180}>
+          <Box minWidth={50}>
             <Link to="/" className="flex">
               <img src={PngLogoIcon} alt="collections-logo" width={50} height={50}/>
-              <Text variant="h5" alignSelf="center">collections</Text>
+              <Text variant="h5" alignSelf="center" hidden={window.innerWidth < 500}>collections</Text>
             </Link>
           </Box>
           <Box display="flex">

@@ -15,7 +15,7 @@ export const TagChip: FC<{ tag: Tag }> = ({ tag }) => {
     dispatch(setSearchTags([tag]))
   }
   return (
-    <Box m={0.5}>
+    <Box mx={0.5}>
       <Chip label={tag.name} size="small" onClick={handleClick}/>
     </Box>
   )

@@ -17,12 +17,13 @@ import { TypographyLink } from "../../common/TypographyLink"
 import Image from "mui-image"
 import { Spinner } from "../../common/Loader/Spinner"
 import { ItemsDataGrid } from "../item/ItemsDataGrid/ItemsDataGrid"
+import { ThemeChip } from "../../common/ThemeChip"
 
 export const CollectionPage: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { id } = useParams()
-  const { collection, itemConfigs, getTheme, isAuthor, loading } = useCollection()
+  const { collection, itemConfigs, isAuthor, loading } = useCollection()
   const theme = useApp().theme
   const items = useAppSelector((state: RootState) => state.item.items)
   const [editItemDialogOpen, setEditItemDialogOpen] = useState(false)
@@ -37,7 +38,6 @@ export const CollectionPage: FC = () => {
   }, [dispatch, id])
 
 
-  // if (!collection.id) return <Box width="min-content" mx="auto" mt={5}><Spinner/></Box>
   return (
     <Box maxWidth="64rem" mx="auto" my={3} borderRadius=".25rem" p={2}>
       <Grid container spacing={5}>
@@ -60,7 +60,7 @@ export const CollectionPage: FC = () => {
       <Box p={2} mt={2} className="border rounded">
         <Box display="flex" justifyContent="space-between">
           <Box>
-            <Typography variant="h6">{t('Theme')}: {getTheme()?.name}</Typography>
+            <Typography variant="h6">{t('Theme')}: <ThemeChip themeId={collection.themeId}/></Typography>
             <i className="flex-wrap">
               <Text>Created by</Text>
               <TypographyLink to={`/profile/${collection.userId}`} mx={1} className="link">
@@ -88,7 +88,6 @@ export const CollectionPage: FC = () => {
 
       </Box>
 
-      {/*{items.map(item => <ItemCard item={item} key={item.id}/>)}*/}
       <ItemsDataGrid items={items} itemConfigs={itemConfigs} loading={loading}/>
     </Box>
   )

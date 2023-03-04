@@ -40,6 +40,7 @@ export const CollectionsList: FC = () => {
 
   return (
     <Box>
+      <Text variant="h4">Collection feed</Text>
       <TextField
         select label={t("Theme")} fullWidth
         value={searchThemeId || ''}

@@ -107,6 +107,9 @@
     "To change the profile, enter the password from the admin account": "To change the profile, enter the password from the admin account",
     "Blocked": "Blocked",
     "You have reached the maximum number of fields with this type": "You have reached the maximum number of fields with this type",
-    "Publication date": "Publication date"
+    "Publication date": "Publication date",
+    "Item feed": "Item feed",
+    "Collection feed": "Collection feed",
+    "An email has been sent to your email. Follow the link from the email to complete the registration": "An email has been sent to your email. Follow the link from the email to complete the registration"
   }
 }

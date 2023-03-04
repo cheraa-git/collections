@@ -15,7 +15,7 @@ export const ThemeChip: FC<{ themeId: number }> = ({ themeId }) => {
     dispatch(setSearchTheme(themeId))
   }
   return (
-    <Box m={0.5}>
+    <Box m={0.5} display="inline-block">
       <Chip label={theme?.name} color="primary" size="medium" variant="outlined" onClick={handleClick}/>
     </Box>
   )

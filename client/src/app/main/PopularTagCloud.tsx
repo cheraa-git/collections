@@ -57,7 +57,7 @@ export const PopularTagCloud: FC = () => {
 
   return (
     <Box>
-      <Text fontSize="xx-large" fontWeight="lighter" hidden={formatTagCounts.length === 0}>The most popular tags</Text>
+      <Text variant="h4" hidden={formatTagCounts.length === 0}>The most popular tags</Text>
       <Box className="bg-gray" mb={2}>
         <TagCloud
           className="text-center"
