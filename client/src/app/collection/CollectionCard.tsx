@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { dateTimeFormat } from "../../utils"
+import { timestampToDateTime } from "../../utils"
 import MDEditor from "@uiw/react-md-editor"
 import { Box, Card, Grid, Typography } from "@mui/material"
 import { TypographyLink } from "../../common/TypographyLink"
@@ -28,7 +28,7 @@ export const CollectionCard: FC<CollectionCardProps> = ({ collection, user }) =>
           <Link to={`/collection/${collection.id}`}>
             <Typography variant="h5">{collection.title}</Typography>
           </Link>
-          <Typography minWidth="max-content" variant="caption">{dateTimeFormat(collection.timestamp)}</Typography>
+          <Typography minWidth="max-content" variant="caption">{timestampToDateTime(collection.timestamp)}</Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
 

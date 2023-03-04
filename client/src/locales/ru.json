@@ -104,6 +104,8 @@
     "There are no collections yet": "Коллекций пока нет",
     "It will be impossible to restore the collection.": "Восстановить коллекцию будет невозможно",
     "To change the profile, enter the password from the admin account": "Чтобы изменить профиль, введите пароль от аккаунта администратора",
-    "Blocked": "Заблокирован"
+    "Blocked": "Заблокирован",
+    "You have reached the maximum number of fields with this type": "Вы достигли максимального количества полей с этим типом",
+    "Publication date": "Дата публикации"
   }
 }

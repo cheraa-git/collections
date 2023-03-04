@@ -10,7 +10,7 @@ import { MultipleActionsMenu } from "./MultipleActionsMenu"
 import { Text } from "../../common/Text"
 
 
-export const UsersList: FC = () => {
+export const UsersDataGrid: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { users } = useAppSelector((state: RootState) => state.admin)

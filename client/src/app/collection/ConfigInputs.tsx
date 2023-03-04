@@ -19,7 +19,7 @@ export const ConfigInputs: FC<ConfigInputsProps> = ({configInputs, setConfigInpu
     const newConfig = [...configInputs]
     const count = newConfig.filter(config => config.type.includes(type)).length + 1
     if (count > 3) {
-      return snackbar('You have reached the maximum number of fields with this type')
+      return snackbar(t('You have reached the maximum number of fields with this type'))
     }
     newConfig[index].type = type + count
     if (editable) newConfig[index].collectionId = editable.collection.id

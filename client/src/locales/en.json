@@ -105,6 +105,8 @@
     "There are no collections yet": "There are no collections yet",
     "It will be impossible to restore the collection.": "It will be impossible to restore the collection.",
     "To change the profile, enter the password from the admin account": "To change the profile, enter the password from the admin account",
-    "Blocked": "Blocked"
+    "Blocked": "Blocked",
+    "You have reached the maximum number of fields with this type": "You have reached the maximum number of fields with this type",
+    "Publication date": "Publication date"
   }
 }

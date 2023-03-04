@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { dateTimeFormat } from "../../utils"
+import { timestampToDateTime } from "../../utils"
 import { Box, Divider, IconButton, TextField, Typography } from "@mui/material"
 import { connectItemSocket, postNewComment } from "../../store/socket/item/itemSocketAcions"
 import { useSnackbar } from "notistack"
@@ -55,7 +55,7 @@ export const Comments: FC<{ itemId: number }> = ({ itemId }) => {
           <Box py={1} key={id} className="border-b flex">
             <TypographyLink mr={1} to={`/profile/${userId}`}>{nickname}:</TypographyLink>
             <Typography alignSelf="center">{text}</Typography>
-            <Typography fontSize="x-small" ml="auto" minWidth={90}>{dateTimeFormat(timestamp)}</Typography>
+            <Typography fontSize="x-small" ml="auto" minWidth={90}>{timestampToDateTime(timestamp)}</Typography>
           </Box>
         ))}
       </Box>

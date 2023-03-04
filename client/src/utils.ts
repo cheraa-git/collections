@@ -1,13 +1,17 @@
 import dayjs from "dayjs"
 
-export const dateFormat = (timestamp?: string) => {
+export const timestampToDate = (timestamp?: string) => {
   if (!timestamp) return ''
   return dayjs(+timestamp).format('DD-MM-YYYY')
 }
 
-export const dateTimeFormat = (timestamp?: string) => {
+export const timestampToDateTime = (timestamp?: string) => {
   if (!timestamp) return ''
   return dayjs(+timestamp).format('HH:mm DD-MM-YY')
+}
+
+export const dateFormat = (date: string) => {
+  return dayjs(date).format('DD-MM-YYYY')
 }
 
 

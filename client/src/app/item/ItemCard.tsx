@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { TagChip } from "../../common/TagChip"
 import { useApp } from "../../hooks/appStateHook"
 import { TransButton } from "../../common/TransButton"
-import { dateTimeFormat } from "../../utils"
+import { timestampToDateTime } from "../../utils"
 import { Item } from "../../../../common/types/item"
 
 interface ItemCardProps {
@@ -19,7 +19,7 @@ export const ItemCard: FC<ItemCardProps> = ({ item }) => {
     <Box className="item-card border-b fade">
       <Box>
         <Typography fontWeight="bold" width="max-content">{item.name}</Typography>
-        <Typography fontSize="small">{dateTimeFormat(item.timestamp)}</Typography>
+        <Typography fontSize="small">{timestampToDateTime(item.timestamp)}</Typography>
       </Box>
 
       <Box className="card-tags">

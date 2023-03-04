@@ -13,7 +13,7 @@ import { useConfirm } from "../../hooks/confirmHook"
 import { TransButton } from "../../common/TransButton"
 import { useTranslation } from "react-i18next"
 import { useAuth } from "../../hooks/authHook"
-import { dateTimeFormat } from "../../utils"
+import { timestampToDateTime } from "../../utils"
 import { Text } from "../../common/Text"
 import { Spinner } from "../../common/Loader/Spinner"
 
@@ -55,7 +55,7 @@ export const ItemPage: FC = () => {
       <Box p={1} className="flex border-b">
         <Box mr="auto">
           <Typography variant="h5">{item?.name}</Typography>
-          <Typography fontSize="small" color="gray">{dateTimeFormat(item?.timestamp)}</Typography>
+          <Typography fontSize="small" color="gray">{timestampToDateTime(item?.timestamp)}</Typography>
         </Box>
         {
           loading
