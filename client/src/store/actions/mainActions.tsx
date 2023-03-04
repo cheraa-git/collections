@@ -19,7 +19,6 @@ export const getNextItems = (offset: number, limit: number, tagIds: number[] = [
   itemsResponse
     .mapRight(({ data: items }) => {
       if (items.length === 0) return dispatch(setHasManyItems(false))
-      console.log(items)
       dispatch(addMainItems(items))
     })
     .mapLeft(e => {

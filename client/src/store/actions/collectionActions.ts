@@ -1,6 +1,6 @@
 import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
 import { CreateCollectionPayload, EditCollectionPayload } from "../../types/collection"
-import { saveImageToCloud } from "../../apis/firebase/firebaseActions"
+import { deleteImageFromCloud, saveImageToCloud } from "../../apis/firebase/firebaseActions"
 import { CreateCollectionBody, EditCollectionBody } from "../../../../common/types/request-types"
 import {
   setCollectionData,
@@ -43,10 +43,11 @@ export const createCollection = (data: CreateCollectionPayload, navigate: Naviga
 
 export const editCollection = (data: EditCollectionPayload, navigate: NavigateFunction) => {
   return async (dispatch: AppDispatch, getState: GetState) => {
-    const { image, existingImage, id, title, userId, itemConfigs, themeId, description } = data
+    const { image, existingImage, id, title, userId, itemConfigs, themeId, description, deletedImage } = data
     const token = getState().user.currentUser.token
-    let imageUrl = existingImage || await saveImageToCloud(image)
     dispatch(setCollectionLoading(true))
+    let imageUrl = existingImage || await saveImageToCloud(image)
+    await deleteImageFromCloud(deletedImage)
     const response = await axiosPatch<TokenError | DatabaseError, Collection, EditCollectionBody>('/collection', {
       itemConfigs, collection: { id, userId, imageUrl, title, themeId, description }, token
     })

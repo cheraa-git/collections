@@ -14,6 +14,7 @@ const Items_1 = require("../../db/models/Items");
 const Tags_1 = require("../../db/models/Tags");
 const sequelize_typescript_1 = require("sequelize-typescript");
 const ItemsTags_1 = require("../../db/models/ItemsTags");
+const Collections_1 = require("../../db/models/Collections");
 const getRangeItemsQuery = (params) => __awaiter(void 0, void 0, void 0, function* () {
     return yield Items_1.Items.findAll({
         offset: params.offset,
@@ -24,6 +25,10 @@ const getRangeItemsQuery = (params) => __awaiter(void 0, void 0, void 0, functio
                 through: { attributes: [] },
                 where: (params.tagIds && params.tagIds.length > 0) ? { id: params.tagIds } : undefined,
             },
+            {
+                model: Collections_1.Collections,
+                attributes: ['title']
+            }
         ],
         order: [sequelize_typescript_1.Sequelize.literal('timestamp DESC')]
     });

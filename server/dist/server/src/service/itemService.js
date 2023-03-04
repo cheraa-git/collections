@@ -128,7 +128,8 @@ const getAllItems = () => __awaiter(void 0, void 0, void 0, function* () {
 exports.getAllItems = getAllItems;
 const getNextItems = (offset, limit, tagIds) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const items = yield (0, itemQueries_1.getRangeItemsQuery)({ offset, limit, tagIds });
+        const items = (yield (0, itemQueries_1.getRangeItemsQuery)({ offset, limit, tagIds }))
+            .map(item => (Object.assign(Object.assign({}, item.dataValues), { collections: undefined, collectionTitle: item.collections.title })));
         if (items.length === 0)
             return (0, either_1.right)([]);
         return (0, either_1.right)(items.map(item => (0, utils_1.filterItem)(item)));

@@ -18,6 +18,7 @@ import { ConfigInputs } from "./ConfigInputs"
 import { FixedConfigInputs } from "./FixedConfigInputs"
 import { AddIcon } from "../../common/icons"
 import { Collection, ItemConfigType } from "../../../../common/types/collection"
+import { EditCollectionPayload } from "../../types/collection"
 
 
 interface Inputs {
@@ -64,7 +65,11 @@ export const CreateCollectionPage: FC = () => {
     const itemConfigs = configInputs.filter(config => config.type && config.label)
     if (data.image[0]?.size > MAX_IMAGE_SIZE) return snackbar('The maximum photo size is 10MB')
     if (editable) {
-      dispatch(editCollection({ ...editable.collection, ...data, image: data.image[0], itemConfigs, }, navigate))
+      const sendData: EditCollectionPayload = { ...editable.collection, ...data, image: data.image[0], itemConfigs, }
+      if (editable.collection.imageUrl && !data.existingImage) {
+        sendData.deletedImage = editable.collection.imageUrl
+      }
+      dispatch(editCollection(sendData, navigate))
     } else {
       dispatch(createCollection({ ...data, image: data.image[0], itemConfigs, userId }, navigate))
     }
