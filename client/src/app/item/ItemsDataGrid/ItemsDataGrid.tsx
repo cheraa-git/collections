@@ -2,21 +2,23 @@ import { FC } from "react"
 import { ItemConfigType } from "../../../../../common/types/collection"
 import { Item } from "../../../../../common/types/item"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
-import { Box, Typography } from "@mui/material"
+import { Box, LinearProgress } from "@mui/material"
 import { useNavigate } from "react-router-dom"
-import { dateFormat } from "../../../utils"
+import { dateFormat, timestampToDateTime } from "../../../utils"
 import { NameCell } from "./NameCell"
 import { TextCell } from "./TextCell"
 import { mdToString } from "../../../common/Markdown/mdToString"
 import { DateCell } from "./DateCell"
 import { useTranslation } from "react-i18next"
+import { ToolBar } from "./ToolBar"
 
 interface ItemsDataGridProps {
   itemConfigs: ItemConfigType[]
   items: Item[]
+  loading?: boolean
 }
 
-export const ItemsDataGrid: FC<ItemsDataGridProps> = ({ itemConfigs, items }) => {
+export const ItemsDataGrid: FC<ItemsDataGridProps> = ({ itemConfigs, items, loading }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -34,7 +36,8 @@ export const ItemsDataGrid: FC<ItemsDataGridProps> = ({ itemConfigs, items }) =>
       return {
         type: 'date',
         minWidth: 120,
-        renderCell: params => <Typography fontSize="small" color="gray">{dateFormat(params.row[type])}</Typography>
+        valueFormatter: (params) => dateFormat(params.value),
+        renderCell: params => <DateCell params={params}/>
       }
     }
     if (type.includes('txt')) {
@@ -49,6 +52,7 @@ export const ItemsDataGrid: FC<ItemsDataGridProps> = ({ itemConfigs, items }) =>
       field: 'timestamp',
       minWidth: 140,
       headerName: t('Publication date') || '',
+      valueFormatter: params => timestampToDateTime(params.value),
       renderCell: params => <DateCell params={params}/>
     }
   ]
@@ -64,8 +68,10 @@ export const ItemsDataGrid: FC<ItemsDataGridProps> = ({ itemConfigs, items }) =>
         columns={[...defaultColumn, ...columns]}
         rows={items}
         onRowClick={(row) => navigate(`/item/${row.id}`)}
-        disableSelectionOnClick
+        disableRowSelectionOnClick
         autoHeight
+        loading={loading}
+        slots={{ toolbar: ToolBar, loadingOverlay: LinearProgress }}
       />
     </Box>
   )

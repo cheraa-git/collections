@@ -1,6 +1,6 @@
 import { axiosGet, axiosPost } from "../../apis/axios/axios-app"
-import { setAdmin, setStatus, setUsers } from "../slices/adminSlice"
-import { setLoading, setUnknownError } from "../slices/appSlice"
+import { setAdmin, setAdminLoading, setStatus, setUsers } from "../slices/adminSlice"
+import { setUnknownError } from "../slices/appSlice"
 import { AppDispatch, RootState } from "../store"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { TokenError } from "../../../../common/errors/TokenError"
@@ -9,17 +9,17 @@ import { User, UserStatus } from "../../../../common/types/user"
 
 
 export const getUsers = () => async (dispatch: AppDispatch) => {
-  dispatch(setLoading(true))
+  dispatch(setAdminLoading(true))
   const users = (await axiosGet<DatabaseError, User[]>('/admin/users'))
   users
     .mapRight(r => dispatch(setUsers(r.data)))
     .mapLeft(e => console.log(e.response?.data))
-  dispatch(setLoading(false))
+  dispatch(setAdminLoading(false))
 }
 
 export const setUsersStatus = (ids: number[], status: UserStatus) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(setLoading(true))
+    dispatch(setAdminLoading(true))
     const token = getState().user.currentUser.token
     const response = await axiosPost<TokenError | DatabaseError, number[]>('/admin/users/status', {
       token, status, userIds: ids
@@ -33,13 +33,13 @@ export const setUsersStatus = (ids: number[], status: UserStatus) => {
           dispatch(setUnknownError(true))
         }
       })
-    dispatch(setLoading(false))
+    dispatch(setAdminLoading(false))
   }
 }
 
 export const setAdminStatus = (ids: number[], status: boolean) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(setLoading(true))
+    dispatch(setAdminLoading(true))
     const token = getState().user.currentUser.token
     const response = await axiosPost<TokenError | DatabaseError, number[]>('/admin/users/admin_status', {
       token, status, userIds: ids
@@ -53,7 +53,7 @@ export const setAdminStatus = (ids: number[], status: boolean) => {
           dispatch(setUnknownError(true))
         }
       })
-    dispatch(setLoading(false))
+    dispatch(setAdminLoading(false))
   }
 }
 

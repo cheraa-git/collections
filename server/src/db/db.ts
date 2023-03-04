@@ -21,6 +21,12 @@ const connection = new Sequelize({
   database: process.env.PGDATABASE,
   logging: false,
   models: [Users, Collections, Items, ItemConfigs, Tags, ItemsTags, Themes, Comments, Likes],
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 300000,
+    acquire: 300000
+  },
   dialectOptions: {
     ssl: {
       require: true,

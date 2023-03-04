@@ -6,7 +6,7 @@ export const NameCell: FC<{ params: GridRenderCellParams }> = ({ params }) => {
   return (
     <Box>
       <Typography height="100%" whiteSpace="normal" fontWeight="bold">
-        {params.row.name}
+        {params.value}
       </Typography>
     </Box>
   )

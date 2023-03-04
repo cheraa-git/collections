@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react"
-import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
-import { Box } from "@mui/material"
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid'
+import { Box, LinearProgress } from "@mui/material"
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { getUsers } from "../../store/actions/adminActions"
 import { Link } from "react-router-dom"
@@ -8,13 +8,14 @@ import { useTranslation } from "react-i18next"
 import { UserActions } from "./UsersActions"
 import { MultipleActionsMenu } from "./MultipleActionsMenu"
 import { Text } from "../../common/Text"
+import { ToolBar } from "../item/ItemsDataGrid/ToolBar"
 
 
 export const UsersDataGrid: FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { users } = useAppSelector((state: RootState) => state.admin)
-  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([])
+  const { users, loading } = useAppSelector((state: RootState) => state.admin)
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([])
 
   useEffect(() => {
     dispatch(getUsers())
@@ -59,9 +60,11 @@ export const UsersDataGrid: FC = () => {
         rows={users}
         columns={columns}
         checkboxSelection
-        disableSelectionOnClick
-        onSelectionModelChange={(newSelectionModel) => setSelectionModel(newSelectionModel)}
-        selectionModel={selectionModel}
+        disableRowSelectionOnClick
+        onRowSelectionModelChange={(newSelectionModel) => setSelectionModel(newSelectionModel)}
+        rowSelectionModel={selectionModel}
+        slots={{ toolbar: ToolBar, loadingOverlay: LinearProgress }}
+        loading={loading}
       />
     </Box>
   )

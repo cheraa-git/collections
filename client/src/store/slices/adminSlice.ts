@@ -3,10 +3,12 @@ import { User, UserStatus } from "../../../../common/types/user"
 
 export interface AdminState {
   users: Omit<User, 'token'>[]
+  loading: boolean
 }
 
 const initialState: AdminState = {
   users: [],
+  loading: false,
 }
 
 export const adminSlice = createSlice({
@@ -32,9 +34,12 @@ export const adminSlice = createSlice({
         return user
       })
     },
+    setAdminLoading: (state, {payload}: PayloadAction<boolean>) => {
+      state.loading = payload
+    }
   }
 })
 
-export const { setUsers, setStatus, setAdmin } = adminSlice.actions
+export const { setUsers, setStatus, setAdmin, setAdminLoading } = adminSlice.actions
 
 export const AdminReducer = adminSlice.reducer

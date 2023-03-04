@@ -37,7 +37,7 @@ export const CollectionPage: FC = () => {
   }, [dispatch, id])
 
 
-  if (!collection.id) return <Box width="min-content" mx="auto" mt={5}><Spinner/></Box>
+  // if (!collection.id) return <Box width="min-content" mx="auto" mt={5}><Spinner/></Box>
   return (
     <Box maxWidth="64rem" mx="auto" my={3} borderRadius=".25rem" p={2}>
       <Grid container spacing={5}>
@@ -49,7 +49,7 @@ export const CollectionPage: FC = () => {
         <Grid item md={8} xs={12}>
           <Box display="flex">
             <Typography variant="h4" className="capitalize">{collection.title}</Typography>
-            {loading && <Box ml="auto"><Spinner/></Box>}
+            {loading && <Box ml={5} mt={1}><Spinner/></Box>}
           </Box>
           <Box data-color-mode={theme} mb={2}>
             <MDEditor.Markdown source={collection.description}/>
@@ -89,7 +89,7 @@ export const CollectionPage: FC = () => {
       </Box>
 
       {/*{items.map(item => <ItemCard item={item} key={item.id}/>)}*/}
-      <ItemsDataGrid items={items} itemConfigs={itemConfigs}/>
+      <ItemsDataGrid items={items} itemConfigs={itemConfigs} loading={loading}/>
     </Box>
   )
 }

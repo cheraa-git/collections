@@ -11,15 +11,15 @@ export const TextCell: FC<{ source: string }> = ({ source }) => {
     if (!boxRef.current || !textRef.current) return
     if (boxRef.current?.offsetHeight < textRef.current?.offsetHeight) {
       setShowEllipsis(true)
-    } else {
+    } else if (boxRef.current?.offsetHeight > textRef.current?.offsetHeight) {
       setShowEllipsis(false)
     }
-  }, [])
+  }, [source, boxRef.current?.offsetHeight, textRef.current?.offsetHeight])
 
   return (
-    <Box height="100%"  position="relative">
-      <Box height="calc(100% - 10px)" overflow="hidden" ref={boxRef} >
-        <Typography fontSize="0.875rem" whiteSpace="pre-wrap" ref={textRef} >
+    <Box height="100%" position="relative">
+      <Box height="calc(100% - 10px)" overflow="hidden" ref={boxRef}>
+        <Typography fontSize="0.875rem" whiteSpace="pre-wrap" ref={textRef}>
           {source}
         </Typography>
       </Box>
