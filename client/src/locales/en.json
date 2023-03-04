@@ -110,6 +110,9 @@
     "Publication date": "Publication date",
     "Item feed": "Item feed",
     "Collection feed": "Collection feed",
-    "An email has been sent to your email. Follow the link from the email to complete the registration": "An email has been sent to your email. Follow the link from the email to complete the registration"
+    "An email has been sent to your email. Follow the link from the email to complete the registration": "An email has been sent to your email. Follow the link from the email to complete the registration",
+    "This action will delete the field of each item": "This action will delete the field of each item",
+    "Hide": "Hide",
+    "Show": "Show"
   }
 }

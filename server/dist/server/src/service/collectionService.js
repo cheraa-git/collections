@@ -59,7 +59,7 @@ const editCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, vo
     try {
         const editedCollection = yield Collections_1.Collections.update(collection, { where: { id: collection.id }, returning: ['*'] });
         const editedConfigs = yield ItemConfigs_1.ItemConfigs.bulkCreate(itemConfigs, {
-            updateOnDuplicate: ['type', 'label'], returning: ['*']
+            updateOnDuplicate: ['type', 'label', 'hidden'], returning: ['*']
         });
         return (0, either_1.right)({ collection: editedCollection[1][0], itemConfigs: editedConfigs });
     }

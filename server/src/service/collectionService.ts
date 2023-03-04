@@ -60,7 +60,7 @@ export const editCollection: EditCollection = async (collection, itemConfigs) =>
   try {
     const editedCollection = await Collections.update(collection, { where: { id: collection.id }, returning: ['*'] })
     const editedConfigs = await ItemConfigs.bulkCreate(itemConfigs, {
-      updateOnDuplicate: ['type', 'label'], returning: ['*']
+      updateOnDuplicate: ['type', 'label', 'hidden'], returning: ['*']
     })
     return right({ collection: editedCollection[1][0], itemConfigs: editedConfigs })
   } catch (e) {

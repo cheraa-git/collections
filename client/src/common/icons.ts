@@ -23,6 +23,10 @@ import ArticleTwoToneIcon from '@mui/icons-material/ArticleTwoTone'
 import CheckIcon from '@mui/icons-material/Check'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import RemoveIcon from '@mui/icons-material/Remove'
+
 
 export {
   LoginIcon,
@@ -49,5 +53,8 @@ export {
   ArticleTwoToneIcon,
   CheckIcon,
   ArrowBackIosIcon,
-  ArrowForwardIosIcon
+  ArrowForwardIosIcon,
+  VisibilityIcon,
+  VisibilityOffIcon,
+  RemoveIcon
 }

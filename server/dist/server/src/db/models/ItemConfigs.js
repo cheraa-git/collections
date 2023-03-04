@@ -38,6 +38,10 @@ __decorate([
     __metadata("design:type", String)
 ], ItemConfigs.prototype, "label", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN }),
+    __metadata("design:type", Boolean)
+], ItemConfigs.prototype, "hidden", void 0);
+__decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => Collections_1.Collections),
     __metadata("design:type", Collections_1.Collections)
 ], ItemConfigs.prototype, "collections", void 0);

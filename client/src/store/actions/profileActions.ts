@@ -9,7 +9,7 @@ import { AuthorizationError } from "../../../../common/errors/AuthorizationError
 import { GmailError } from "../../../../common/errors/GmailError"
 import { Either, left } from "@sweet-monads/either"
 import { AxiosResponse } from "axios"
-import { saveImageToCloud } from "../../apis/firebase/firebaseActions"
+import { deleteImageFromCloud, saveImageToCloud } from "../../apis/firebase/firebaseActions"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { onTokenError } from "../slices/userSlice"
 
@@ -43,22 +43,25 @@ export const editProfileInfo = async (editToken?: string): Promise<Either<any, A
   return (await axiosPost<any, number>('/profile/edit', { token: editToken }))
 }
 
-export const editProfileImage = (userId: number, image?: File) => async (dispatch: AppDispatch, getState: GetState) => {
-  const token = getState().user.currentUser.token
-  dispatch(setProfileLoading(true))
-  let avatarUrl = await saveImageToCloud(image)
-  const response = await axiosPatch<TokenError | DatabaseError, { avatarUrl: string }>('/profile/edit_avatar', {
-    avatarUrl, token, userId
-  })
-  response
-    .mapRight(({ data }) => dispatch(setProfileAvatar(data.avatarUrl)))
-    .mapLeft(e => {
-      if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
-      else {
-        console.log(e.response?.data)
-        dispatch(setUnknownError(true))
-      }
+export const editProfileImage = (userId: number, image?: File, deletedImage?: string) => {
+  return async (dispatch: AppDispatch, getState: GetState) => {
+    const token = getState().user.currentUser.token
+    dispatch(setProfileLoading(true))
+    let avatarUrl = await saveImageToCloud(image)
+    await deleteImageFromCloud(deletedImage)
+    const response = await axiosPatch<TokenError | DatabaseError, { avatarUrl: string }>('/profile/edit_avatar', {
+      avatarUrl, token, userId
     })
-  dispatch(setProfileLoading(false))
+    response
+      .mapRight(({ data }) => dispatch(setProfileAvatar(data.avatarUrl)))
+      .mapLeft(e => {
+        if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
+        else {
+          console.log(e.response?.data)
+          dispatch(setUnknownError(true))
+        }
+      })
+    dispatch(setProfileLoading(false))
 
+  }
 }

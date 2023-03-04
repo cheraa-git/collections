@@ -1,9 +1,10 @@
 import { FC } from "react"
-import { Box, IconButton, MenuItem, TextField } from "@mui/material"
-import RemoveIcon from '@mui/icons-material/Remove'
+import { Box, IconButton, MenuItem, TextField, Tooltip } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useSnackbar } from "notistack"
 import { Collection, ItemConfigType } from "../../../../common/types/collection"
+import { useConfirm } from "../../hooks/confirmHook"
+import { RemoveIcon, VisibilityIcon, VisibilityOffIcon } from "../../common/icons"
 
 
 interface ConfigInputsProps {
@@ -11,9 +12,11 @@ interface ConfigInputsProps {
   setConfigInputs: (configs: ItemConfigType[]) => void
   editable?: { collection: Collection, itemConfigs: ItemConfigType[] }
 }
-export const ConfigInputs: FC<ConfigInputsProps> = ({configInputs, setConfigInputs, editable}) => {
+
+export const ConfigInputs: FC<ConfigInputsProps> = ({ configInputs, setConfigInputs, editable }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar: snackbar } = useSnackbar()
+  const { showConfirm } = useConfirm()
 
   const configTypeHandler = (index: number, type: string) => {
     const newConfig = [...configInputs]
@@ -34,14 +37,47 @@ export const ConfigInputs: FC<ConfigInputsProps> = ({configInputs, setConfigInpu
 
 
   const removeConfigInput = (index: number) => {
-    setConfigInputs(configInputs.filter((_, i) => i !== index))
+    if (editable) {
+      showConfirm(t('This action will delete the field of each item'), () => {
+        setConfigInputs(configInputs.filter((_, i) => i !== index))
+      })
+    } else setConfigInputs(configInputs.filter((_, i) => i !== index))
   }
+
+  const toggleVisible = (index: number) => {
+    const newConfig = [...configInputs]
+    newConfig[index].hidden = !newConfig[index].hidden
+    setConfigInputs(newConfig)
+  }
+
+  const getInputActions = (config: ItemConfigType, index: number) => (
+    <>
+      <IconButton color="error" onClick={() => removeConfigInput(index)}>
+        <RemoveIcon className="red"/>
+      </IconButton>
+      {
+        config.hidden
+          ?
+          <Tooltip title={t('Show')}>
+            <IconButton onClick={() => toggleVisible(index)}>
+              <VisibilityOffIcon fontSize="small"/>
+            </IconButton>
+          </Tooltip>
+          :
+          <Tooltip title={t('Hide')}>
+            <IconButton onClick={() => toggleVisible(index)}>
+              <VisibilityIcon fontSize="small"/>
+            </IconButton>
+          </Tooltip>
+      }
+    </>
+  )
 
   return (
     <div>
       {configInputs.map((config, index) => (
         <Box display="flex" my={1} key={index}>
-          <TextField sx={{ mr: 2 }} select size="small" label={t("type")} fullWidth
+          <TextField sx={{ mr: 2 }} select label={t("type")} fullWidth
                      value={config.type.slice(0, -1)}
                      onChange={(e) => configTypeHandler(index, e.target.value)}
           >
@@ -51,13 +87,12 @@ export const ConfigInputs: FC<ConfigInputsProps> = ({configInputs, setConfigInpu
             <MenuItem value="bool">{t('checkbox')}</MenuItem>
             <MenuItem value="date">{t('date')}</MenuItem>
           </TextField>
-          <TextField size="small" label={t("label")} fullWidth
-                     value={config.label}
-                     onChange={e => configLabelHandler(index, e.target.value)}
+          <TextField
+            label={t("label")} fullWidth
+            value={config.label}
+            onChange={e => configLabelHandler(index, e.target.value)}
+            InputProps={{ endAdornment: getInputActions(config, index) }}
           />
-          <IconButton color="error" onClick={() => removeConfigInput(index)}>
-            <RemoveIcon className="red"/>
-          </IconButton>
         </Box>
       ))}
     </div>

@@ -12,6 +12,7 @@ import { useApp } from "../../hooks/appStateHook"
 import { useAppDispatch } from "../../store/store"
 import { setSearchOpen } from "../../store/slices/appSlice"
 import { SearchCollectionList } from "./collection/SearchCollectionList"
+import { LoadingIndicator } from "./LoadingIndicator"
 
 
 export const SearchDialog: FC = () => {
@@ -45,6 +46,7 @@ export const SearchDialog: FC = () => {
         </Box>
         <InstantSearch indexName="comments" searchClient={searchClient}>
           <SearchInput/>
+          <LoadingIndicator/>
           <Box px={1} mt={1}>
             <Index indexName="items">
               <SearchItemsList/>

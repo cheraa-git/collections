@@ -18,6 +18,7 @@ export interface Theme {
 export type ItemConfigType = {
   id?: number
   collectionId?: number
+  hidden?: boolean
   type: string
   label: string
 }

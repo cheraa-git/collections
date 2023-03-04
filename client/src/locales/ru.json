@@ -109,6 +109,9 @@
     "Publication date": "Дата публикации",
     "Item feed": "Лента элементов",
     "Collection feed": "Лента коллекций",
-    "An email has been sent to your email. Follow the link from the email to complete the registration": "На ваш email было отправлено письмо. Перейдите по ссылке из письма для завершения регистрации"
+    "An email has been sent to your email. Follow the link from the email to complete the registration": "На ваш email было отправлено письмо. Перейдите по ссылке из письма для завершения регистрации",
+    "This action will delete the field of each item": "Это действие приведет к удалению этого поля у каждого элемента",
+    "Hide": "Скрыть",
+    "Show": "Отобразить"
   }
 }

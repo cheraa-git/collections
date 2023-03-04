@@ -85,7 +85,7 @@ export const CreateCollectionPage: FC = () => {
   }
 
   return (
-    <Box maxWidth="900px" mx="auto" px={5} py={4} className="border-x">
+    <Box maxWidth="900px" mx="auto" mb={10} px={5} py={4} className="border-x border-b">
       <Text variant="h4">{editable ? 'Edit' : 'Create'} collection</Text>
       <Box component="form" display="flex" flexDirection="column" mx="auto" px={1} onSubmit={handleSubmit(onSubmit)}>
 
@@ -121,7 +121,10 @@ export const CreateCollectionPage: FC = () => {
         {
           loading
             ? <Box ml="auto"><Spinner/></Box>
-            : <Box alignSelf="end"><TransButton type="submit" variant="outlined">Save</TransButton></Box>
+            : <Box display="flex" justifyContent="space-between">
+              <TransButton variant="outlined" color="inherit" onClick={() => navigate(-1)}>Cancel</TransButton>
+              <TransButton type="submit" variant="outlined" >Save</TransButton>
+            </Box>
         }
       </Box>
     </Box>

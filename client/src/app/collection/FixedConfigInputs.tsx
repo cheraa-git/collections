@@ -9,7 +9,7 @@ export const FixedConfigInputs: FC = () => {
   return (
     <>
       {fixedConfigInputs.map((config, index) => (
-        <Box my={1} display="flex" mr={5} key={index}>
+        <Box my={1} display="flex" key={index}>
           <TextField size="small" sx={{ mr: 2 }} label={t("type")} disabled value={t(config[0])} fullWidth/>
           <TextField size="small" label={t("label")} disabled value={t(config[1])} fullWidth/>
         </Box>

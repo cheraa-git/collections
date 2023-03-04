@@ -38,7 +38,7 @@ export const MenuSettings: FC = () => {
 
   return (
     <ListItem>
-      <Grid container spacing={1} width="250px">
+      <Grid container spacing={1} width="300px">
         <Grid item xs={3} alignSelf="center">
           <Text fontWeight="bold" fontSize="small">theme</Text>
         </Grid>

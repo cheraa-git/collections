@@ -24,7 +24,7 @@ export const ItemPage: FC = () => {
   const navigate = useNavigate()
   const { showConfirm } = useConfirm()
   const { items, loading } = useAppSelector((state: RootState) => state.item)
-  const { itemConfigs } = useCollection()
+  const itemConfigs = useCollection().itemConfigs.filter(config => !config.hidden)
   const { id: currentUserId, isAdmin } = useAuth().currentUser
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const item = items.find(item => item.id === Number(id))

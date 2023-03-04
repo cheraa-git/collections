@@ -24,7 +24,7 @@ export const EditItemDialog: FC<EditItemDialogProps> = ({ open, onClose, collect
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { register, handleSubmit, formState: { errors }, control, setValue, reset } = useForm<FieldValues>({})
-  const itemConfigs = useCollection().itemConfigs
+  const itemConfigs = useCollection().itemConfigs.filter(config => !config.hidden)
   const [addedTags, setAddedTags] = useState<Tag[]>([])
 
   useEffect(() => {

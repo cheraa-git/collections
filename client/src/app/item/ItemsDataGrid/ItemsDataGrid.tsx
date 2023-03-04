@@ -21,6 +21,7 @@ interface ItemsDataGridProps {
 export const ItemsDataGrid: FC<ItemsDataGridProps> = ({ itemConfigs, items, loading }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const filteredConfigs = itemConfigs.filter(config => !config.hidden)
 
   const getColumnConfig = (type: string): Omit<GridColDef, 'field'> => {
     if (type.includes('str')) {
@@ -56,7 +57,7 @@ export const ItemsDataGrid: FC<ItemsDataGridProps> = ({ itemConfigs, items, load
       renderCell: params => <DateCell params={params}/>
     }
   ]
-  const columns: GridColDef[] = itemConfigs.map(config => ({
+  const columns: GridColDef[] = filteredConfigs.map(config => ({
     field: config.type, headerName: config.label, minWidth: 200, flex: 1, ...getColumnConfig(config.type)
   }))
 

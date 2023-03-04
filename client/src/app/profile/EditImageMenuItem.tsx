@@ -38,7 +38,7 @@ export const EditImageMenuItem: FC = () => {
   const editImageHandler = () => {
     if (existingImageUrl) return onClose()
     if (imageFile && imageFile?.size > MAX_IMAGE_SIZE) return snackbar('The maximum photo size is 10MB')
-    dispatch(editProfileImage(profileUser.id, imageFile))
+    dispatch(editProfileImage(profileUser.id, imageFile, profileUser.avatarUrl))
     onClose()
   }
 

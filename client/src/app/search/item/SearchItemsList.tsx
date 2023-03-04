@@ -5,7 +5,6 @@ import { Box } from "@mui/material"
 import { Text } from "../../../common/Text"
 
 export const SearchItemsList = connectHits(({ hits }) => {
-  console.log('items', hits)
   return (
     <Box>
       <Text className="search-title" hidden={hits.length === 0}>Items</Text>
