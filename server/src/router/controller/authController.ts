@@ -1,17 +1,22 @@
 import { Request, Response } from "express"
 import { Users } from "../../db/models/Users"
 import { authByProvider, checkLoginData, checkRegisterData, registerUser } from "../../service/authService"
-import { AuthorizationError } from "../../../../common/errors/AuthorizationError"
+import { AuthError } from "../../../../common/errors/AuthError"
 import { AutoLoginError } from "../../../../common/errors/AutoLoginError"
 import { checkAutoLoginToken, createToken, parseRegisterToken } from "../../service/tokenService"
 import { sendRegisterConfirm } from "../../service/emailService"
-import { DatabaseError } from "../../../../common/errors/DatabaseError"
-import { AuthByProviderBody } from "../../../../common/types/request-body-types/auth"
+import { DbError } from "../../../../common/errors/DbError"
+import {
+  AuthByProviderBody,
+  LoginBody,
+  RegisterBody,
+  SendConfirmEmailBody
+} from "../../../../common/types/request-body-types/auth-body"
 
 
 class AuthController {
 
-  handleRegisterUser = async (req: Request, res: Response) => {
+  handleRegister = async (req: Request<any, any, RegisterBody>, res: Response) => {
     const token = req.body.token
     parseRegisterToken(token)
       .mapRight(async ({ email, password, nickname }) => {
@@ -22,11 +27,11 @@ class AuthController {
       })
   }
 
-  handleLoginUser = async (req: Request, res: Response) => {
+  handleLogin = async (req: Request<any, any, LoginBody>, res: Response) => {
     const email = req.body.email?.trim().toLowerCase()
     const password = req.body.password?.trim()
     if (!email || !password) {
-      return res.status(401).json(new AuthorizationError('Registration data invalid'))
+      return res.status(401).json(new AuthError('Registration data invalid'))
     }
     const response = await checkLoginData(email, password)
     response
@@ -43,12 +48,12 @@ class AuthController {
     res.json({ ...user.dataValues, token, password: undefined })
   }
 
-  handleSendConfirmationEmail = async (req: Request, res: Response) => {
+  handleSendConfirmEmail = async (req: Request<any, any, SendConfirmEmailBody>, res: Response) => {
     const nickname = req.body.nickname.trim().toLowerCase()
     const email = req.body.email.trim().toLowerCase()
     const password = req.body.password.trim()
     if (!nickname || !email || !password) {
-      return res.status(401).json(new AuthorizationError('Registration data invalid'))
+      return res.status(401).json(new AuthError('Registration data invalid'))
     }
     const checkRegisterDataResponse = await checkRegisterData(email, nickname)
     checkRegisterDataResponse
@@ -56,7 +61,7 @@ class AuthController {
       .mapRight(async () => {
         (await sendRegisterConfirm({ email, nickname, password }))
           .mapRight(() => res.json({ status: 200 }))
-          .mapLeft(e => res.status(401).json(new DatabaseError('sendRegisterConfirm: Error', e)))
+          .mapLeft(e => res.status(401).json(new DbError('sendRegisterConfirm: Error', e)))
       })
   }
 

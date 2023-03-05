@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-import { CreateItemBody, DeleteItemBody, EditItemBody } from "../../../../common/types/request-types"
 import { Tags } from "../../db/models/Tags"
 import {
   createItem,
@@ -12,7 +11,8 @@ import {
 } from "../../service/itemService"
 import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../../common/errors/TokenError"
-import { DatabaseError } from "../../../../common/errors/DatabaseError"
+import { DbError } from "../../../../common/errors/DbError"
+import { CreateItemBody, DeleteItemBody, EditItemBody } from "../../../../common/types/request-body-types/item-body"
 
 export class ItemController {
 
@@ -54,7 +54,7 @@ export class ItemController {
     try {
       res.json(await Tags.findAll())
     } catch (e) {
-      res.status(500).json(new DatabaseError('Get tags error', e))
+      res.status(500).json(new DbError('Get tags error', e))
     }
   }
 

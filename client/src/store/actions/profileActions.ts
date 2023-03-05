@@ -9,9 +9,8 @@ import {
 import { setLoading, setUnknownError } from "../slices/appSlice"
 import { AppDispatch, GetState } from "../store"
 import { GetProfileResponse } from "../../../../common/types/response-types"
-import { DatabaseError } from "../../../../common/errors/DatabaseError"
-import { EditProfileByProviderBody, EditProfileByTokenBody } from "../../../../common/types/request-types"
-import { AuthorizationError } from "../../../../common/errors/AuthorizationError"
+import { DbError } from "../../../../common/errors/DbError"
+import { AuthError } from "../../../../common/errors/AuthError"
 import { GmailError } from "../../../../common/errors/GmailError"
 import { Either, left } from "@sweet-monads/either"
 import { AxiosResponse } from "axios"
@@ -20,22 +19,26 @@ import { TokenError } from "../../../../common/errors/TokenError"
 import { onTokenError } from "../slices/userSlice"
 import { authProvider, getProvider } from "../../apis/firebase/actions/auth"
 import { ProfileUser } from "../../../../common/types/user"
+import {
+  EditAvatarBody,
+  EditProfileByProviderBody,
+  EditProfileByTokenBody
+} from "../../../../common/types/request-body-types/profile-body"
 
 export const getProfile = (userId: string) => async (dispatch: AppDispatch) => {
   dispatch(setProfileLoading(true))
-  const response = await axiosGet<DatabaseError, GetProfileResponse>(`/profile/${userId}`)
-  response
+  const res = await axiosGet<DbError, GetProfileResponse>(`/profile/${userId}`)
+  res
     .mapRight(({ data }) => dispatch(setProfileInfo({ ...data })))
     .mapLeft(e => console.log(e))
-
   dispatch(setProfileLoading(false))
 }
 
 export const sendConfirmProfileChange = (data: EditProfileByTokenBody) => async (dispatch: AppDispatch) => {
-  (await axiosPost<AuthorizationError | DatabaseError | GmailError>('/profile/confirm_edit', data))
+  (await axiosPost<AuthError | DbError | GmailError, any, EditProfileByTokenBody>('/profile/confirm_edit', data))
     .mapLeft(e => {
-      if (e.response?.data.name === 'AuthorizationError') dispatch(setProfileErrorMessage('The password is invalid'))
-      if (e.response?.data.name === 'DatabaseError') {
+      if (e.response?.data.name === 'AuthError') dispatch(setProfileErrorMessage('The password is invalid'))
+      if (e.response?.data.name === 'DbError') {
         dispatch(setUnknownError(true))
         console.log(e.response?.data)
       }
@@ -57,11 +60,10 @@ export const editProfileInfoByProvider = (data: EditProfileByProviderBody) => {
     const providerName = getState().user.currentUser.authProvider
     if (!providerName) return
     const provider = getProvider(providerName)
-    const providerResponse = await authProvider(provider, providerName)
-    providerResponse
+    const providerRes = await authProvider(provider, providerName)
+    providerRes
       .mapRight(async () => {
-        const userResponse = await axiosPost<DatabaseError, ProfileUser>('/profile/edit_by_provider', data)
-        userResponse
+        (await axiosPost<DbError, ProfileUser, EditProfileByProviderBody>('/profile/edit_by_provider', data))
           .mapRight(({ data: user }) => {
             dispatch(setProfileUser(user))
             dispatch(setLoading(false))
@@ -84,9 +86,9 @@ export const editProfileImage = (userId: number, image?: File, deletedImage?: st
     dispatch(setProfileLoading(true))
     let avatarUrl = await saveImageToCloud(image)
     await deleteImageFromCloud(deletedImage)
-    const response = await axiosPatch<TokenError | DatabaseError, { avatarUrl: string }>('/profile/edit_avatar', {
-      avatarUrl, token, userId
-    })
+    const response = await axiosPatch<TokenError | DbError, { avatarUrl: string }, EditAvatarBody>('/profile/edit_avatar',
+      { avatarUrl, token, userId }
+    )
     response
       .mapRight(({ data }) => dispatch(setProfileAvatar(data.avatarUrl)))
       .mapLeft(e => {

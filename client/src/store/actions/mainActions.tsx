@@ -1,6 +1,6 @@
 import { AppDispatch } from "../store"
 import { axiosGet } from "../../apis/axios/axios-app"
-import { DatabaseError } from "../../../../common/errors/DatabaseError"
+import { DbError } from "../../../../common/errors/DbError"
 import { setLoading, setUnknownError } from "../slices/appSlice"
 import {
   addMainCollections,
@@ -15,7 +15,7 @@ import { Collection } from "../../../../common/types/collection"
 export const getNextItems = (offset: number, limit: number, tagIds: number[] = []) => async (dispatch: AppDispatch) => {
   const url = `/item/next?offset=${offset}&limit=${limit}&tagIds=${JSON.stringify(tagIds)}`
   setLoading(true)
-  const itemsResponse = await axiosGet<DatabaseError, Item[]>(url)
+  const itemsResponse = await axiosGet<DbError, Item[]>(url)
   itemsResponse
     .mapRight(({ data: items }) => {
       if (items.length === 0) return dispatch(setHasManyItems(false))
@@ -31,7 +31,7 @@ export const getNextItems = (offset: number, limit: number, tagIds: number[] = [
 export const getNextCollections = (offset: number, limit: number, themeId?: number) => async (dispatch: AppDispatch) => {
   const url = `/collection/next?offset=${offset}&limit=${limit}&themeId=${themeId}`
   setLoading(true)
-  const collectionsResponse = await axiosGet<DatabaseError, Collection[]>(url)
+  const collectionsResponse = await axiosGet<DbError, Collection[]>(url)
   collectionsResponse
     .mapRight(({ data: collections }) => {
       if (collections.length === 0) return dispatch(setHasManyCollections(false))
@@ -46,7 +46,7 @@ export const getNextCollections = (offset: number, limit: number, themeId?: numb
 
 export const getMostPopularTags = () => async (dispatch: AppDispatch) => {
   setLoading(true)
-  const tagCountsResponse = await axiosGet<DatabaseError, TagCount[]>('/item/popular_tags')
+  const tagCountsResponse = await axiosGet<DbError, TagCount[]>('/item/popular_tags')
   tagCountsResponse
     .mapRight(({ data: tagCounts }) => dispatch(setTagCounts(tagCounts)))
     .mapLeft(e => {

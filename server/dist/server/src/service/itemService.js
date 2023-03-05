@@ -27,7 +27,7 @@ const ItemsTags_1 = require("../db/models/ItemsTags");
 const ItemConfigs_1 = require("../db/models/ItemConfigs");
 const Collections_1 = require("../db/models/Collections");
 const either_1 = require("@sweet-monads/either");
-const DatabaseError_1 = require("../../../common/errors/DatabaseError");
+const DbError_1 = require("../../../common/errors/DbError");
 const NotFoundError_1 = require("../../../common/errors/NotFoundError");
 const Users_1 = require("../db/models/Users");
 const itemQueries_1 = require("./queries/itemQueries");
@@ -41,7 +41,7 @@ const createItemTags = (tags, itemId) => __awaiter(void 0, void 0, void 0, funct
         return (0, either_1.right)([...addedTags, ...createdTags]);
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Create item tags error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Create item tags error', e));
     }
 });
 const editItemTags = (tags, itemId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -51,7 +51,7 @@ const editItemTags = (tags, itemId) => __awaiter(void 0, void 0, void 0, functio
         return response.map(() => tags);
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Edit item tags error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Edit item tags error', e));
     }
 });
 const createItem = (userId, collectionId, fields, tags) => __awaiter(void 0, void 0, void 0, function* () {
@@ -63,7 +63,7 @@ const createItem = (userId, collectionId, fields, tags) => __awaiter(void 0, voi
     }
     catch (e) {
         console.log(e);
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Create item error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Create item error', e));
     }
 });
 exports.createItem = createItem;
@@ -79,7 +79,7 @@ const getItem = (itemId) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (e) {
         console.log('item', e);
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Get item error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Get item error', e));
     }
 });
 exports.getItem = getItem;
@@ -103,7 +103,7 @@ const editItem = (item) => __awaiter(void 0, void 0, void 0, function* () {
         return updatedTagsResponse.map(updatedTags => (Object.assign(Object.assign({}, (0, utils_1.filterItem)(updatedItem[1][0])), { tags: updatedTags, userId: user === null || user === void 0 ? void 0 : user.id, userNickname: user === null || user === void 0 ? void 0 : user.nickname })));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Edit item error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Edit item error', e));
     }
 });
 exports.editItem = editItem;
@@ -113,7 +113,7 @@ const deleteItem = (id) => __awaiter(void 0, void 0, void 0, function* () {
         return (0, either_1.right)(yield Items_1.Items.destroy({ where: { id }, force: true }));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Delete item error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Delete item error', e));
     }
 });
 exports.deleteItem = deleteItem;
@@ -122,7 +122,7 @@ const getAllItems = () => __awaiter(void 0, void 0, void 0, function* () {
         return (0, either_1.right)(yield Items_1.Items.findAll());
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Delete item error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Delete item error', e));
     }
 });
 exports.getAllItems = getAllItems;
@@ -136,7 +136,7 @@ const getNextItems = (offset, limit, tagIds) => __awaiter(void 0, void 0, void 0
     }
     catch (e) {
         console.log(e);
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('getNextItems: Error', e));
+        return (0, either_1.left)(new DbError_1.DbError('getNextItems: Error', e));
     }
 });
 exports.getNextItems = getNextItems;
@@ -150,7 +150,7 @@ const getMostPopularTags = () => __awaiter(void 0, void 0, void 0, function* () 
     }
     catch (e) {
         console.log(e);
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('getMostPopularTags: Error', e));
+        return (0, either_1.left)(new DbError_1.DbError('getMostPopularTags: Error', e));
     }
 });
 exports.getMostPopularTags = getMostPopularTags;

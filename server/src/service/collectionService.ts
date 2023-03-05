@@ -2,7 +2,7 @@ import { Collections } from "../db/models/Collections"
 import { ItemConfigs } from "../db/models/ItemConfigs"
 import { filterItem } from "../utils"
 import { Either, left, right } from "@sweet-monads/either"
-import { DatabaseError } from "../../../common/errors/DatabaseError"
+import { DbError } from "../../../common/errors/DbError"
 import { EditCollectionResponse, GetCollectionResponse } from "../../../common/types/response-types"
 import {
   cascadeDeleteItemConfigs,
@@ -12,11 +12,11 @@ import {
 import { removeCollectionRelationshipIndexes } from "./searchService"
 import { Collection, ItemConfigType } from "../../../common/types/collection"
 import { Item } from "../../../common/types/item"
-import { EditCollectionBody } from "../../../common/types/request-types"
+import { EditCollectionBody } from "../../../common/types/request-body-types/collection-body"
 
 
 interface CreateCollection {
-  (collection: Omit<Collection, 'id'>, itemConfigs?: ItemConfigType[]): Promise<Either<DatabaseError, Collections>>
+  (collection: Omit<Collection, 'id'>, itemConfigs?: ItemConfigType[]): Promise<Either<DbError, Collections>>
 }
 
 export const createCollection: CreateCollection = async (collection, itemConfigs) => {
@@ -28,11 +28,11 @@ export const createCollection: CreateCollection = async (collection, itemConfigs
     }
     return right(newCollection.dataValues)
   } catch (e) {
-    return left(new DatabaseError('Create collection error', e))
+    return left(new DbError('Create collection error', e))
   }
 }
 
-export const getCollection = async (id: number): Promise<Either<DatabaseError, GetCollectionResponse | undefined>> => {
+export const getCollection = async (id: number): Promise<Either<DbError, GetCollectionResponse | undefined>> => {
   try {
     const response = await getFullCollectionDataQuery(id)
     if (!response) return right(undefined)
@@ -44,21 +44,21 @@ export const getCollection = async (id: number): Promise<Either<DatabaseError, G
     const items = response.items.map(i => ({ ...filterItem(i) } as Item))
     return right({ collection, itemConfigs: response.itemConfigs, items })
   } catch (e) {
-    return left(new DatabaseError('Get collection error', e))
+    return left(new DbError('Get collection error', e))
   }
 }
 
-export const deleteCollection = async (id: number): Promise<Either<DatabaseError, number>> => {
+export const deleteCollection = async (id: number): Promise<Either<DbError, number>> => {
   try {
     await removeCollectionRelationshipIndexes(id)
     return right(await Collections.destroy({ where: { id }, force: true }))
   } catch (e) {
-    return left(new DatabaseError('Delete collection error'))
+    return left(new DbError('Delete collection error'))
   }
 }
 
 interface EditCollection {
-  (data: Omit<EditCollectionBody, 'token'>): Promise<Either<DatabaseError, EditCollectionResponse>>
+  (data: Omit<EditCollectionBody, 'token'>): Promise<Either<DbError, EditCollectionResponse>>
 }
 
 export const editCollection: EditCollection = async ({collection, removedConfigs, itemConfigs}) => {
@@ -70,19 +70,19 @@ export const editCollection: EditCollection = async ({collection, removedConfigs
     await cascadeDeleteItemConfigs(removedConfigs)
     return right({ collection: editedCollection[1][0], itemConfigs: editedConfigs })
   } catch (e) {
-    return left(new DatabaseError('Edit collection error', e))
+    return left(new DbError('Edit collection error', e))
   }
 }
 
-export const getAllCollections = async (): Promise<Either<DatabaseError, Collections[]>> => {
+export const getAllCollections = async (): Promise<Either<DbError, Collections[]>> => {
   try {
     return right(await Collections.findAll())
   } catch (e) {
-    return left(new DatabaseError('Get all collection error'))
+    return left(new DbError('Get all collection error'))
   }
 }
 
-export const getNextCollections = async (offset: number, limit: number, themeId: number): Promise<Either<DatabaseError, Collection[]>> => {
+export const getNextCollections = async (offset: number, limit: number, themeId: number): Promise<Either<DbError, Collection[]>> => {
   try {
     const collections = (await getCollectionsByItemCountQuery({ offset, limit, themeId }))
       .map((w: any) => ({
@@ -95,6 +95,6 @@ export const getNextCollections = async (offset: number, limit: number, themeId:
     if (collections.length === 0) return right([])
     return right(collections)
   } catch (e) {
-    return left(new DatabaseError('getNextCollections: Error', e))
+    return left(new DbError('getNextCollections: Error', e))
   }
 }

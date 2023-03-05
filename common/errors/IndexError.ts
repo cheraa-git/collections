@@ -1,5 +1,5 @@
-export class IndexingError extends Error {
-  name: 'IndexingError' = 'IndexingError'
+export class IndexError extends Error {
+  name: 'IndexError' = 'IndexError'
   error: unknown
   constructor(message: string, error?: unknown) {
     super()

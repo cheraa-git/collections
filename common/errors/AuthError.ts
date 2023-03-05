@@ -1,5 +1,5 @@
-export class AuthorizationError extends Error {
-  name: "AuthorizationError" = "AuthorizationError"
+export class AuthError extends Error {
+  name: "AuthError" = "AuthError"
   error: unknown
   constructor(message: string, error?: unknown) {
     super()

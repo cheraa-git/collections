@@ -14,7 +14,7 @@ const Collections_1 = require("../db/models/Collections");
 const ItemConfigs_1 = require("../db/models/ItemConfigs");
 const utils_1 = require("../utils");
 const either_1 = require("@sweet-monads/either");
-const DatabaseError_1 = require("../../../common/errors/DatabaseError");
+const DbError_1 = require("../../../common/errors/DbError");
 const collectionQueries_1 = require("./queries/collectionQueries");
 const searchService_1 = require("./searchService");
 const createCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,7 +27,7 @@ const createCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, 
         return (0, either_1.right)(newCollection.dataValues);
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Create collection error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Create collection error', e));
     }
 });
 exports.createCollection = createCollection;
@@ -41,7 +41,7 @@ const getCollection = (id) => __awaiter(void 0, void 0, void 0, function* () {
         return (0, either_1.right)({ collection, itemConfigs: response.itemConfigs, items });
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Get collection error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Get collection error', e));
     }
 });
 exports.getCollection = getCollection;
@@ -51,7 +51,7 @@ const deleteCollection = (id) => __awaiter(void 0, void 0, void 0, function* () 
         return (0, either_1.right)(yield Collections_1.Collections.destroy({ where: { id }, force: true }));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Delete collection error'));
+        return (0, either_1.left)(new DbError_1.DbError('Delete collection error'));
     }
 });
 exports.deleteCollection = deleteCollection;
@@ -65,7 +65,7 @@ const editCollection = ({ collection, removedConfigs, itemConfigs }) => __awaite
         return (0, either_1.right)({ collection: editedCollection[1][0], itemConfigs: editedConfigs });
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Edit collection error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Edit collection error', e));
     }
 });
 exports.editCollection = editCollection;
@@ -74,7 +74,7 @@ const getAllCollections = () => __awaiter(void 0, void 0, void 0, function* () {
         return (0, either_1.right)(yield Collections_1.Collections.findAll());
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Get all collection error'));
+        return (0, either_1.left)(new DbError_1.DbError('Get all collection error'));
     }
 });
 exports.getAllCollections = getAllCollections;
@@ -87,7 +87,7 @@ const getNextCollections = (offset, limit, themeId) => __awaiter(void 0, void 0,
         return (0, either_1.right)(collections);
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('getNextCollections: Error', e));
+        return (0, either_1.left)(new DbError_1.DbError('getNextCollections: Error', e));
     }
 });
 exports.getNextCollections = getNextCollections;

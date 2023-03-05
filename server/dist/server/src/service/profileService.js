@@ -24,7 +24,7 @@ exports.editAvatar = exports.editProfileByProvider = exports.editProfileByToken 
 const Collections_1 = require("../db/models/Collections");
 const Users_1 = require("../db/models/Users");
 const either_1 = require("@sweet-monads/either");
-const DatabaseError_1 = require("../../../common/errors/DatabaseError");
+const DbError_1 = require("../../../common/errors/DbError");
 const tokenService_1 = require("./tokenService");
 const sequelize_1 = require("sequelize");
 const getProfile = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -37,7 +37,7 @@ const getProfile = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         return (0, either_1.right)({ collections, user: user === null || user === void 0 ? void 0 : user.dataValues });
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Get profile error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Get profile error', e));
     }
 });
 exports.getProfile = getProfile;
@@ -51,7 +51,7 @@ const editProfileByToken = (token) => __awaiter(void 0, void 0, void 0, function
         }));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('editProfile: Error', e));
+        return (0, either_1.left)(new DbError_1.DbError('editProfile: Error', e));
     }
 });
 exports.editProfileByToken = editProfileByToken;
@@ -62,7 +62,7 @@ const editProfileByProvider = (data) => __awaiter(void 0, void 0, void 0, functi
         return (0, either_1.right)(user);
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('editProfile: Error', e));
+        return (0, either_1.left)(new DbError_1.DbError('editProfile: Error', e));
     }
 });
 exports.editProfileByProvider = editProfileByProvider;
@@ -75,7 +75,7 @@ const editAvatar = (userId, avatar) => __awaiter(void 0, void 0, void 0, functio
         return (0, either_1.right)({ avatarUrl: updatedUser.avatarUrl });
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('editAvatar: Error', e));
+        return (0, either_1.left)(new DbError_1.DbError('editAvatar: Error', e));
     }
 });
 exports.editAvatar = editAvatar;

@@ -25,7 +25,7 @@ const Themes_1 = require("../../db/models/Themes");
 const collectionService_1 = require("../../service/collectionService");
 const tokenService_1 = require("../../service/tokenService");
 const TokenError_1 = require("../../../../common/errors/TokenError");
-const DatabaseError_1 = require("../../../../common/errors/DatabaseError");
+const DbError_1 = require("../../../../common/errors/DbError");
 const sequelize_1 = require("sequelize");
 class CollectionController {
     constructor() {
@@ -65,7 +65,7 @@ class CollectionController {
                 res.json(yield Themes_1.Themes.findAll({ order: sequelize_1.Sequelize.literal('name') }));
             }
             catch (e) {
-                res.status(500).json(new DatabaseError_1.DatabaseError('Get themes', e));
+                res.status(500).json(new DbError_1.DbError('Get themes', e));
             }
         });
     }

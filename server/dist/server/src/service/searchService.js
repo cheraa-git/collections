@@ -18,7 +18,7 @@ const Comments_1 = require("../db/models/Comments");
 const commentService_1 = require("./commentService");
 const collectionService_1 = require("./collectionService");
 const either_1 = require("@sweet-monads/either");
-const IndexingError_1 = require("../../../common/errors/IndexingError");
+const IndexError_1 = require("../../../common/errors/IndexError");
 const addItemIndex = (item) => {
     const index = new meilisearch_1.SearchClient().index('items');
     index.addDocuments([(0, utils_1.filterItem)(item)])
@@ -91,14 +91,14 @@ const indexingAllItems = () => __awaiter(void 0, void 0, void 0, function* () {
         const index = new meilisearch_1.SearchClient().index('items');
         yield index.deleteAllDocuments();
         return (yield (0, itemService_1.getAllItems)())
-            .mapLeft(e => new IndexingError_1.IndexingError('Get items error', e))
+            .mapLeft(e => new IndexError_1.IndexError('Get items error', e))
             .asyncMap((items) => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield index.addDocuments(items.map(item => (0, utils_1.filterItem)(item)));
             return { status: response.status };
         }));
     }
     catch (e) {
-        return (0, either_1.left)(new IndexingError_1.IndexingError('Indexing all items error', e));
+        return (0, either_1.left)(new IndexError_1.IndexError('Indexing all items error', e));
     }
 });
 exports.indexingAllItems = indexingAllItems;
@@ -107,14 +107,14 @@ const indexingAllComments = () => __awaiter(void 0, void 0, void 0, function* ()
         const index = new meilisearch_1.SearchClient().index('comments');
         yield index.deleteAllDocuments();
         return (yield (0, commentService_1.getAllComments)())
-            .mapLeft(e => new IndexingError_1.IndexingError('Get comments error', e))
+            .mapLeft(e => new IndexError_1.IndexError('Get comments error', e))
             .asyncMap((comments) => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield index.addDocuments(comments);
             return { status: response.status };
         }));
     }
     catch (e) {
-        return (0, either_1.left)(new IndexingError_1.IndexingError('Indexing all comments error', e));
+        return (0, either_1.left)(new IndexError_1.IndexError('Indexing all comments error', e));
     }
 });
 exports.indexingAllComments = indexingAllComments;
@@ -123,14 +123,14 @@ const indexingAllCollections = () => __awaiter(void 0, void 0, void 0, function*
         const index = new meilisearch_1.SearchClient().index('collections');
         yield index.deleteAllDocuments();
         return (yield (0, collectionService_1.getAllCollections)())
-            .mapLeft(e => new IndexingError_1.IndexingError('Get collections error', e))
+            .mapLeft(e => new IndexError_1.IndexError('Get collections error', e))
             .asyncMap((collections) => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield index.addDocuments(collections);
             return { status: response.status };
         }));
     }
     catch (e) {
-        return (0, either_1.left)(new IndexingError_1.IndexingError('Indexing all collections error', e));
+        return (0, either_1.left)(new IndexError_1.IndexError('Indexing all collections error', e));
     }
 });
 exports.indexingAllCollections = indexingAllCollections;

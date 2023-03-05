@@ -13,7 +13,7 @@ exports.setAdminStatus = exports.setUsersStatus = exports.getUsers = void 0;
 const Users_1 = require("../db/models/Users");
 const sequelize_typescript_1 = require("sequelize-typescript");
 const either_1 = require("@sweet-monads/either");
-const DatabaseError_1 = require("../../../common/errors/DatabaseError");
+const DbError_1 = require("../../../common/errors/DbError");
 const getUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return (0, either_1.right)(yield Users_1.Users.findAll({
@@ -21,7 +21,7 @@ const getUsers = () => __awaiter(void 0, void 0, void 0, function* () {
         }));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Get users error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Get users error', e));
     }
 });
 exports.getUsers = getUsers;
@@ -30,7 +30,7 @@ const setUsersStatus = (status, ids) => __awaiter(void 0, void 0, void 0, functi
         return (0, either_1.right)(yield Users_1.Users.update({ status }, { where: { id: ids } }));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Set users status error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Set users status error', e));
     }
 });
 exports.setUsersStatus = setUsersStatus;
@@ -39,7 +39,7 @@ const setAdminStatus = (status, ids) => __awaiter(void 0, void 0, void 0, functi
         return (0, either_1.right)(yield Users_1.Users.update({ isAdmin: status }, { where: { id: ids } }));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Set admin status error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Set admin status error', e));
     }
 });
 exports.setAdminStatus = setAdminStatus;

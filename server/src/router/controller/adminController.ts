@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { getUsers, setAdminStatus, setUsersStatus } from "../../service/adminService"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { checkAdminToken } from "../../service/tokenService"
+import { SetAdminStatusBody, SetUsersStatusBody } from "../../../../common/types/request-body-types/admin-body"
 
 export default class AdminController {
   handleGetUsers = async (req: Request, res: Response) => {
@@ -10,7 +11,7 @@ export default class AdminController {
       .mapLeft(error => res.status(500).json(error))
   }
 
-  handleSetUsersStatus = async (req: Request, res: Response) => {
+  handleSetUsersStatus = async (req: Request<any, any, SetUsersStatusBody>, res: Response) => {
     const { token, userIds, status } = req.body
     if (!checkAdminToken(token)) return res.status(498).json(new TokenError())
     const response = await setUsersStatus(status, userIds)
@@ -19,7 +20,7 @@ export default class AdminController {
       .mapLeft(e => res.status(500).json(e))
   }
 
-  handleSetAdminStatus = async (req: Request, res: Response) => {
+  handleSetAdminStatus = async (req: Request<any, any, SetAdminStatusBody>, res: Response) => {
     const { token, userIds, status } = req.body
     if (!checkAdminToken(token)) return res.status(498).json(new TokenError())
     const response = await setAdminStatus(status, userIds)

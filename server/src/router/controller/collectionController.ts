@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-import { CreateCollectionBody, DeleteCollectionBody, EditCollectionBody, } from "../../../../common/types/request-types"
 import { Themes } from "../../db/models/Themes"
 import {
   createCollection,
@@ -10,9 +9,14 @@ import {
 } from "../../service/collectionService"
 import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../../common/errors/TokenError"
-import { DatabaseError } from "../../../../common/errors/DatabaseError"
+import { DbError } from "../../../../common/errors/DbError"
 import { Sequelize } from "sequelize"
 import { Theme } from "../../../../common/types/collection"
+import {
+  CreateCollectionBody,
+  DeleteCollectionBody,
+  EditCollectionBody
+} from "../../../../common/types/request-body-types/collection-body"
 
 
 export class CollectionController {
@@ -49,11 +53,11 @@ export class CollectionController {
       .mapLeft(e => res.status(500).json(e))
   }
 
-  getThemes = async (req: Request, res: Response<Theme[] | DatabaseError>) => {
+  getThemes = async (req: Request, res: Response<Theme[] | DbError>) => {
     try {
       res.json(await Themes.findAll({order: Sequelize.literal('name')}))
     } catch (e) {
-      res.status(500).json(new DatabaseError('Get themes', e))
+      res.status(500).json(new DbError('Get themes', e))
     }
   }
 

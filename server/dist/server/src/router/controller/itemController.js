@@ -14,7 +14,7 @@ const Tags_1 = require("../../db/models/Tags");
 const itemService_1 = require("../../service/itemService");
 const tokenService_1 = require("../../service/tokenService");
 const TokenError_1 = require("../../../../common/errors/TokenError");
-const DatabaseError_1 = require("../../../../common/errors/DatabaseError");
+const DbError_1 = require("../../../../common/errors/DbError");
 class ItemController {
     constructor() {
         this.handlerCreateItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -55,7 +55,7 @@ class ItemController {
                 res.json(yield Tags_1.Tags.findAll());
             }
             catch (e) {
-                res.status(500).json(new DatabaseError_1.DatabaseError('Get tags error', e));
+                res.status(500).json(new DbError_1.DbError('Get tags error', e));
             }
         });
     }

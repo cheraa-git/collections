@@ -7,7 +7,7 @@ import { getAllComments } from "./commentService"
 import { Collections } from "../db/models/Collections"
 import { getAllCollections } from "./collectionService"
 import { Either, left } from "@sweet-monads/either"
-import { IndexingError } from "../../../common/errors/IndexingError"
+import { IndexError } from "../../../common/errors/IndexError"
 import { TaskStatus } from "meilisearch"
 
 export const addItemIndex = (item: Items) => {
@@ -79,48 +79,48 @@ export const removeCollectionRelationshipIndexes = async (collectionId: number) 
     .catch(e => console.log('DELETE_INDEXES_ERROR', e))
 }
 
-export const indexingAllItems = async (): Promise<Either<IndexingError, { status: TaskStatus }>> => {
+export const indexingAllItems = async (): Promise<Either<IndexError, { status: TaskStatus }>> => {
   try {
     const index = new SearchClient().index('items')
     await index.deleteAllDocuments()
     return (await getAllItems())
-      .mapLeft(e => new IndexingError('Get items error', e))
+      .mapLeft(e => new IndexError('Get items error', e))
       .asyncMap(async (items) => {
         const response = await index.addDocuments(items.map(item => filterItem(item)))
         return { status: response.status }
       })
   } catch (e) {
-    return left(new IndexingError('Indexing all items error', e))
+    return left(new IndexError('Indexing all items error', e))
   }
 }
 
-export const indexingAllComments = async (): Promise<Either<IndexingError, { status: TaskStatus }>> => {
+export const indexingAllComments = async (): Promise<Either<IndexError, { status: TaskStatus }>> => {
   try {
     const index = new SearchClient().index('comments')
     await index.deleteAllDocuments()
     return (await getAllComments())
-      .mapLeft(e => new IndexingError('Get comments error', e))
+      .mapLeft(e => new IndexError('Get comments error', e))
       .asyncMap(async (comments) => {
         const response = await index.addDocuments(comments)
         return { status: response.status }
       })
   } catch (e) {
-    return left(new IndexingError('Indexing all comments error', e))
+    return left(new IndexError('Indexing all comments error', e))
   }
 }
 
-export const indexingAllCollections = async (): Promise<Either<IndexingError, { status: TaskStatus }>> => {
+export const indexingAllCollections = async (): Promise<Either<IndexError, { status: TaskStatus }>> => {
   try {
     const index = new SearchClient().index('collections')
     await index.deleteAllDocuments()
     return (await getAllCollections())
-      .mapLeft(e => new IndexingError('Get collections error', e))
+      .mapLeft(e => new IndexError('Get collections error', e))
       .asyncMap(async (collections) => {
         const response = await index.addDocuments(collections)
         return { status: response.status }
       })
   } catch (e) {
-    return left(new IndexingError('Indexing all collections error', e))
+    return left(new IndexError('Indexing all collections error', e))
   }
 }
 

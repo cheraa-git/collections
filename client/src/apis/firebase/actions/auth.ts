@@ -1,7 +1,7 @@
 import { signInWithPopup } from "firebase/auth"
 import { auth, facebookProvider, githubProvider, googleProvider, ProviderType } from "../firebase"
 import { Either, left, right } from "@sweet-monads/either"
-import { AuthByProviderBody } from "../../../../../common/types/request-body-types/auth"
+import { AuthByProviderBody } from "../../../../../common/types/request-body-types/auth-body"
 import { AuthProviderName } from "../../../../../common/types/user"
 import { FirebaseError } from 'firebase/app'
 import { FacebookIconPng, GithubDarkIconPng, GithubLightIconPng, GoogleIconPng } from "../../../common/icons"

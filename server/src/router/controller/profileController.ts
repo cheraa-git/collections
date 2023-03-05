@@ -1,10 +1,14 @@
 import { Request, Response } from "express"
 import { editAvatar, editProfileByProvider, editProfileByToken, getProfile } from "../../service/profileService"
-import { EditProfileByProviderBody, EditProfileByTokenBody } from "../../../../common/types/request-types"
 import { checkLoginData } from "../../service/authService"
 import { sendProfileChangeConfirm } from "../../service/emailService"
 import { checkToken } from "../../service/tokenService"
 import { TokenError } from "../../../../common/errors/TokenError"
+import {
+  EditAvatarBody,
+  EditProfileByProviderBody,
+  EditProfileByTokenBody
+} from "../../../../common/types/request-body-types/profile-body"
 
 
 export class ProfileController {
@@ -40,7 +44,7 @@ export class ProfileController {
       .mapLeft(e => res.status(500).json(e))
   }
 
-  async handleEditAvatar(req: Request, res: Response) {
+  async handleEditAvatar(req: Request<any, any, EditAvatarBody>, res: Response) {
     const { token, userId, avatarUrl } = req.body
     if (!checkToken(token, userId)) return res.status(498).json(new TokenError())
     const response = await editAvatar(userId, avatarUrl)

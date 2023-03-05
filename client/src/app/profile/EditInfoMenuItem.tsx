@@ -7,11 +7,11 @@ import { TransButton } from "../../common/TransButton"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useAuth } from "../../hooks/authHook"
-import { EditProfileByTokenBody } from "../../../../common/types/request-types"
 import { useSnackbar } from "notistack"
 import { editProfileInfoByProvider, sendConfirmProfileChange } from "../../store/actions/profileActions"
 import { useApp } from "../../hooks/appStateHook"
 import { getProviderImage } from "../../apis/firebase/actions/auth"
+import { EditProfileByTokenBody } from "../../../../common/types/request-body-types/profile-body"
 
 interface Inputs {
   nickname: string

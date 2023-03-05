@@ -1,7 +1,6 @@
 import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
 import { CreateCollectionPayload, EditCollectionPayload } from "../../types/collection"
 import { deleteImageFromCloud, saveImageToCloud } from "../../apis/firebase/actions/storage"
-import { CreateCollectionBody, EditCollectionBody } from "../../../../common/types/request-types"
 import {
   setCollectionData,
   setCollectionErrorMessage,
@@ -13,10 +12,11 @@ import { NavigateFunction } from "react-router-dom"
 import { setItems } from "../slices/itemSlice"
 import { AppDispatch, GetState } from "../store"
 import { TokenError } from "../../../../common/errors/TokenError"
-import { DatabaseError } from "../../../../common/errors/DatabaseError"
+import { DbError } from "../../../../common/errors/DbError"
 import { onTokenError } from "../slices/userSlice"
 import { GetCollectionResponse } from "../../../../common/types/response-types"
 import { Collection, Theme } from "../../../../common/types/collection"
+import { CreateCollectionBody, EditCollectionBody } from "../../../../common/types/request-body-types/collection-body"
 
 
 export const createCollection = (data: CreateCollectionPayload, navigate: NavigateFunction) => {
@@ -24,7 +24,7 @@ export const createCollection = (data: CreateCollectionPayload, navigate: Naviga
     const { image, themeId, title, itemConfigs, description, userId } = data
     const token = getState().user.currentUser.token
     dispatch(setCollectionLoading(true))
-    const response = await axiosPost<TokenError | DatabaseError, Collection, CreateCollectionBody>('/collection', {
+    const response = await axiosPost<TokenError | DbError, Collection, CreateCollectionBody>('/collection', {
       userId, token, imageUrl: await saveImageToCloud(image), themeId, title, description, itemConfigs
     })
     response
@@ -48,7 +48,7 @@ export const editCollection = (data: EditCollectionPayload, navigate: NavigateFu
     dispatch(setCollectionLoading(true))
     let imageUrl = existingImage || await saveImageToCloud(image)
     await deleteImageFromCloud(deletedImage)
-    const response = await axiosPatch<TokenError | DatabaseError, Collection, EditCollectionBody>('/collection', {
+    const response = await axiosPatch<TokenError | DbError, Collection, EditCollectionBody>('/collection', {
       itemConfigs, removedConfigs, collection: { ...collection, imageUrl }, token
     })
     response
@@ -67,7 +67,7 @@ export const editCollection = (data: EditCollectionPayload, navigate: NavigateFu
 
 export const getCollection = (id: string) => async (dispatch: AppDispatch) => {
   dispatch(setCollectionLoading(true))
-  const response = await axiosGet<DatabaseError, GetCollectionResponse | undefined>(`/collection/${id}`)
+  const response = await axiosGet<DbError, GetCollectionResponse | undefined>(`/collection/${id}`)
   response
     .mapRight(({ data }) => {
       if (!data) return dispatch(setCollectionErrorMessage('Collection not found'))
@@ -83,7 +83,7 @@ export const deleteCollection = (collection: Collection, navigate: NavigateFunct
   return async (dispatch: AppDispatch, getState: GetState) => {
     dispatch(setCollectionLoading(true))
     const token = getState().user.currentUser.token
-    const response = await axiosDelete<TokenError | DatabaseError>('/collection', { data: { collection, token } })
+    const response = await axiosDelete<TokenError | DbError>('/collection', { data: { collection, token } })
     response
       .mapRight(() => navigate(`/profile/${collection.userId}`))
       .mapLeft(e => {
@@ -99,7 +99,7 @@ export const deleteCollection = (collection: Collection, navigate: NavigateFunct
 
 export const getThemes = () => async (dispatch: AppDispatch) => {
   dispatch(setLoading(true))
-  const response = await axiosGet<DatabaseError, Theme[]>('/collection/themes')
+  const response = await axiosGet<DbError, Theme[]>('/collection/themes')
   response
     .mapRight(({ data: themes }) => dispatch(setThemes(themes)))
     .mapLeft(e => console.log(e.response?.data))

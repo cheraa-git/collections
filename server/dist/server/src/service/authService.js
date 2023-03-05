@@ -36,8 +36,8 @@ exports.authByProvider = exports.checkLoginData = exports.checkRegisterData = ex
 const bcrypt = __importStar(require("bcrypt"));
 const Users_1 = require("../db/models/Users");
 const either_1 = require("@sweet-monads/either");
-const AuthorizationError_1 = require("../../../common/errors/AuthorizationError");
-const DatabaseError_1 = require("../../../common/errors/DatabaseError");
+const AuthError_1 = require("../../../common/errors/AuthError");
+const DbError_1 = require("../../../common/errors/DbError");
 const tokenService_1 = require("./tokenService");
 const registerUser = (nickname, email, password) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -49,10 +49,10 @@ const registerUser = (nickname, email, password) => __awaiter(void 0, void 0, vo
     }
     catch (e) {
         if (e.name === 'SequelizeUniqueConstraintError') {
-            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError(`${e.errors[0].path} already exists`));
+            return (0, either_1.left)(new AuthError_1.AuthError(`${e.errors[0].path} already exists`));
         }
         else
-            return (0, either_1.left)(new DatabaseError_1.DatabaseError('Register user error', e));
+            return (0, either_1.left)(new DbError_1.DbError('Register user error', e));
     }
 });
 exports.registerUser = registerUser;
@@ -61,13 +61,13 @@ const checkRegisterData = (email, nickname) => __awaiter(void 0, void 0, void 0,
         const emailMach = yield Users_1.Users.findOne({ where: { email } });
         const nicknameMach = yield Users_1.Users.findOne({ where: { nickname } });
         if (emailMach)
-            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError(`email already exists`));
+            return (0, either_1.left)(new AuthError_1.AuthError(`email already exists`));
         if (nicknameMach)
-            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError(`nickname already exists`));
+            return (0, either_1.left)(new AuthError_1.AuthError(`nickname already exists`));
         return (0, either_1.right)('');
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('checkRegisterData: Error', e));
+        return (0, either_1.left)(new DbError_1.DbError('checkRegisterData: Error', e));
     }
 });
 exports.checkRegisterData = checkRegisterData;
@@ -75,16 +75,16 @@ const checkLoginData = (email, password) => __awaiter(void 0, void 0, void 0, fu
     try {
         const user = yield Users_1.Users.findOne({ where: { email } });
         if (!user)
-            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError('No user with this email was found'));
+            return (0, either_1.left)(new AuthError_1.AuthError('No user with this email was found'));
         if (user.status !== 'active')
-            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError(`The user is ${user.status}`));
+            return (0, either_1.left)(new AuthError_1.AuthError(`The user is ${user.status}`));
         const comparePassword = yield bcrypt.compare(password, user.password);
         if (!comparePassword)
-            return (0, either_1.left)(new AuthorizationError_1.AuthorizationError('The password is invalid'));
+            return (0, either_1.left)(new AuthError_1.AuthError('The password is invalid'));
         return (0, either_1.right)(user.dataValues);
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('Check login data error', e));
+        return (0, either_1.left)(new DbError_1.DbError('Check login data error', e));
     }
 });
 exports.checkLoginData = checkLoginData;
@@ -102,7 +102,7 @@ const authByProvider = (data) => __awaiter(void 0, void 0, void 0, function* () 
         return (0, either_1.right)(Object.assign(Object.assign({}, user.dataValues), { token, password: undefined }));
     }
     catch (e) {
-        return (0, either_1.left)(new DatabaseError_1.DatabaseError('authUserByProvider: Error', e));
+        return (0, either_1.left)(new DbError_1.DbError('authUserByProvider: Error', e));
     }
 });
 exports.authByProvider = authByProvider;

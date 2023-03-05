@@ -1,5 +1,5 @@
-export class DatabaseError extends Error {
-  name: "DatabaseError" = "DatabaseError"
+export class DbError extends Error {
+  name: "DbError" = "DbError"
   error: unknown
   constructor(message: string, error?: unknown) {
     super()

@@ -4,7 +4,7 @@ import { ItemsTags } from "../db/models/ItemsTags"
 import { ItemConfigs } from "../db/models/ItemConfigs"
 import { Collections } from "../db/models/Collections"
 import { Either, left, right } from "@sweet-monads/either"
-import { DatabaseError } from "../../../common/errors/DatabaseError"
+import { DbError } from "../../../common/errors/DbError"
 import { GetItemResponse } from "../../../common/types/response-types"
 import { NotFoundError } from "../../../common/errors/NotFoundError"
 import { Users } from "../db/models/Users"
@@ -18,7 +18,7 @@ import { removeItemCommentsIndexes } from "./searchService"
 import { Fields, Item, Tag, TagCount } from "../../../common/types/item"
 
 
-const createItemTags = async (tags: Tag[], itemId: number): Promise<Either<DatabaseError, Tag[]>> => {
+const createItemTags = async (tags: Tag[], itemId: number): Promise<Either<DbError, Tag[]>> => {
   try {
     const addedTags = tags.filter(tag => tag.id)
     const createdTags = await createTagsQuery(tags.filter(tag => !tag.id))
@@ -26,22 +26,22 @@ const createItemTags = async (tags: Tag[], itemId: number): Promise<Either<Datab
     await ItemsTags.bulkCreate(itemTags)
     return right([...addedTags, ...createdTags])
   } catch (e) {
-    return left(new DatabaseError('Create item tags error', e))
+    return left(new DbError('Create item tags error', e))
   }
 }
 
-const editItemTags = async (tags: Tag[], itemId: number): Promise<Either<DatabaseError, Tag[]>> => {
+const editItemTags = async (tags: Tag[], itemId: number): Promise<Either<DbError, Tag[]>> => {
   try {
     await ItemsTags.destroy({ where: { itemId } })
     const response = await createItemTags(tags, itemId)
     return response.map(() => tags)
   } catch (e) {
-    return left(new DatabaseError('Edit item tags error', e))
+    return left(new DbError('Edit item tags error', e))
   }
 }
 
 interface CreateItem {
-  (userId: number, collectionId: number, fields: Fields, tags: Tag[]): Promise<Either<DatabaseError, Item>>
+  (userId: number, collectionId: number, fields: Fields, tags: Tag[]): Promise<Either<DbError, Item>>
 }
 
 export const createItem: CreateItem = async (userId, collectionId, fields, tags) => {
@@ -52,12 +52,12 @@ export const createItem: CreateItem = async (userId, collectionId, fields, tags)
     return newTagsResponse.map(newTags => ({ ...filterItem(newItem), tags: newTags } as Item))
   } catch (e) {
     console.log(e)
-    return left(new DatabaseError('Create item error', e))
+    return left(new DbError('Create item error', e))
   }
 }
 
 
-export const getItem = async (itemId: number): Promise<Either<DatabaseError | NotFoundError, GetItemResponse>> => {
+export const getItem = async (itemId: number): Promise<Either<DbError | NotFoundError, GetItemResponse>> => {
   try {
     const item = await getItemWithTagsQuery({ itemId })
     if (!item) return left(new NotFoundError(`Item number ${itemId} not found`))
@@ -66,7 +66,7 @@ export const getItem = async (itemId: number): Promise<Either<DatabaseError | No
     return right({ item: { ...filterItem(item), userId: user?.id, userNickname: user?.nickname } as Item, itemConfigs })
   } catch (e) {
     console.log('item', e)
-    return left(new DatabaseError('Get item error', e))
+    return left(new DbError('Get item error', e))
   }
 }
 
@@ -79,7 +79,7 @@ export const getItemAuthorId = async (collectionId: number): Promise<number | un
   }
 }
 
-export const editItem = async (item: Item): Promise<Either<DatabaseError, Item>> => {
+export const editItem = async (item: Item): Promise<Either<DbError, Item>> => {
   try {
     const { tags, ...editingItem } = item
     const updatedItem = await Items.update(editingItem, { where: { id: editingItem.id }, returning: ['*'] })
@@ -89,28 +89,28 @@ export const editItem = async (item: Item): Promise<Either<DatabaseError, Item>>
       ...filterItem(updatedItem[1][0]), tags: updatedTags, userId: user?.id, userNickname: user?.nickname
     } as Item))
   } catch (e) {
-    return left(new DatabaseError('Edit item error', e))
+    return left(new DbError('Edit item error', e))
   }
 }
 
-export const deleteItem = async (id: number): Promise<Either<DatabaseError, number>> => {
+export const deleteItem = async (id: number): Promise<Either<DbError, number>> => {
   try {
     await removeItemCommentsIndexes(id)
     return right(await Items.destroy({ where: { id }, force: true }))
   } catch (e) {
-    return left(new DatabaseError('Delete item error', e))
+    return left(new DbError('Delete item error', e))
   }
 }
 
-export const getAllItems = async (): Promise<Either<DatabaseError, Items[]>> => {
+export const getAllItems = async (): Promise<Either<DbError, Items[]>> => {
   try {
     return right(await Items.findAll())
   } catch (e) {
-    return left(new DatabaseError('Delete item error', e))
+    return left(new DbError('Delete item error', e))
   }
 }
 
-export const getNextItems = async (offset: number, limit: number, tagIds?: number[]): Promise<Either<DatabaseError, Item[]>> => {
+export const getNextItems = async (offset: number, limit: number, tagIds?: number[]): Promise<Either<DbError, Item[]>> => {
   try {
     const items = (await getRangeItemsQuery({ offset, limit, tagIds }))
       .map(item => ({ ...item.dataValues, collections: undefined, collectionTitle: item.collections.title }))
@@ -118,11 +118,11 @@ export const getNextItems = async (offset: number, limit: number, tagIds?: numbe
     return right(items.map(item => (filterItem(item) as Item)))
   } catch (e) {
     console.log(e)
-    return left(new DatabaseError('getNextItems: Error', e))
+    return left(new DbError('getNextItems: Error', e))
   }
 }
 
-export const getMostPopularTags = async (): Promise<Either<DatabaseError, TagCount[]>> => {
+export const getMostPopularTags = async (): Promise<Either<DbError, TagCount[]>> => {
   try {
     const countTags: TagCount[] = (await getMostPopularTagsQuery()).map(countTag => ({
       tagId: countTag.tagId,
@@ -131,6 +131,6 @@ export const getMostPopularTags = async (): Promise<Either<DatabaseError, TagCou
     return right(countTags)
   } catch (e) {
     console.log(e)
-    return left(new DatabaseError('getMostPopularTags: Error', e))
+    return left(new DbError('getMostPopularTags: Error', e))
   }
 }
