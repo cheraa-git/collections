@@ -11,6 +11,7 @@ import { Box } from "@mui/material"
 import { Text } from "../../common/Text"
 import { useTranslation } from "react-i18next"
 import { useSnackbar } from "notistack"
+import { AuthProviderButtons } from "./AuthProviderButtons"
 
 export function AuthPage() {
   const { t } = useTranslation()
@@ -24,7 +25,7 @@ export function AuthPage() {
 
   useEffect(() => {
     if (infoMessage) {
-      snackbar(t(infoMessage), {autoHideDuration: 10000})
+      snackbar(t(infoMessage), { autoHideDuration: 10000 })
       dispatch(setAuthInfoMessage(''))
     }
   }, [infoMessage, dispatch, t, snackbar])
@@ -48,6 +49,8 @@ export function AuthPage() {
           : <LoginIcon color="primary" fontSize="large"/>}
       </Box>
       {mode === 'signup' ? <RegisterContent/> : <LoginContent/>}
+      <Text variant="h6" className="border-t" mt={2}>Authorization with</Text>
+      <AuthProviderButtons/>
     </Box>
   )
 }

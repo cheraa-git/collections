@@ -47,7 +47,7 @@ export const SearchDialog: FC = () => {
         <InstantSearch indexName="comments" searchClient={searchClient}>
           <SearchInput/>
           <LoadingIndicator/>
-          <Box px={1} mt={1}>
+          <Box mt={1}>
             <Index indexName="items">
               <SearchItemsList/>
             </Index>

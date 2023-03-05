@@ -43,7 +43,7 @@ export const UsersDataGrid: FC = () => {
       field: 'actions',
       headerName: t('Actions') || '',
       type: 'actions',
-      width: 160,
+      width: 180,
       renderCell: UserActions
     },
 
@@ -51,7 +51,7 @@ export const UsersDataGrid: FC = () => {
 
 
   return (
-    <Box height={window.innerHeight - 200} width="100%" maxWidth={720} mx="auto">
+    <Box height={window.innerHeight - 200} width="100%" maxWidth={740} mx="auto">
       <Box display="flex" justifyContent="space-between">
         <Text alignSelf="center">Users management</Text>
         <MultipleActionsMenu selectionModel={selectionModel as number[]}/>

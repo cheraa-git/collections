@@ -46,6 +46,7 @@ export const createToken = (user: Users) => {
     {
       email: user.email,
       hashPassword: user.password,
+      authProvider: user.authProvider,
       id: user.id,
       isAdmin: user.isAdmin,
       status: user.status

@@ -9,7 +9,7 @@ export const SearchCommentsList = connectHits(({ hits }) => {
   return (
     <Box>
       <Text className="search-title" hidden={hits.length === 0}>Comments</Text>
-      <Box px={1}>
+      <Box>
         {hits.map(hit => (
           <SearchCommentCard key={hit.id} hit={hit} attribute="text"/>
         ))}

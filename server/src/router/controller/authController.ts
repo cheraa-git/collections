@@ -1,11 +1,12 @@
 import { Request, Response } from "express"
 import { Users } from "../../db/models/Users"
-import { checkLoginData, checkRegisterData, registerUser } from "../../service/authService"
+import { authByProvider, checkLoginData, checkRegisterData, registerUser } from "../../service/authService"
 import { AuthorizationError } from "../../../../common/errors/AuthorizationError"
 import { AutoLoginError } from "../../../../common/errors/AutoLoginError"
 import { checkAutoLoginToken, createToken, parseRegisterToken } from "../../service/tokenService"
 import { sendRegisterConfirm } from "../../service/emailService"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
+import { AuthByProviderBody } from "../../../../common/types/request-body-types/auth"
 
 
 class AuthController {
@@ -54,9 +55,15 @@ class AuthController {
       .mapLeft(e => res.status(401).json(e))
       .mapRight(async () => {
         (await sendRegisterConfirm({ email, nickname, password }))
-          .mapRight(() => res.json({status: 200}))
+          .mapRight(() => res.json({ status: 200 }))
           .mapLeft(e => res.status(401).json(new DatabaseError('sendRegisterConfirm: Error', e)))
       })
+  }
+
+  handleAuthByProvider = async (req: Request<any, any, AuthByProviderBody>, res: Response) => {
+    (await authByProvider(req.body))
+      .mapRight(user => res.json(user))
+      .mapLeft(e => res.status(401).json(e))
   }
 }
 

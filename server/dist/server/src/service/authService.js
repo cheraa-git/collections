@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkLoginData = exports.checkRegisterData = exports.registerUser = void 0;
+exports.authByProvider = exports.checkLoginData = exports.checkRegisterData = exports.registerUser = void 0;
 const bcrypt = __importStar(require("bcrypt"));
 const Users_1 = require("../db/models/Users");
 const either_1 = require("@sweet-monads/either");
@@ -88,3 +88,21 @@ const checkLoginData = (email, password) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.checkLoginData = checkLoginData;
+const authByProvider = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { authProvider, nickname, email } = data;
+    try {
+        let [user, created] = yield Users_1.Users.findOrCreate({
+            where: { email },
+            defaults: { email, nickname, authProvider, isAdmin: false, status: 'active' },
+        });
+        if (!created && (!user.authProvider || user.authProvider !== authProvider)) {
+            user = (yield Users_1.Users.update({ authProvider }, { where: { email }, returning: ['*'] }))[1][0];
+        }
+        const token = (0, tokenService_1.createToken)(user);
+        return (0, either_1.right)(Object.assign(Object.assign({}, user.dataValues), { token, password: undefined }));
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('authUserByProvider: Error', e));
+    }
+});
+exports.authByProvider = authByProvider;

@@ -6,11 +6,14 @@ export interface User {
   token: string
   isAdmin: boolean
   status: UserStatus
+  authProvider?: AuthProviderName
 }
 
 export type ProfileUser = Omit<User, "token">
 
 export type UserStatus = 'active' | 'blocked' | 'deleted'
+
+export type AuthProviderName = 'google' | 'github' | 'facebook'
 
 export interface EditProfileTokenData {
   email?: string,

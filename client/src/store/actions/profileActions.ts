@@ -9,7 +9,7 @@ import { AuthorizationError } from "../../../../common/errors/AuthorizationError
 import { GmailError } from "../../../../common/errors/GmailError"
 import { Either, left } from "@sweet-monads/either"
 import { AxiosResponse } from "axios"
-import { deleteImageFromCloud, saveImageToCloud } from "../../apis/firebase/firebaseActions"
+import { deleteImageFromCloud, saveImageToCloud } from "../../apis/firebase/actions/storage"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { onTokenError } from "../slices/userSlice"
 

@@ -2,7 +2,7 @@ import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript"
 import { Collections } from "./Collections"
 import { Comments } from "./Comments"
 import { Likes } from "./Likes"
-import { UserStatus } from "../../../../common/types/user"
+import { AuthProviderName, UserStatus } from "../../../../common/types/user"
 
 
 @Table({ timestamps: false, tableName: 'users' })
@@ -33,6 +33,9 @@ export class Users extends Model {
   @Column({ type: DataType.STRING })
   password!: string
 
+  @Column({ type: DataType.STRING })
+  authProvider!: AuthProviderName
+
   @Column({ type: DataType.STRING, })
   avatarUrl!: string
 
@@ -45,9 +48,9 @@ export class Users extends Model {
   @HasMany(() => Collections, { onDelete: 'cascade' })
   collections!: Collections[]
 
-  @HasMany(() => Comments, {onDelete: 'cascade'})
+  @HasMany(() => Comments, { onDelete: 'cascade' })
   comments!: Comments[]
 
-  @HasMany(() => Likes, {onDelete: 'cascade'})
+  @HasMany(() => Likes, { onDelete: 'cascade' })
   likes!: Likes[]
 }

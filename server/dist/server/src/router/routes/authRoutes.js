@@ -12,3 +12,4 @@ exports.authRouter.post('/login', controller.handleLoginUser);
 exports.authRouter.post('/confirm_register', controller.handleSendConfirmationEmail);
 exports.authRouter.post('/register', controller.handleRegisterUser);
 exports.authRouter.post('/autologin', controller.handleAutoLogin);
+exports.authRouter.post('/provider', controller.handleAuthByProvider);

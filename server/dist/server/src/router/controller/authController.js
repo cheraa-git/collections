@@ -64,6 +64,11 @@ class AuthController {
                     .mapLeft(e => res.status(401).json(new DatabaseError_1.DatabaseError('sendRegisterConfirm: Error', e)));
             }));
         });
+        this.handleAuthByProvider = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            (yield (0, authService_1.authByProvider)(req.body))
+                .mapRight(user => res.json(user))
+                .mapLeft(e => res.status(401).json(e));
+        });
     }
 }
 exports.default = AuthController;

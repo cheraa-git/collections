@@ -83,7 +83,7 @@
     "Item not found": "Item not found",
     "Go back": "Go back",
     "Collection not found": "Collection not found",
-    "Something went wrong. Try to return to the main page": "Something went wrong. Try to return to the main page",
+    "Something went wrong...": "Something went wrong...",
     "Go to the main page": "Go to the main page",
     "Edit profile": "Edit profile",
     "New password": "New password",
@@ -113,6 +113,7 @@
     "An email has been sent to your email. Follow the link from the email to complete the registration": "An email has been sent to your email. Follow the link from the email to complete the registration",
     "This action will delete the field of each item": "This action will delete the field of each item",
     "Hide": "Hide",
-    "Show": "Show"
+    "Show": "Show",
+    "The account is already registered using another service": "The account is already registered using another service"
   }
 }

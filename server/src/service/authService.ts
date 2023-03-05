@@ -5,6 +5,7 @@ import { AuthorizationError } from "../../../common/errors/AuthorizationError"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
 import { createToken } from "./tokenService"
 import { User } from "../../../common/types/user"
+import { AuthByProviderBody } from "../../../common/types/request-body-types/auth"
 
 
 interface RegisterUser {
@@ -58,6 +59,22 @@ export const checkLoginData: CheckLoginData = async (email, password) => {
   }
 }
 
+export const authByProvider = async (data: AuthByProviderBody): Promise<Either<DatabaseError, User>> => {
+  const { authProvider, nickname, email } = data
+  try {
+    let [user, created] = await Users.findOrCreate({
+      where: { email },
+      defaults: { email, nickname, authProvider, isAdmin: false, status: 'active' },
+    })
+    if (!created && (!user.authProvider || user.authProvider !== authProvider)) {
+      user = (await Users.update({ authProvider }, { where: { email }, returning: ['*'] }))[1][0]
+    }
+    const token = createToken(user)
+    return right({ ...user.dataValues, token, password: undefined })
+  } catch (e) {
+    return left(new DatabaseError('authUserByProvider: Error', e))
+  }
+}
 
 
 

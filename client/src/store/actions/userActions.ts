@@ -1,12 +1,16 @@
 import { axiosPost } from "../../apis/axios/axios-app"
-import { logoutUser, setAuthErrorMessage, setAuthInfoMessage, setUser, setAuthLoading } from "../slices/userSlice"
+import { logoutUser, setAuthErrorMessage, setAuthInfoMessage, setAuthLoading, setUser } from "../slices/userSlice"
 import { AppDispatch } from "../store"
 import { AuthorizationError } from "../../../../common/errors/AuthorizationError"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
 import { AutoLoginError } from "../../../../common/errors/AutoLoginError"
 import { Either, left } from "@sweet-monads/either"
 import { AxiosResponse } from "axios"
-import { AuthData, User } from "../../../../common/types/user"
+import { AuthData, AuthProviderName, User } from "../../../../common/types/user"
+import { authProvider } from "../../apis/firebase/actions/auth"
+import { setUnknownError } from "../slices/appSlice"
+import { AuthByProviderBody } from "../../../../common/types/request-body-types/auth"
+import { ProviderType } from "../../apis/firebase/firebase"
 
 
 export const sendRegisterConfirm = (data: AuthData) => {
@@ -56,6 +60,31 @@ export const autoLogin = () => async (dispatch: AppDispatch) => {
     .mapRight(({ data: user }) => dispatch(setUser(user)))
     .mapLeft(() => dispatch(logoutUser()))
 }
+
+export const authByProvider = (provider: ProviderType, providerName: AuthProviderName) => {
+  return async (dispatch: AppDispatch) => {
+    setAuthLoading(true)
+    const googleResponse = await authProvider(provider, providerName)
+    googleResponse
+      .mapLeft((e) => {
+        if (e.code === 'auth/account-exists-with-different-credential') {
+          return dispatch(setAuthErrorMessage('The account is already registered using another service'))
+        }
+        dispatch(setUnknownError(true))
+      })
+      .mapRight(async (data) => {
+        const userResponse = await axiosPost<DatabaseError, User, AuthByProviderBody>('/auth/provider', { ...data })
+        userResponse
+          .mapRight(({ data: user }) => {
+            localStorage.setItem('token', user.token)
+            dispatch(setUser(user))
+          })
+          .mapLeft(() => dispatch(setUnknownError(true)))
+      })
+    setAuthLoading(false)
+  }
+}
+
 
 
 

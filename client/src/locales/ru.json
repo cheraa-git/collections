@@ -82,8 +82,8 @@
     "Item not found": "Элемент не найден",
     "Go back": "Вернуться назад",
     "Collection not found": "Коллекция не найдена",
-    "Something went wrong. Try to return to the main page": "Что-то пошло не так. Попробуйте вернуться на главную страницу.",
-    "Go to the main page": "Вернуться на главную",
+    "Something went wrong...": "Что-то пошло не так..",
+    "Go to the main page": "Перейти на главную",
     "Edit profile": "Изменить профиль",
     "New password": "Новый пароль",
     "To change the profile, enter the old password": "Для изменения профиля, введите старый пароль",
@@ -112,6 +112,7 @@
     "An email has been sent to your email. Follow the link from the email to complete the registration": "На ваш email было отправлено письмо. Перейдите по ссылке из письма для завершения регистрации",
     "This action will delete the field of each item": "Это действие приведет к удалению этого поля у каждого элемента",
     "Hide": "Скрыть",
-    "Show": "Отобразить"
+    "Show": "Отобразить",
+    "The account is already registered using another service": "Аккаунт уже зарегистрирован с помощью другого сервиса"
   }
 }

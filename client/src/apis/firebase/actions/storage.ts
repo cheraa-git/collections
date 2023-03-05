@@ -1,4 +1,4 @@
-import { storage } from "./firebaseConfig"
+import { storage } from "../firebase"
 import { deleteObject, getDownloadURL, ref, uploadBytes, } from "firebase/storage"
 
 const getPathStorageFromUrl = (url: string) => {

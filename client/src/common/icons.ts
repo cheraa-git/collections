@@ -26,6 +26,11 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import RemoveIcon from '@mui/icons-material/Remove'
+import GoogleIconPng from '../assets/google-icon.png'
+import GithubLightIconPng from '../assets/github-light-icon.png'
+import GithubDarkIconPng from '../assets/github-dark-icon.png'
+import FacebookIconPng from '../assets/facebook-icon.png'
+import ReplayIcon from '@mui/icons-material/Replay'
 
 
 export {
@@ -56,5 +61,10 @@ export {
   ArrowForwardIosIcon,
   VisibilityIcon,
   VisibilityOffIcon,
-  RemoveIcon
+  RemoveIcon,
+  GoogleIconPng,
+  GithubLightIconPng,
+  GithubDarkIconPng,
+  FacebookIconPng,
+  ReplayIcon
 }

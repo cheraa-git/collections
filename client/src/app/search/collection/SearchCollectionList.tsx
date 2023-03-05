@@ -9,7 +9,7 @@ export const SearchCollectionList = connectHits(({ hits }) => {
   return (
     <Box>
       <Text className="search-title" hidden={hits.length === 0}>collections</Text>
-      <Box px={1}>
+      <Box>
         {hits.map(hit => (
           <SearchCollectionCard key={hit.id} hit={hit} attribute="name"/>
         ))}

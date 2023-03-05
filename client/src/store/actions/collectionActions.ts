@@ -1,6 +1,6 @@
 import { axiosDelete, axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
 import { CreateCollectionPayload, EditCollectionPayload } from "../../types/collection"
-import { deleteImageFromCloud, saveImageToCloud } from "../../apis/firebase/firebaseActions"
+import { deleteImageFromCloud, saveImageToCloud } from "../../apis/firebase/actions/storage"
 import { CreateCollectionBody, EditCollectionBody } from "../../../../common/types/request-types"
 import {
   setCollectionData,

@@ -3,7 +3,7 @@ import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { useSnackbar } from "notistack"
 import { setItemErrorMessage } from "../../store/slices/itemSlice"
 import { Box, IconButton, Tooltip } from "@mui/material"
-import { CloseIcon, ReplyIcon } from "../../common/icons"
+import { CloseIcon, ReplayIcon, ReplyIcon } from "../../common/icons"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { setCollectionErrorMessage } from "../../store/slices/collectionSlice"
@@ -40,6 +40,7 @@ export const ErrorMessageProvider: FC<{ children: ReactNode }> = ({ children }) 
           <Tooltip title={t(tooltip)}>
             <IconButton onClick={action}><ReplyIcon/></IconButton>
           </Tooltip>
+          <IconButton onClick={() => window.location.reload()}><ReplayIcon/></IconButton>
           <IconButton onClick={() => closeSnackbar()}><CloseIcon/></IconButton>
         </Box>
       )
@@ -56,7 +57,7 @@ export const ErrorMessageProvider: FC<{ children: ReactNode }> = ({ children }) 
         dispatch(setCollectionErrorMessage(''))
       }
       if (isUnknownError) {
-        showErrorSnackbar('Something went wrong. Try to return to the main page', onGoHome, 'Go to the main page')
+        showErrorSnackbar('Something went wrong...', onGoHome, 'Go to the main page')
         dispatch(setUnknownError(false))
       }
       if (profileErrorMessage) {

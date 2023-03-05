@@ -49,5 +49,3 @@ export interface EditProfileBody {
   oldEmail: string
   adminEmail?: string
 }
-
-
