@@ -36,6 +36,7 @@ export interface DeleteCollectionBody {
 
 export interface EditCollectionBody {
   itemConfigs: ItemConfigType[]
+  removedConfigs: ItemConfigType[]
   collection: Omit<Collection, 'timestamp'>
   token: string
 }

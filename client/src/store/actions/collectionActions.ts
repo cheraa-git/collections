@@ -43,16 +43,16 @@ export const createCollection = (data: CreateCollectionPayload, navigate: Naviga
 
 export const editCollection = (data: EditCollectionPayload, navigate: NavigateFunction) => {
   return async (dispatch: AppDispatch, getState: GetState) => {
-    const { image, existingImage, id, title, userId, itemConfigs, themeId, description, deletedImage } = data
+    const { image, existingImage, itemConfigs, removedConfigs, deletedImage, ...collection } = data
     const token = getState().user.currentUser.token
     dispatch(setCollectionLoading(true))
     let imageUrl = existingImage || await saveImageToCloud(image)
     await deleteImageFromCloud(deletedImage)
     const response = await axiosPatch<TokenError | DatabaseError, Collection, EditCollectionBody>('/collection', {
-      itemConfigs, collection: { id, userId, imageUrl, title, themeId, description }, token
+      itemConfigs, removedConfigs, collection: { ...collection, imageUrl }, token
     })
     response
-      .mapRight(() => navigate(`/collection/${id}`))
+      .mapRight(() => navigate(`/collection/${collection.id}`))
       .mapLeft(e => {
         if (e.response?.data.name === 'TokenError') dispatch(onTokenError())
         else {

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { useSnackbar } from "notistack"
 import { Collection, ItemConfigType } from "../../../../common/types/collection"
 import { useConfirm } from "../../hooks/confirmHook"
-import { RemoveIcon, VisibilityIcon, VisibilityOffIcon } from "../../common/icons"
+import { AddIcon, RemoveIcon, VisibilityIcon, VisibilityOffIcon } from "../../common/icons"
 
 
 interface ConfigInputsProps {
@@ -35,9 +35,12 @@ export const ConfigInputs: FC<ConfigInputsProps> = ({ configInputs, setConfigInp
     setConfigInputs(newConfig)
   }
 
+  const addConfigInput = () => {
+    setConfigInputs([...configInputs, { type: '', label: '' }])
+  }
 
   const removeConfigInput = (index: number) => {
-    if (editable) {
+    if (editable && configInputs[index].id !== undefined) {
       showConfirm(t('This action will delete the field of each item'), () => {
         setConfigInputs(configInputs.filter((_, i) => i !== index))
       })
@@ -74,7 +77,7 @@ export const ConfigInputs: FC<ConfigInputsProps> = ({ configInputs, setConfigInp
   )
 
   return (
-    <div>
+    <>
       {configInputs.map((config, index) => (
         <Box display="flex" my={1} key={index}>
           <TextField sx={{ mr: 2 }} select label={t("type")} fullWidth
@@ -95,6 +98,9 @@ export const ConfigInputs: FC<ConfigInputsProps> = ({ configInputs, setConfigInp
           />
         </Box>
       ))}
-    </div>
+      <IconButton className="w-min pulse" onClick={addConfigInput}>
+        <AddIcon className="blue"/>
+      </IconButton>
+    </>
   )
 }

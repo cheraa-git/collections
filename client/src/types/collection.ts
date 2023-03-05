@@ -17,6 +17,7 @@ export interface EditCollectionPayload {
   deletedImage?: string
   id: number
   itemConfigs: ItemConfigType[]
+  removedConfigs: ItemConfigType[]
   themeId: number
   title: string
   userId: number

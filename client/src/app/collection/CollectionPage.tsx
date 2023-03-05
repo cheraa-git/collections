@@ -69,7 +69,8 @@ export const CollectionPage: FC = () => {
               <Typography>{t('on')} {timestampToDate(collection.timestamp)}</Typography>
             </i>
           </Box>
-          <EditCollectionMenu/>
+          {isAuthor ? <EditCollectionMenu/> : <></>}
+
         </Box>
         {
           isAuthor

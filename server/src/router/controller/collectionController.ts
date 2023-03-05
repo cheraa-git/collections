@@ -42,9 +42,9 @@ export class CollectionController {
   }
 
   handleEditCollection = async (req: Request<any, any, EditCollectionBody>, res: Response) => {
-    const { collection, token, itemConfigs } = req.body
+    const {token, collection, itemConfigs, removedConfigs } = req.body
     if (!checkToken(token, collection.userId)) return res.status(500).json(new TokenError())
-    return (await editCollection(collection, itemConfigs))
+    return (await editCollection({ collection, itemConfigs, removedConfigs }))
       .mapRight(data => res.json(data))
       .mapLeft(e => res.status(500).json(e))
   }

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { Box, IconButton, MenuItem, TextField } from "@mui/material"
+import { Box, MenuItem, TextField } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useAppDispatch, } from "../../store/store"
 import { createCollection, editCollection } from "../../store/actions/collectionActions"
@@ -16,7 +16,6 @@ import { TransButton } from "../../common/TransButton"
 import { useAuth } from "../../hooks/authHook"
 import { ConfigInputs } from "./ConfigInputs"
 import { FixedConfigInputs } from "./FixedConfigInputs"
-import { AddIcon } from "../../common/icons"
 import { Collection, ItemConfigType } from "../../../../common/types/collection"
 import { EditCollectionPayload } from "../../types/collection"
 
@@ -65,7 +64,12 @@ export const CreateCollectionPage: FC = () => {
     const itemConfigs = configInputs.filter(config => config.type && config.label)
     if (data.image[0]?.size > MAX_IMAGE_SIZE) return snackbar('The maximum photo size is 10MB')
     if (editable) {
-      const sendData: EditCollectionPayload = { ...editable.collection, ...data, image: data.image[0], itemConfigs, }
+      const removedConfigs = editable.itemConfigs.filter((config) => {
+        return !configInputs.find(newConfig => newConfig.id === config.id)
+      })
+      const sendData: EditCollectionPayload = {
+        ...editable.collection, ...data, image: data.image[0], itemConfigs, removedConfigs
+      }
       if (editable.collection.imageUrl && !data.existingImage) {
         sendData.deletedImage = editable.collection.imageUrl
       }
@@ -73,10 +77,6 @@ export const CreateCollectionPage: FC = () => {
     } else {
       dispatch(createCollection({ ...data, image: data.image[0], itemConfigs, userId }, navigate))
     }
-  }
-
-  const addConfigInput = () => {
-    setConfigInputs(prev => [...prev, { type: '', label: '' }])
   }
 
   const clearImage = () => {
@@ -114,16 +114,12 @@ export const CreateCollectionPage: FC = () => {
 
         <ConfigInputs configInputs={configInputs} setConfigInputs={setConfigInputs} editable={editable}/>
 
-        <IconButton className="w-min pulse" onClick={addConfigInput}>
-          <AddIcon className="blue"/>
-        </IconButton>
-
         {
           loading
             ? <Box ml="auto"><Spinner/></Box>
             : <Box display="flex" justifyContent="space-between">
               <TransButton variant="outlined" color="inherit" onClick={() => navigate(-1)}>Cancel</TransButton>
-              <TransButton type="submit" variant="outlined" >Save</TransButton>
+              <TransButton type="submit" variant="outlined">Save</TransButton>
             </Box>
         }
       </Box>

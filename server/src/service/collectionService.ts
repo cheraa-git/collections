@@ -4,10 +4,15 @@ import { filterItem } from "../utils"
 import { Either, left, right } from "@sweet-monads/either"
 import { DatabaseError } from "../../../common/errors/DatabaseError"
 import { EditCollectionResponse, GetCollectionResponse } from "../../../common/types/response-types"
-import { getCollectionsByItemCountQuery, getFullCollectionDataQuery } from "./queries/collectionQueries"
+import {
+  cascadeDeleteItemConfigs,
+  getCollectionsByItemCountQuery,
+  getFullCollectionDataQuery
+} from "./queries/collectionQueries"
 import { removeCollectionRelationshipIndexes } from "./searchService"
 import { Collection, ItemConfigType } from "../../../common/types/collection"
 import { Item } from "../../../common/types/item"
+import { EditCollectionBody } from "../../../common/types/request-types"
 
 
 interface CreateCollection {
@@ -53,15 +58,16 @@ export const deleteCollection = async (id: number): Promise<Either<DatabaseError
 }
 
 interface EditCollection {
-  (collection: Omit<Collection, 'timestamp'>, itemConfigs: ItemConfigType[]): Promise<Either<DatabaseError, EditCollectionResponse>>
+  (data: Omit<EditCollectionBody, 'token'>): Promise<Either<DatabaseError, EditCollectionResponse>>
 }
 
-export const editCollection: EditCollection = async (collection, itemConfigs) => {
+export const editCollection: EditCollection = async ({collection, removedConfigs, itemConfigs}) => {
   try {
     const editedCollection = await Collections.update(collection, { where: { id: collection.id }, returning: ['*'] })
     const editedConfigs = await ItemConfigs.bulkCreate(itemConfigs, {
       updateOnDuplicate: ['type', 'label', 'hidden'], returning: ['*']
     })
+    await cascadeDeleteItemConfigs(removedConfigs)
     return right({ collection: editedCollection[1][0], itemConfigs: editedConfigs })
   } catch (e) {
     return left(new DatabaseError('Edit collection error', e))

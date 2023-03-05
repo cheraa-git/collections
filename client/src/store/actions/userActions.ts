@@ -1,5 +1,5 @@
 import { axiosPost } from "../../apis/axios/axios-app"
-import { logoutUser, setAuthErrorMessage, setAuthInfoMessage, setUser, toggleAuthLoading } from "../slices/userSlice"
+import { logoutUser, setAuthErrorMessage, setAuthInfoMessage, setUser, setAuthLoading } from "../slices/userSlice"
 import { AppDispatch } from "../store"
 import { AuthorizationError } from "../../../../common/errors/AuthorizationError"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
@@ -11,7 +11,7 @@ import { AuthData, User } from "../../../../common/types/user"
 
 export const sendRegisterConfirm = (data: AuthData) => {
   return async (dispatch: AppDispatch) => {
-    dispatch(toggleAuthLoading())
+    dispatch(setAuthLoading(true))
     const response = await axiosPost<AuthorizationError | DatabaseError>('/auth/confirm_register', data)
     response
       .mapRight(() => dispatch(setAuthInfoMessage(
@@ -22,7 +22,7 @@ export const sendRegisterConfirm = (data: AuthData) => {
           dispatch(setAuthErrorMessage(e.response?.data.message))
         } else console.log(e.response?.data)
       })
-    dispatch(toggleAuthLoading())
+    dispatch(setAuthLoading(false))
   }
 }
 
@@ -33,7 +33,7 @@ export const registerUser = async (registerToken?: string): Promise<Either<any, 
 }
 
 export const loginUser = (data: AuthData) => async (dispatch: AppDispatch) => {
-  dispatch(toggleAuthLoading())
+  dispatch(setAuthLoading(true))
   const response = await axiosPost<AuthorizationError | DatabaseError, User>('/auth/login', data)
   response
     .mapRight(({ data: user }) => {
@@ -45,6 +45,7 @@ export const loginUser = (data: AuthData) => async (dispatch: AppDispatch) => {
         dispatch(setAuthErrorMessage(e.response?.data.message))
       } else console.log(e.response?.data)
     })
+  dispatch(setAuthLoading(false))
 }
 
 export const autoLogin = () => async (dispatch: AppDispatch) => {

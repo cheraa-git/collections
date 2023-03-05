@@ -31,7 +31,7 @@ export const userSlice = createSlice({
     setAuthErrorMessage: (state, { payload: message }: PayloadAction<string>) => {
       state.errorMessage = message
     },
-    toggleAuthLoading: (state, { payload }: PayloadAction<boolean | undefined>) => {
+    setAuthLoading: (state, { payload }: PayloadAction<boolean | undefined>) => {
       if (payload !== undefined) state.loading = payload
       else state.loading = !state.loading
     },
@@ -57,7 +57,7 @@ export const userSlice = createSlice({
 })
 
 export const {
-  toggleAuthLoading,
+  setAuthLoading,
   setAuthErrorMessage,
   setUser,
   logoutUser,
