@@ -53,10 +53,10 @@ class CollectionController {
                 .mapLeft(e => res.status(500).json(e));
         });
         this.handleEditCollection = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { collection, token, itemConfigs } = req.body;
+            const { token, collection, itemConfigs, removedConfigs } = req.body;
             if (!(0, tokenService_1.checkToken)(token, collection.userId))
                 return res.status(500).json(new TokenError_1.TokenError());
-            return (yield (0, collectionService_1.editCollection)(collection, itemConfigs))
+            return (yield (0, collectionService_1.editCollection)({ collection, itemConfigs, removedConfigs }))
                 .mapRight(data => res.json(data))
                 .mapLeft(e => res.status(500).json(e));
         });

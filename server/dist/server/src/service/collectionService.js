@@ -55,12 +55,13 @@ const deleteCollection = (id) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteCollection = deleteCollection;
-const editCollection = (collection, itemConfigs) => __awaiter(void 0, void 0, void 0, function* () {
+const editCollection = ({ collection, removedConfigs, itemConfigs }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const editedCollection = yield Collections_1.Collections.update(collection, { where: { id: collection.id }, returning: ['*'] });
         const editedConfigs = yield ItemConfigs_1.ItemConfigs.bulkCreate(itemConfigs, {
             updateOnDuplicate: ['type', 'label', 'hidden'], returning: ['*']
         });
+        yield (0, collectionQueries_1.cascadeDeleteItemConfigs)(removedConfigs);
         return (0, either_1.right)({ collection: editedCollection[1][0], itemConfigs: editedConfigs });
     }
     catch (e) {

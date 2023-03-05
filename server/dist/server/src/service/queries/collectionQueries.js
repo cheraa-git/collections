@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFullCollectionDataQuery = exports.getCollectionsByItemCountQuery = void 0;
+exports.cascadeDeleteItemConfigs = exports.getFullCollectionDataQuery = exports.getCollectionsByItemCountQuery = void 0;
 const Items_1 = require("../../db/models/Items");
 const sequelize_1 = require("sequelize");
 const Collections_1 = require("../../db/models/Collections");
@@ -43,3 +43,15 @@ const getFullCollectionDataQuery = (id) => __awaiter(void 0, void 0, void 0, fun
     });
 });
 exports.getFullCollectionDataQuery = getFullCollectionDataQuery;
+const cascadeDeleteItemConfigs = (removedConfigs) => __awaiter(void 0, void 0, void 0, function* () {
+    if (removedConfigs.length === 0)
+        return;
+    const configIds = removedConfigs.map(config => config.id);
+    const removedItemFields = {};
+    removedConfigs.forEach(config => {
+        removedItemFields[config.type] = null;
+    });
+    yield ItemConfigs_1.ItemConfigs.destroy({ where: { id: configIds } });
+    yield Items_1.Items.update(removedItemFields, { where: { collectionId: removedConfigs[0].collectionId } });
+});
+exports.cascadeDeleteItemConfigs = cascadeDeleteItemConfigs;
