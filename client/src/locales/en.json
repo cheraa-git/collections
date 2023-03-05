@@ -114,6 +114,8 @@
     "This action will delete the field of each item": "This action will delete the field of each item",
     "Hide": "Hide",
     "Show": "Show",
-    "The account is already registered using another service": "The account is already registered using another service"
+    "The account is already registered using another service": "The account is already registered using another service",
+    "Continue with": "Continue with",
+    "authorized by": "authorized by"
   }
 }

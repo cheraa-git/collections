@@ -113,6 +113,8 @@
     "This action will delete the field of each item": "Это действие приведет к удалению этого поля у каждого элемента",
     "Hide": "Скрыть",
     "Show": "Отобразить",
-    "The account is already registered using another service": "Аккаунт уже зарегистрирован с помощью другого сервиса"
+    "The account is already registered using another service": "Аккаунт уже зарегистрирован с помощью другого сервиса",
+    "Continue with": "Продолжить с",
+    "authorized by": "авторизован с помощью"
   }
 }

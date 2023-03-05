@@ -1,10 +1,16 @@
 import { axiosGet, axiosPatch, axiosPost } from "../../apis/axios/axios-app"
-import { setProfileAvatar, setProfileErrorMessage, setProfileInfo, setProfileLoading } from "../slices/profileSlice"
-import { setUnknownError } from "../slices/appSlice"
+import {
+  setProfileAvatar,
+  setProfileErrorMessage,
+  setProfileInfo,
+  setProfileLoading,
+  setProfileUser
+} from "../slices/profileSlice"
+import { setLoading, setUnknownError } from "../slices/appSlice"
 import { AppDispatch, GetState } from "../store"
 import { GetProfileResponse } from "../../../../common/types/response-types"
 import { DatabaseError } from "../../../../common/errors/DatabaseError"
-import { EditProfileBody } from "../../../../common/types/request-types"
+import { EditProfileByProviderBody, EditProfileByTokenBody } from "../../../../common/types/request-types"
 import { AuthorizationError } from "../../../../common/errors/AuthorizationError"
 import { GmailError } from "../../../../common/errors/GmailError"
 import { Either, left } from "@sweet-monads/either"
@@ -12,6 +18,8 @@ import { AxiosResponse } from "axios"
 import { deleteImageFromCloud, saveImageToCloud } from "../../apis/firebase/actions/storage"
 import { TokenError } from "../../../../common/errors/TokenError"
 import { onTokenError } from "../slices/userSlice"
+import { authProvider, getProvider } from "../../apis/firebase/actions/auth"
+import { ProfileUser } from "../../../../common/types/user"
 
 export const getProfile = (userId: string) => async (dispatch: AppDispatch) => {
   dispatch(setProfileLoading(true))
@@ -23,7 +31,7 @@ export const getProfile = (userId: string) => async (dispatch: AppDispatch) => {
   dispatch(setProfileLoading(false))
 }
 
-export const sendConfirmProfileChange = (data: EditProfileBody) => async (dispatch: AppDispatch) => {
+export const sendConfirmProfileChange = (data: EditProfileByTokenBody) => async (dispatch: AppDispatch) => {
   (await axiosPost<AuthorizationError | DatabaseError | GmailError>('/profile/confirm_edit', data))
     .mapLeft(e => {
       if (e.response?.data.name === 'AuthorizationError') dispatch(setProfileErrorMessage('The password is invalid'))
@@ -38,9 +46,36 @@ export const sendConfirmProfileChange = (data: EditProfileBody) => async (dispat
     })
 }
 
-export const editProfileInfo = async (editToken?: string): Promise<Either<any, AxiosResponse<number>>> => {
+export const editProfileInfoByToken = async (editToken?: string): Promise<Either<any, AxiosResponse<number>>> => {
   if (!editToken) return left(new Error())
-  return (await axiosPost<any, number>('/profile/edit', { token: editToken }))
+  return (await axiosPost<any, number>('/profile/edit_by_token', { token: editToken }))
+}
+
+export const editProfileInfoByProvider = (data: EditProfileByProviderBody) => {
+  return async (dispatch: AppDispatch, getState: GetState) => {
+    dispatch(setLoading(true))
+    const providerName = getState().user.currentUser.authProvider
+    if (!providerName) return
+    const provider = getProvider(providerName)
+    const providerResponse = await authProvider(provider, providerName)
+    providerResponse
+      .mapRight(async () => {
+        const userResponse = await axiosPost<DatabaseError, ProfileUser>('/profile/edit_by_provider', data)
+        userResponse
+          .mapRight(({ data: user }) => {
+            dispatch(setProfileUser(user))
+            dispatch(setLoading(false))
+          })
+          .mapLeft((e) => {
+            console.log(e.response?.data)
+            dispatch(setLoading(false))
+          })
+      })
+      .mapLeft(() => {
+        dispatch(setUnknownError(true))
+        dispatch(setLoading(false))
+      })
+  }
 }
 
 export const editProfileImage = (userId: number, image?: File, deletedImage?: string) => {

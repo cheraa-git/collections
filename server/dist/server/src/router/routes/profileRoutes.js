@@ -6,6 +6,7 @@ const profileController_1 = require("../controller/profileController");
 const controller = new profileController_1.ProfileController();
 exports.profileRouter = (0, express_1.Router)();
 exports.profileRouter.post('/confirm_edit', controller.handleSendConfirmationEmail);
-exports.profileRouter.post('/edit', controller.handleEditProfile);
+exports.profileRouter.post('/edit_by_token', controller.handleEditProfileByToken);
+exports.profileRouter.post('/edit_by_provider', controller.handleEditProfileByProvider);
 exports.profileRouter.patch('/edit_avatar', controller.handleEditAvatar);
 exports.profileRouter.get('/:userId', controller.handleGetProfile);

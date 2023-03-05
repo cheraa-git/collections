@@ -1,9 +1,10 @@
 import { signInWithPopup } from "firebase/auth"
-import { auth, ProviderType } from "../firebase"
+import { auth, facebookProvider, githubProvider, googleProvider, ProviderType } from "../firebase"
 import { Either, left, right } from "@sweet-monads/either"
 import { AuthByProviderBody } from "../../../../../common/types/request-body-types/auth"
 import { AuthProviderName } from "../../../../../common/types/user"
 import { FirebaseError } from 'firebase/app'
+import { FacebookIconPng, GithubDarkIconPng, GithubLightIconPng, GoogleIconPng } from "../../../common/icons"
 
 
 interface AuthProvider {
@@ -21,4 +22,18 @@ export const authProvider: AuthProvider = async (provider, providerName) => {
   } catch (error: any) {
     return left(error)
   }
+}
+
+export const getProviderImage = (providerName: AuthProviderName, theme: 'light' | 'dark') => {
+  if (providerName === 'google') return GoogleIconPng
+  if (providerName === 'github' && theme === 'light') return GithubDarkIconPng
+  if (providerName === 'github' && theme === 'dark') return GithubLightIconPng
+  if (providerName === 'facebook') return FacebookIconPng
+}
+
+export const getProvider = (providerName: AuthProviderName): ProviderType => {
+  if (providerName === 'google') return googleProvider
+  if (providerName === 'github') return githubProvider
+  if (providerName === 'facebook') return facebookProvider
+  return googleProvider
 }

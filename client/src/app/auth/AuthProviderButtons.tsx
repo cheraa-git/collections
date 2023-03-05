@@ -1,10 +1,11 @@
 import { FC } from "react"
-import { FacebookIconPng, GithubDarkIconPng, GithubLightIconPng, GoogleIconPng } from "../../common/icons"
+import { FacebookIconPng, GoogleIconPng } from "../../common/icons"
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { useApp } from "../../hooks/appStateHook"
 import { useAppDispatch } from "../../store/store"
 import { authByProvider } from "../../store/actions/userActions"
 import { facebookProvider, githubProvider, googleProvider } from "../../apis/firebase/firebase"
+import { getProviderImage } from "../../apis/firebase/actions/auth"
 
 export const AuthProviderButtons: FC = () => {
   const dispatch = useAppDispatch()
@@ -19,7 +20,7 @@ export const AuthProviderButtons: FC = () => {
       </Tooltip>
       <Tooltip title="GitHub">
         <IconButton onClick={() => dispatch(authByProvider(githubProvider, 'github'))}>
-          <img src={theme === 'light' ? GithubDarkIconPng : GithubLightIconPng} width={40} height={40} alt="github"/>
+          <img src={getProviderImage('github', theme)} width={40} height={40} alt="github"/>
         </IconButton>
       </Tooltip>
       <Tooltip title="Facebook">

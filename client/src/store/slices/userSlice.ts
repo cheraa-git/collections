@@ -31,9 +31,8 @@ export const userSlice = createSlice({
     setAuthErrorMessage: (state, { payload: message }: PayloadAction<string>) => {
       state.errorMessage = message
     },
-    setAuthLoading: (state, { payload }: PayloadAction<boolean | undefined>) => {
-      if (payload !== undefined) state.loading = payload
-      else state.loading = !state.loading
+    setAuthLoading: (state, { payload }: PayloadAction<boolean>) => {
+      state.loading = payload
     },
     setUser: (state, { payload }: PayloadAction<User>) => {
       state.currentUser = payload
@@ -50,7 +49,7 @@ export const userSlice = createSlice({
     clearTokenError: state => {
       state.tokenError = ''
     },
-    setAuthInfoMessage: (state, {payload}: PayloadAction<string>) => {
+    setAuthInfoMessage: (state, { payload }: PayloadAction<string>) => {
       state.infoMessage = payload
     }
   }

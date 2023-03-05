@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import { editAvatar, editProfile, getProfile } from "../../service/profileService"
-import { EditProfileBody } from "../../../../common/types/request-types"
+import { editAvatar, editProfileByProvider, editProfileByToken, getProfile } from "../../service/profileService"
+import { EditProfileByProviderBody, EditProfileByTokenBody } from "../../../../common/types/request-types"
 import { checkLoginData } from "../../service/authService"
 import { sendProfileChangeConfirm } from "../../service/emailService"
 import { checkToken } from "../../service/tokenService"
@@ -17,7 +17,7 @@ export class ProfileController {
       .mapLeft(e => res.status(500).json(e))
   }
 
-  async handleSendConfirmationEmail(req: Request<any, any, EditProfileBody>, res: Response) {
+  async handleSendConfirmationEmail(req: Request<any, any, EditProfileByTokenBody>, res: Response) {
     const { oldEmail, oldPassword, ...newDataOfUser } = req.body
     const authResponse = await checkLoginData(oldEmail, oldPassword)
     authResponse
@@ -28,9 +28,15 @@ export class ProfileController {
       })
   }
 
-  async handleEditProfile({ body: { token } }: Request, res: Response) {
-    (await editProfile(token))
+  async handleEditProfileByToken({ body: { token } }: Request, res: Response) {
+    (await editProfileByToken(token))
       .mapRight(userId => res.json(userId))
+      .mapLeft(e => res.status(500).json(e))
+  }
+
+  async handleEditProfileByProvider(req: Request<any, any, EditProfileByProviderBody>, res: Response) {
+    (await editProfileByProvider(req.body))
+      .mapRight(user => res.json(user))
       .mapLeft(e => res.status(500).json(e))
   }
 

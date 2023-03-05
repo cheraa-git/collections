@@ -40,10 +40,19 @@ export const profileSlice = createSlice({
     },
     setProfileLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.loading = payload
+    },
+    setProfileUser: (state, { payload }: PayloadAction<ProfileUser>) => {
+      state.profileUser = payload
     }
   }
 })
 
-export const { setProfileInfo, setProfileErrorMessage, setProfileAvatar, setProfileLoading } = profileSlice.actions
+export const {
+  setProfileInfo,
+  setProfileErrorMessage,
+  setProfileAvatar,
+  setProfileLoading,
+  setProfileUser
+} = profileSlice.actions
 
 export const ProfileReducer = profileSlice.reducer

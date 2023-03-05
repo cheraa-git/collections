@@ -8,11 +8,14 @@ import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { Text } from "../../common/Text"
 import { EditProfileMenu } from "./EditProfileMenu"
+import { getProviderImage } from "../../apis/firebase/actions/auth"
+import { useApp } from "../../hooks/appStateHook"
 
 
 export const ProfileUserInfo: FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const theme = useApp().theme
   const profileUser = useAppSelector((state: RootState) => state.profile.profileUser)
   const { currentUser, isAuth } = useAuth()
   const isAuthor = isAuth && (currentUser.isAdmin || (profileUser.id === currentUser.id))
@@ -33,6 +36,14 @@ export const ProfileUserInfo: FC = () => {
           <Text color="gray">Email</Text>
           <Typography fontSize="x-large" ml={2} mr={1}>{profileUser.email}</Typography>
         </Box>
+        {
+          profileUser.authProvider && isAuthor &&
+          <Box ml={3} display="flex">
+            <Text fontSize="small" color="gray" mr={1}>authorized by</Text>
+            <img src={getProviderImage(profileUser.authProvider, theme)} width={17} height={17} alt="provider"/>
+          </Box>
+        }
+
       </Box>
       {
         isAuthor &&

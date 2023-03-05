@@ -6,6 +6,8 @@ import { GetProfileResponse } from "../../../common/types/response-types"
 import { parseEditProfileToken } from "./tokenService"
 import { TokenError } from "../../../common/errors/TokenError"
 import { Sequelize } from "sequelize"
+import { ProfileUser } from "../../../common/types/user"
+import { EditProfileByProviderBody } from "../../../common/types/request-types"
 
 
 export const getProfile = async (userId: number): Promise<Either<DatabaseError, GetProfileResponse>> => {
@@ -21,7 +23,7 @@ export const getProfile = async (userId: number): Promise<Either<DatabaseError, 
   }
 }
 
-export const editProfile = async (token: string): Promise<Either<DatabaseError | TokenError, number>> => {
+export const editProfileByToken = async (token: string): Promise<Either<DatabaseError | TokenError, number>> => {
   try {
     return parseEditProfileToken(token)
       .asyncMap(async (tokenData) => {
@@ -29,6 +31,16 @@ export const editProfile = async (token: string): Promise<Either<DatabaseError |
         const user = await Users.update(userData, { where: { email: tokenData.oldEmail }, returning: ['*'] })
         return user[1][0].id
       })
+  } catch (e) {
+    return left(new DatabaseError('editProfile: Error', e))
+  }
+}
+
+export const editProfileByProvider = async (data: EditProfileByProviderBody): Promise<Either<DatabaseError, ProfileUser>> => {
+  try {
+    const { email, ...userData } = data
+    const user = (await Users.update(userData, { where: { email }, returning: ['*'] }))[1][0]
+    return right(user)
   } catch (e) {
     return left(new DatabaseError('editProfile: Error', e))
   }

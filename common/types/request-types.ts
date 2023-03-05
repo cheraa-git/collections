@@ -41,11 +41,17 @@ export interface EditCollectionBody {
   token: string
 }
 
-export interface EditProfileBody {
+export interface EditProfileByTokenBody {
   email?: string
   password?: string
   nickname?: string
   oldPassword: string
   oldEmail: string
   adminEmail?: string
+}
+
+export interface EditProfileByProviderBody {
+  email: string
+  password?: string
+  nickname?: string
 }

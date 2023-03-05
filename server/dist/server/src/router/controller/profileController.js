@@ -48,10 +48,17 @@ class ProfileController {
             }));
         });
     }
-    handleEditProfile({ body: { token } }, res) {
+    handleEditProfileByToken({ body: { token } }, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            (yield (0, profileService_1.editProfile)(token))
+            (yield (0, profileService_1.editProfileByToken)(token))
                 .mapRight(userId => res.json(userId))
+                .mapLeft(e => res.status(500).json(e));
+        });
+    }
+    handleEditProfileByProvider(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            (yield (0, profileService_1.editProfileByProvider)(req.body))
+                .mapRight(user => res.json(user))
                 .mapLeft(e => res.status(500).json(e));
         });
     }

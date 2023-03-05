@@ -63,7 +63,7 @@ export const autoLogin = () => async (dispatch: AppDispatch) => {
 
 export const authByProvider = (provider: ProviderType, providerName: AuthProviderName) => {
   return async (dispatch: AppDispatch) => {
-    setAuthLoading(true)
+    dispatch(setAuthLoading(true))
     const googleResponse = await authProvider(provider, providerName)
     googleResponse
       .mapLeft((e) => {
@@ -71,6 +71,7 @@ export const authByProvider = (provider: ProviderType, providerName: AuthProvide
           return dispatch(setAuthErrorMessage('The account is already registered using another service'))
         }
         dispatch(setUnknownError(true))
+        dispatch(setAuthLoading(false))
       })
       .mapRight(async (data) => {
         const userResponse = await axiosPost<DatabaseError, User, AuthByProviderBody>('/auth/provider', { ...data })
@@ -78,10 +79,10 @@ export const authByProvider = (provider: ProviderType, providerName: AuthProvide
           .mapRight(({ data: user }) => {
             localStorage.setItem('token', user.token)
             dispatch(setUser(user))
+            dispatch(setAuthLoading(false))
           })
           .mapLeft(() => dispatch(setUnknownError(true)))
       })
-    setAuthLoading(false)
   }
 }
 

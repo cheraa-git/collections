@@ -8,8 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editAvatar = exports.editProfile = exports.getProfile = void 0;
+exports.editAvatar = exports.editProfileByProvider = exports.editProfileByToken = exports.getProfile = void 0;
 const Collections_1 = require("../db/models/Collections");
 const Users_1 = require("../db/models/Users");
 const either_1 = require("@sweet-monads/either");
@@ -30,7 +41,7 @@ const getProfile = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getProfile = getProfile;
-const editProfile = (token) => __awaiter(void 0, void 0, void 0, function* () {
+const editProfileByToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return (0, tokenService_1.parseEditProfileToken)(token)
             .asyncMap((tokenData) => __awaiter(void 0, void 0, void 0, function* () {
@@ -43,7 +54,18 @@ const editProfile = (token) => __awaiter(void 0, void 0, void 0, function* () {
         return (0, either_1.left)(new DatabaseError_1.DatabaseError('editProfile: Error', e));
     }
 });
-exports.editProfile = editProfile;
+exports.editProfileByToken = editProfileByToken;
+const editProfileByProvider = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email } = data, userData = __rest(data, ["email"]);
+        const user = (yield Users_1.Users.update(userData, { where: { email }, returning: ['*'] }))[1][0];
+        return (0, either_1.right)(user);
+    }
+    catch (e) {
+        return (0, either_1.left)(new DatabaseError_1.DatabaseError('editProfile: Error', e));
+    }
+});
+exports.editProfileByProvider = editProfileByProvider;
 const editAvatar = (userId, avatar) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updatedUser = (yield Users_1.Users.update({ avatarUrl: avatar }, {
