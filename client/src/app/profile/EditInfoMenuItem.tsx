@@ -63,7 +63,7 @@ export const EditInfoMenuItem: FC = () => {
   }
 
   const getSubmitMethod = () => {
-    if (profileUser.authProvider) {
+    if (currentUser.authProvider) {
       return submitWithProvider
     } else {
       return submitWithEmail
@@ -79,7 +79,7 @@ export const EditInfoMenuItem: FC = () => {
 
       }
       <TextField label={t("Password")} type="password" size="small" margin="dense" autoComplete="new-password"
-                 fullWidth{...register('oldPassword', { required: !profileUser.authProvider })}
+                 fullWidth{...register('oldPassword', { required: !currentUser.authProvider })}
                  error={!!errors.oldPassword}/>
 
       <Text fontSize="small" color="gray">
@@ -98,7 +98,7 @@ export const EditInfoMenuItem: FC = () => {
                      fullWidth{...register('nickname')}/>
 
           {
-            !profileUser.authProvider &&
+            !currentUser.authProvider &&
             <TextField label="Email" size="small" margin="dense" fullWidth{...register('email')}
                        error={!!errors.email}/>
           }
@@ -106,14 +106,14 @@ export const EditInfoMenuItem: FC = () => {
           <TextField type="password" autoComplete="new-password" label={t("New password")} size="small" margin="dense"
                      fullWidth{...register('newPassword')}/>
 
-          {!profileUser.authProvider && oldPasswordField}
+          {!currentUser.authProvider && oldPasswordField}
           <Box display="flex" justifyContent="space-between" mt={1}>
             <TransButton onClick={onClose} color="inherit">Cancel</TransButton>
             {
-              profileUser.authProvider
+              currentUser.authProvider
                 ? <Button type="submit">
                   <Text variant="button" mt={0.5} mr={1}>Continue with</Text>
-                  <img src={getProviderImage(profileUser.authProvider, theme)} width={25} height={25} alt="provider"/>
+                  <img src={getProviderImage(currentUser.authProvider, theme)} width={25} height={25} alt="provider"/>
                 </Button>
                 : <TransButton type="submit">Save</TransButton>
             }
