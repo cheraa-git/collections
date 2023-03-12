@@ -15,7 +15,7 @@ export const SearchButton: FC<{ onClick: () => void }> = ({ onClick }) => {
         {
           isMacOs
             ? <KeyboardCommandKeyIcon className="self-center" fontSize="inherit"/>
-            : <span>CTRL+</span>
+            : <Typography fontSize="medium">CTRL+</Typography>
         }
         <Typography fontSize="medium">K</Typography>
       </div>

@@ -22,7 +22,7 @@ export const ItemCard: FC<ItemCardProps> = ({ item }) => {
           <TypographyLink to={`/item/${item.id}`} fontWeight="bold">{item.name}</TypographyLink>
         </Grid>
 
-        <Grid item display="flex" overflow="scroll" ml="auto">
+        <Grid item display="flex" overflow="hidden" ml="auto">
           {item.tags?.map(tag => <TagChip key={tag.id} tag={tag}/>)}
         </Grid>
       </Grid>
