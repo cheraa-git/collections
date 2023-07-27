@@ -10,7 +10,7 @@ export const UserActions = (params: GridRenderCellParams) => {
   const activeColor = params.row.status === 'active' ? 'success' : 'action'
   const blockColor = params.row.status === 'blocked' ? 'warning' : 'action'
   const deleteColor = params.row.status === 'deleted' ? 'error' : 'action'
-
+  //test
   const setStatusHandler = (status: UserStatus) => {
     dispatch(setUsersStatus([params.row.id], status))
   }
